@@ -6,15 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>918</width>
-    <height>122</height>
+    <width>927</width>
+    <height>95</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>15645623</width>
+    <height>100</height>
+   </size>
   </property>
   <property name="font">
    <font>
@@ -30,14 +36,20 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>20</number>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
    </property>
    <property name="rightMargin">
     <number>30</number>
    </property>
-   <item row="0" column="0" rowspan="2">
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
     <widget class="QLabel" name="label_albumPic">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -47,14 +59,14 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>100</width>
-       <height>100</height>
+       <width>40</width>
+       <height>40</height>
       </size>
      </property>
      <property name="baseSize">
       <size>
-       <width>100</width>
-       <height>100</height>
+       <width>40</width>
+       <height>40</height>
       </size>
      </property>
      <property name="text">
@@ -68,29 +80,88 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label_songName">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>0</number>
      </property>
-     <property name="font">
-      <font>
-       <bold>true</bold>
-       <stylestrategy>PreferAntialias</stylestrategy>
-      </font>
+     <property name="topMargin">
+      <number>10</number>
      </property>
-     <property name="text">
-      <string>歌名</string>
+     <property name="bottomMargin">
+      <number>10</number>
      </property>
-    </widget>
+     <item>
+      <widget class="QLabel" name="label_songName">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <bold>true</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
+       <property name="text">
+        <string>歌名</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_author">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>歌手</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+       </property>
+       <property name="margin">
+        <number>-2</number>
+       </property>
+       <property name="indent">
+        <number>8</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="2" rowspan="2">
+   <item alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="label_albumName">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -100,26 +171,29 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="3" rowspan="2">
-    <widget class="QLabel" name="label_duration">
-     <property name="text">
-      <string>时长</string>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="label_author">
+   <item>
+    <widget class="QLabel" name="label_duration">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
      <property name="text">
-      <string>歌手</string>
-     </property>
-     <property name="indent">
-      <number>10</number>
+      <string>时长</string>
      </property>
     </widget>
    </item>

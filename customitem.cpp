@@ -1,6 +1,7 @@
 #include "customitem.h"
 #include "ui_customitem.h"
 #include <QTime>
+#include <QTimer>
 #include <QPainter>
 #include <QPainterPath>
 #include <QBitmap>
@@ -12,8 +13,8 @@ CustomItem::CustomItem(Music music, QWidget *parent) :
     ui(new Ui::CustomItem)
 {
     ui->setupUi(this);
-    ui->label_albumPic->setFixedSize(60, 60);
-    setWindowFlags(Qt::WindowTransparentForInput | Qt::FramelessWindowHint);//窗口仅用于输出，不接收任何输入事件
+    ui->label_albumPic->setFixedSize(70, 70);
+    setWindowFlags(Qt::FramelessWindowHint);//窗口仅用于输出，不接收任何输入事件
     this->music = music;
     // 初始化网络请求
     networkManager = new QNetworkAccessManager(this);
@@ -48,7 +49,7 @@ bool CustomItem::albumPicLoadingIsFinished() const
 
 void CustomItem::changeFontColor(QString color)
 {
-    QString qss = QString("color:%1").arg(color);
+    QString qss = QString("*{color:%1}").arg(color);
     this->setStyleSheet(qss);
 }
 
@@ -58,32 +59,31 @@ Music CustomItem::getMusic() const
 }
 
 // 圆角图片
-QPixmap CustomItem::image2Radius(QPixmap pixmap, int radius)
+QPixmap CustomItem::image2Radius(QPixmap img, int radius)
 {
-    //获取图片尺寸
-    int imageWidth = pixmap.width();
-    int imageHeight = pixmap.height();
-
-    //处理大尺寸的图片,保证图片显示区域完整
-    QPixmap newPixMap = pixmap.scaled(imageWidth, (imageHeight == 0 ? imageWidth : imageHeight),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-    QPixmap destImage(imageWidth, imageHeight);
-    destImage.fill(Qt::transparent);
-    QPainter painter(&destImage);
-    // 抗锯齿
-    painter.setRenderHints(QPainter::Antialiasing, true);
-    // 图片平滑处理
-    painter.setRenderHints(QPainter::SmoothPixmapTransform, true);
-    // 将图片裁剪为圆角
-    QPainterPath path;
-    if (radius ==0) {
-        radius = imageWidth * 0.1;
+    if (img.isNull())
+    {
+        qDebug()<<__FILE__<<__LINE__<<"img is null";
+        return QPixmap();
     }
-    QRect rect(0, 0, imageWidth, imageHeight);
-    path.addRoundedRect(rect, radius, radius);
-    painter.setClipPath(path);
-    painter.drawPixmap(0, 0, imageWidth, imageHeight, newPixMap);
-    return destImage;
+    //处理大尺寸的图片
+    if (img.width() > 700) {
+        img = img.scaledToWidth(700);
+    }
+
+    QSize size = img.size();
+    QBitmap mask(size);
+    QPainter painter(&mask);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.fillRect(0, 0, size.width(), size.height(), Qt::white);
+    painter.setBrush(QColor(0, 0, 0));
+    if (radius == 0) {
+        radius = size.width() * 0.07;
+    }
+    painter.drawRoundedRect(0, 0, size.width(), size.height(), radius, radius);//修改这个值，可以改弧度，和直径相等就是圆形
+    img.setMask(mask);
+    return img;
 }
 
 void CustomItem::showAlbumPic()
@@ -106,10 +106,11 @@ void CustomItem::replyFinished(QNetworkReply *reply)
         pixmap.loadFromData(bytes);
         music.setAlbumPic(image2Radius(pixmap));
         albumPicLoadingFinished = true;
-        ui->label_albumPic->setPixmap(music.albumPic());
+        ui->label_albumPic->setPixmap(music.albumPic().scaled(ui->label_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     }else {
         qDebug()<<__FILE__<<__LINE__<<"获取专辑图片失败";
+        QTimer::singleShot(1000, this, CustomItem::showAlbumPic);
     }
     reply->deleteLater();
     reply = nullptr;

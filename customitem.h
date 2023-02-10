@@ -29,7 +29,6 @@ public:
     bool albumPicLoadingIsFinished() const;
 
     void changeFontColor(QString color);
-
 private:
     Ui::CustomItem          *ui;
     QNetworkAccessManager   *networkManager;

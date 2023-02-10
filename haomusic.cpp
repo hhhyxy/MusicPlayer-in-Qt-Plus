@@ -97,14 +97,14 @@ void HaoMusic::updateLayout()
     // 设置title大小
     ui->label_title->setFixedWidth(ui->widget_sidebar->width());
     // 设置歌词界面左侧栏布局
-    ui->widget_lrc_songInfo->setFixedWidth(width()*0.4);
+    ui->widget_lrc_songInfo->setFixedWidth(width()*0.45);
     ui->label_lrc_albumPic->setFixedSize(0.8*ui->widget_lrc_songInfo->width(),0.8*ui->widget_lrc_songInfo->width());
     ui->label_lrc_songName->setIndent(ui->label_lrc_albumPic->width()*0.12);
     ui->label_lrc_author->setIndent(ui->label_lrc_albumPic->width()*0.12 + 5);
     //设置歌词鼠标左键拖动
     QScroller::grabGesture(ui->listWidget_lrc,QScroller::LeftMouseButtonGesture);
-    ui->listWidget_lrc->verticalScrollBar()->setSingleStep(25);
-    ui->listWidget_searchResult->verticalScrollBar()->setSingleStep(25);
+    ui->listWidget_lrc->verticalScrollBar()->setSingleStep(20);
+    ui->listWidget_searchResult->verticalScrollBar()->setSingleStep(20);
 }
 
 // 显示歌词
@@ -114,13 +114,14 @@ void HaoMusic::showLrc()
     currentLrcItem = nullptr;
     QListWidgetItem *nullItem = new QListWidgetItem("");
     nullItem->setSizeHint(QSize(0, height()*0.5));
-//    nullItem->setHidden(true);
+
     nullItem->setFlags(Qt::NoItemFlags);
     ui->listWidget_lrc->addItem(nullItem);
     // 歌名
     QListWidgetItem *songNameItem = new QListWidgetItem(currentMusic.getSongName());
     songNameItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     songNameItem->setData(Qt::StatusTipRole, 0);
+
     ui->listWidget_lrc->addItem(songNameItem);
 
     // 歌词
@@ -131,6 +132,7 @@ void HaoMusic::showLrc()
         item->setData(Qt::StatusTipRole, iter.key());
         ui->listWidget_lrc->addItem(item);
     }
+    ui->listWidget_lrc->setCurrentItem(songNameItem);
     ui->listWidget_lrc->scrollToItem(songNameItem);
 }
 
@@ -184,11 +186,19 @@ void HaoMusic::showLoadingPage()
 // 改变当前播放项
 void HaoMusic::changeCurrentPlayingItem(CustomItem *item)
 {
-    if (currentPlayingItem != nullptr) {
-        currentPlayingItem->changeFontColor("black");
+    if (currentPlayingItem == item) {
+        return;
     }
+    if (currentPlayingItem == nullptr) {
+        currentPlayingItem = item;
+    }
+    // 原来的播放项的字体颜色为黑色
+    currentPlayingItem->changeFontColor("black");
+    // 设置当前播放项的颜色为蓝色
     currentPlayingItem = item;
     currentPlayingItem->changeFontColor("blue");
+
+
 }
 
 // 双击托盘图标显示窗口
@@ -384,8 +394,9 @@ void HaoMusic::updateBottomMusicInfo()
     ui->horizontalSlider_musicProgress->setSingleStep(100);
     ui->horizontalSlider_musicProgress->setPageStep(duration/20);//以及每一步的步数
     // 设置歌曲信息
-    ui->label_albumPic->setPixmap(currentMusic.albumPic());
-    ui->label_lrc_albumPic->setPixmap(currentMusic.albumPic());
+    QPixmap pixmap = currentMusic.albumPic();
+    ui->label_albumPic->setPixmap(pixmap.scaled(ui->label_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    ui->label_lrc_albumPic->setPixmap(pixmap.scaled(ui->label_lrc_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     ui->label_author->setText(currentMusic.getAuthor());
     ui->label_songname->setText(currentMusic.getSongName());
     ui->label_lrc_author->setText(currentMusic.getAuthor());
@@ -415,10 +426,10 @@ void HaoMusic::on_listWidget_searchResult_itemDoubleClicked(QListWidgetItem *ite
 {
     // 获取当前行的customitem
     CustomItem *cItem = dynamic_cast<CustomItem *>(ui->listWidget_searchResult->itemWidget(item));
-    changeCurrentPlayingItem(cItem);
     if (!cItem->albumPicLoadingIsFinished()) {    // 等待图片加载完成才能播放
         return;
     }
+    changeCurrentPlayingItem(cItem);
     // 获取当前点击的音乐
     currentMusic = cItem->getMusic();
     // 通过音乐id获取url
@@ -427,24 +438,27 @@ void HaoMusic::on_listWidget_searchResult_itemDoubleClicked(QListWidgetItem *ite
     // 音乐播放
     mediaPlayer->setMedia(QUrl(songUrl));
     mediaPlayer->play();
-    ui->tabWidget->setCurrentWidget(ui->tab_lrc);
+//    ui->tabWidget->setCurrentWidget(ui->tab_lrc);
 }
 
 // 搜索
 void HaoMusic::on_pushButton_search_clicked()
 {
-    if (searchKeywords == ui->lineEdit_search->text())  // 禁止重复搜索
+
+    if (searchKeywords == ui->lineEdit_search->text()) {  // 禁止重复搜索
+        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_searchResult);
         return;
+    }
     searchKeywords = ui->lineEdit_search->text(); // 获取搜索关键词
     if (searchKeywords.isEmpty()) {   // 判断关键词是否为空
         return;
     }
+    ui->lineEdit_search->clearFocus();      // 清除搜索框焦点
     ui->listWidget_searchResult->clear();   // 清空搜索结果列表
     // 进入加载动画页面
     showLoadingPage();
     // 切换到搜索页面,暂停加载动画
     QTimer::singleShot(1000, [=] {
-        ui->tabWidget->setCurrentWidget(ui->tab_homePage);
         ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_searchResult);
         loadingMovie->stop();
     });
@@ -591,5 +605,11 @@ void HaoMusic::on_listWidget_lrc_itemClicked(QListWidgetItem *item)
         mediaPlayer->setMedia(QUrl(currentMusic.getSongUrl()));
         mediaPlayer->play();
     }
+}
+
+// 隐藏歌词
+void HaoMusic::on_pushButton_dropDown_clicked()
+{
+    ui->tabWidget->setCurrentWidget(ui->tab_homePage);
 }
 

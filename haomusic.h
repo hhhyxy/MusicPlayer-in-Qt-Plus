@@ -120,5 +120,6 @@ private slots:
     void on_pushButton_defaultSongList_clicked();
     void on_pushButton_localmusic_clicked();
     void on_listWidget_lrc_itemClicked(QListWidgetItem *item);
+    void on_pushButton_dropDown_clicked();
 };
 #endif // HAOMUSIC_H

@@ -19,3 +19,7 @@ void CustomSlider::mousePressEvent(QMouseEvent *ev)
         emit customSliderClicked();
     }
 }
+
+void CustomSlider::mouseReleaseEvent(QMouseEvent *ev)
+{
+}

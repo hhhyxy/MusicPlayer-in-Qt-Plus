@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1072</width>
-    <height>957</height>
+    <width>1282</width>
+    <height>912</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,6 +29,11 @@
     text-align: center;
     background-color:transparent;
 }
+QTabBar::tab {
+      	width: 0;
+		height:0;
+        color: transparent;
+}
 QWidget#inner_widget{
 	margin:0px;
 	border:1px solid #FFFFFF;
@@ -45,13 +50,25 @@ QLineEdit {
 	background-color:#f2f2f4;
 	font-size:20px;
 	color: #335eea;
-	margin-left: 20px;
 	padding: 10px;
 	border: none;
 	border-top-left-radius: 8px;
 	border-bottom-left-radius: 8px;
 }
 
+QPushButton {
+    icon-size: 32px;
+    border: none;
+    border-radius: 5px;
+}
+
+QPushButton:hover {
+    background-color: rgb(228, 237, 242);
+}
+QPushButton#pushButton_dropDown {
+	margin-left:15px;
+margin-top:15px;
+}
 QPushButton#pushButton_search{
 	background-color:#f2f2f4;
 	margin:0px;
@@ -63,7 +80,6 @@ QPushButton#pushButton_search{
 QPushButton#pushButton_close:hover {
 	background-color:red;
 }
-
 QLabel#label_title {
 	font-size:30px;
 }
@@ -71,21 +87,28 @@ QLabel#label_searchKeywords {
 	font: 26pt &quot;华文楷体&quot;;
 }
 QLabel#label_songname,
-QLabel#label_lrc_songName,
-QLabel#label_songName
+QLabel#label_lrc_songName
  {
 	font: 18pt &quot;华文楷体&quot;;
+}
+QLabel#label_songName {
+	font: 15pt &quot;华文楷体&quot;;
 }
 QLabel#label_author,
 QLabel#label_lrc_author
 {
+	margin:0;
 	font: 12pt &quot;华文楷体&quot;;
 }
 QLabel#label_lrc_songName,
 QLabel#label_lrc_author
  {
-	margin-top:15px;
-	padding-left:30px;
+	margin-top:2px;
+	padding-left:0px;
+}
+QLabel#label_lrc_songName {
+	margin-top:10px;
+
 }
 QLabel#label_albumName {
 	font: 14pt &quot;华文楷体&quot;;
@@ -94,15 +117,13 @@ QLabel#label_duration {
 	font: 12pt &quot;华文楷体&quot;;
 }	
 QToolTip {
-	border: 0px solid white;
+	color:black;
+	background-color:white;
+	border: 1px solid white;
     border-radius: 2px;
 }
 
-QTabBar::tab {
-      /*  width: 0;
-		height:0;*/
-        color: transparent;
-}
+
 QTabWidget::pane{
 	border:none;
 }
@@ -183,16 +204,6 @@ QScrollBar::add-page:vertical {
     background-color: white;
 }
 
-QPushButton {
-    icon-size: 32px;
-    border: none;
-    border-radius: 5px;
-}
-
-QPushButton:hover {
-    background-color: rgb(228, 237, 242);
-}
-
 QSlider {
 	background-color:transparent;
 }
@@ -237,22 +248,7 @@ QSlider::handle:horizontal {
 
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>8</number>
-   </property>
-   <property name="topMargin">
-    <number>8</number>
-   </property>
-   <property name="rightMargin">
-    <number>8</number>
-   </property>
-   <property name="bottomMargin">
-    <number>8</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
     <widget class="QWidget" name="inner_widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -272,280 +268,6 @@ QSlider::handle:horizontal {
        <number>0</number>
       </property>
       <item>
-       <widget class="QWidget" name="widget_header" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>80</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>100</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item alignment="Qt::AlignVCenter">
-          <widget class="QLabel" name="label_title">
-           <property name="font">
-            <font>
-             <family>华文楷体</family>
-             <pointsize>-1</pointsize>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>MusicPlayer</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item alignment="Qt::AlignVCenter">
-          <widget class="MyLineEdit" name="lineEdit_search">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>500</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>150</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="frame">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item alignment="Qt::AlignVCenter">
-          <widget class="QPushButton" name="pushButton_search">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>50</width>
-             <height>40</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>搜索</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="res.qrc">
-             <normaloff>:/icon/search.svg</normaloff>:/icon/search.svg</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item alignment="Qt::AlignTop">
-          <widget class="QPushButton" name="pushButton_minsize">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>50</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>60</width>
-             <height>60</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>50</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="res.qrc">
-             <normaloff>:/icon/min.svg</normaloff>:/icon/min.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="autoRepeatDelay">
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-         <item alignment="Qt::AlignTop">
-          <widget class="QPushButton" name="pushButton_maxsize">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>50</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>60</width>
-             <height>60</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>50</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="res.qrc">
-             <normaloff>:/icon/max.svg</normaloff>:/icon/max.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item alignment="Qt::AlignTop">
-          <widget class="QPushButton" name="pushButton_close">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>50</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>60</width>
-             <height>60</height>
-            </size>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>50</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="res.qrc">
-             <normaloff>:/icon/close.svg</normaloff>:/icon/close.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -564,6 +286,280 @@ QSlider::handle:horizontal {
           <string>主页</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QWidget" name="widget_header" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item alignment="Qt::AlignVCenter">
+              <widget class="QLabel" name="label_title">
+               <property name="font">
+                <font>
+                 <family>华文楷体</family>
+                 <pointsize>-1</pointsize>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>MusicPlayer</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignVCenter">
+              <widget class="MyLineEdit" name="lineEdit_search">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>500</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>150</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignVCenter">
+              <widget class="QPushButton" name="pushButton_search">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>搜索</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="res.qrc">
+                 <normaloff>:/icon/search.svg</normaloff>:/icon/search.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item alignment="Qt::AlignTop">
+              <widget class="QPushButton" name="pushButton_minsize">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="res.qrc">
+                 <normaloff>:/icon/min.svg</normaloff>:/icon/min.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="autoRepeatDelay">
+                <number>100</number>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignTop">
+              <widget class="QPushButton" name="pushButton_maxsize">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="res.qrc">
+                 <normaloff>:/icon/max.svg</normaloff>:/icon/max.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignTop">
+              <widget class="QPushButton" name="pushButton_close">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="res.qrc">
+                 <normaloff>:/icon/close.svg</normaloff>:/icon/close.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
           <item>
            <widget class="QWidget" name="widget_content" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -792,11 +788,20 @@ QSlider::handle:horizontal {
                  </item>
                  <item row="1" column="0" colspan="2">
                   <widget class="QListWidget" name="listWidget_searchResult">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="verticalScrollBarPolicy">
                     <enum>Qt::ScrollBarAlwaysOff</enum>
                    </property>
                    <property name="horizontalScrollBarPolicy">
-                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                    <enum>Qt::ScrollBarAsNeeded</enum>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QAbstractScrollArea::AdjustToContents</enum>
                    </property>
                    <property name="editTriggers">
                     <set>QAbstractItemView::DoubleClicked|QAbstractItemView::SelectedClicked</set>
@@ -885,7 +890,7 @@ QSlider::handle:horizontal {
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>12</height>
+              <height>20</height>
              </size>
             </property>
             <property name="tracking">
@@ -1105,7 +1110,7 @@ QSlider::handle:horizontal {
                    <bool>false</bool>
                   </property>
                   <property name="indent">
-                   <number>15</number>
+                   <number>12</number>
                   </property>
                  </widget>
                 </item>
@@ -1322,14 +1327,14 @@ QSlider::handle:horizontal {
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>60</width>
-                    <height>60</height>
+                    <width>50</width>
+                    <height>50</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
-                    <height>60</height>
+                    <width>50</width>
+                    <height>50</height>
                    </size>
                   </property>
                   <property name="sizeIncrement">
@@ -1417,12 +1422,12 @@ QSlider::handle:horizontal {
                   <property name="minimumSize">
                    <size>
                     <width>100</width>
-                    <height>20</height>
+                    <height>50</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
+                    <width>100</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -1462,7 +1467,7 @@ QSlider::handle:horizontal {
          <attribute name="title">
           <string>歌词</string>
          </attribute>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QWidget" name="widget_lrc" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1481,7 +1486,7 @@ QSlider::handle:horizontal {
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item alignment="Qt::AlignHCenter">
+             <item>
               <widget class="QWidget" name="widget_lrc_songInfo" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -1495,7 +1500,10 @@ QSlider::handle:horizontal {
                  <height>2000</height>
                 </size>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_7">
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
                 <property name="leftMargin">
                  <number>0</number>
                 </property>
@@ -1508,9 +1516,44 @@ QSlider::handle:horizontal {
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item alignment="Qt::AlignVCenter">
+                <item>
+                 <widget class="QPushButton" name="pushButton_dropDown">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>80</width>
+                    <height>80</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>80</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res.qrc">
+                    <normaloff>:/icon/arowDown.svg</normaloff>:/icon/arowDown.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                  <widget class="QWidget" name="widget_lrc_song" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_3">
+                  <layout class="QVBoxLayout" name="verticalLayout_4">
                    <property name="spacing">
                     <number>0</number>
                    </property>
@@ -1526,7 +1569,7 @@ QSlider::handle:horizontal {
                    <property name="bottomMargin">
                     <number>0</number>
                    </property>
-                   <item alignment="Qt::AlignHCenter">
+                   <item>
                     <widget class="QLabel" name="label_lrc_albumPic">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1570,6 +1613,9 @@ QSlider::handle:horizontal {
                      <property name="text">
                       <string>歌名：</string>
                      </property>
+                     <property name="indent">
+                      <number>0</number>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1578,7 +1624,7 @@ QSlider::handle:horizontal {
                       <string>歌手：</string>
                      </property>
                      <property name="indent">
-                      <number>10</number>
+                      <number>0</number>
                      </property>
                     </widget>
                    </item>
@@ -1598,8 +1644,8 @@ QSlider::handle:horizontal {
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>300</width>
-                 <height>300</height>
+                 <width>80</width>
+                 <height>80</height>
                 </size>
                </property>
                <property name="sizeIncrement">
@@ -1622,6 +1668,12 @@ QSlider::handle:horizontal {
                </property>
                <property name="editTriggers">
                 <set>QAbstractItemView::SelectedClicked</set>
+               </property>
+               <property name="showDropIndicator" stdset="0">
+                <bool>false</bool>
+               </property>
+               <property name="dragDropMode">
+                <enum>QAbstractItemView::NoDragDrop</enum>
                </property>
                <property name="verticalScrollMode">
                 <enum>QAbstractItemView::ScrollPerPixel</enum>

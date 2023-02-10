@@ -67,9 +67,9 @@ QPixmap MyHttp::showAlbumPic(QString albumPicUrl)
     QNetworkReply           *reply;          // 网络应答
     request->setUrl(QUrl(albumPicUrl));
     reply = networkManager->get(*request);
-    //阻塞网络请求，请求成功或5秒后没得到响应，则终止阻塞，
+    //阻塞网络请求，请求成功或6秒后没得到响应，则终止阻塞，
     QEventLoop eventLoop;
-    QTimer::singleShot(5000, &eventLoop,
+    QTimer::singleShot(10000, &eventLoop,
         [&]() {
             if (eventLoop.isRunning()) {
                 eventLoop.quit();
@@ -86,13 +86,25 @@ QPixmap MyHttp::showAlbumPic(QString albumPicUrl)
     if (reply->error() == QNetworkReply::NoError)
     {
         QByteArray bytes = reply->readAll();  //获取字节
-        QPixmap pixmap;
-        pixmap.loadFromData(bytes);
-        return CustomItem::image2Radius(pixmap);
+        QPixmap img;
+        img.loadFromData(bytes);
+        QImage image;
+        image.loadFromData(bytes);
+//        //处理大尺寸的图片
+//        if (image.width() > 1000) {
+//            image.scaled(1000, 1000);
+//        }
+//        QPixmap pixmap = QPixmap::fromImage(image);
+//        //获取图片尺寸
+//        int imageWidth = pixmap.width();
+//        qDebug() << __FILE__ << __LINE__ << imageWidth;
+
+        return CustomItem::image2Radius(img);
     }
     else
     {
         qDebug()<< __FILE__<<__LINE__<<"searchByUrl_Erro:"<< reply->errorString().toUtf8();
+        return QPixmap();
     }
     reply->deleteLater();
 }
@@ -266,7 +278,7 @@ void MyHttp::parseForSongLrc()
         qDebug()<< __FILE__<<__LINE__ << "歌词解析错误";
         return;
     }
-    qDebug()<< __FILE__ << __LINE__ << "lrc:" << lrcs;
+//    qDebug()<< __FILE__ << __LINE__ << "lrc:" << lrcs;
     QStringList lrcList = lrcs.split("\n");
 
     lrcMap.clear();// 清理原来的歌词
