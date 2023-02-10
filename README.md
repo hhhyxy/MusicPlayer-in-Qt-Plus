@@ -2,12 +2,15 @@
 基于Qt的音乐播放器的设计与实现
 
 ## 项目运行
+
 ### 代码环境
 win10
+
 ### 编辑工具
 Qt Creator 9.0.1
+
 ### 编译器
-MinGW 8.1.0 32-bit
+MinGW 8.1.0
 
 ## 功能和画饼
 
@@ -18,10 +21,19 @@ MinGW 8.1.0 32-bit
 - [ ] 本地数据库存储功能
 - [ ] 云端数据存储功能
 
-## API来源
+## 界面展示
 
+### 搜索结果页面
+![搜索结果页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/searchResult_Page.png)
+
+### 歌词页面
+![歌词页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/lrc_Page.png)
+
+## 灵感来源
+[YesPlayMusic](https://github.com/qier222/YesPlayMusic)
+
+## API来源
 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 ## License
-
 [The MIT License (MIT)](https://github.com/hhhyxy/MusicPlayer-in-Qt/edit/main/LICENSE)
