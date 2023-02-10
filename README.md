@@ -33,6 +33,7 @@ MinGW 8.1.0
 
 ## 灵感来源
 [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
+[lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
 
 ## API来源
 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
