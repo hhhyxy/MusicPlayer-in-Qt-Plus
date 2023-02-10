@@ -284,7 +284,7 @@ void MyHttp::parseForSongLrc()
     lrcMap.clear();// 清理原来的歌词
     for (int i = 0; i < lrcList.size(); i++) {
         QString str = lrcList.at(i);
-        QString lrc = str.remove(QRegExp("\\s"));
+        QString lrc = str.trimmed();
         // 歌词
         QString lrcStr = lrc.mid(lrc.lastIndexOf("]") + 1);
         if (lrcStr.isEmpty()) {

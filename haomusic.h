@@ -82,6 +82,7 @@ private:
 
     QListWidgetItem     *currentLrcItem;        // 当前歌词所在item
     QMap<int,QString>    lrcMap;                // 歌词
+    QList<int>           lrcKeys;               // 歌词对应的时间帧
     QList<Music>         musicList;             // 播放列表音乐列表
     QList<Music>         searchResultMusicList; //搜索结果音乐列表
 

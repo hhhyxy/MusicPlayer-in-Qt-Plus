@@ -104,27 +104,28 @@ void HaoMusic::updateLayout()
     //设置歌词鼠标左键拖动
     QScroller::grabGesture(ui->listWidget_lrc,QScroller::LeftMouseButtonGesture);
     ui->listWidget_lrc->verticalScrollBar()->setSingleStep(20);
-    ui->listWidget_searchResult->verticalScrollBar()->setSingleStep(20);
+    ui->listWidget_searchResult->verticalScrollBar()->setSingleStep(1);
 }
 
 // 显示歌词
 void HaoMusic::showLrc()
 {
+    // 清空歌词
     ui->listWidget_lrc->clear();
+    lrcKeys.clear();
     currentLrcItem = nullptr;
+    // 歌词前空行
     QListWidgetItem *nullItem = new QListWidgetItem("");
     nullItem->setSizeHint(QSize(0, height()*0.5));
-
     nullItem->setFlags(Qt::NoItemFlags);
     ui->listWidget_lrc->addItem(nullItem);
     // 歌名
     QListWidgetItem *songNameItem = new QListWidgetItem(currentMusic.getSongName());
     songNameItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     songNameItem->setData(Qt::StatusTipRole, 0);
-
     ui->listWidget_lrc->addItem(songNameItem);
-
     // 歌词
+    lrcKeys = lrcMap.keys();
     QMap<int, QString>::iterator iter = lrcMap.begin();
     for (;iter != lrcMap.end(); iter++) {
         QListWidgetItem *item = new QListWidgetItem(iter.value());
@@ -132,6 +133,12 @@ void HaoMusic::showLrc()
         item->setData(Qt::StatusTipRole, iter.key());
         ui->listWidget_lrc->addItem(item);
     }
+    // 歌词后空行
+    nullItem = new QListWidgetItem("");
+    nullItem->setSizeHint(QSize(0, height()*0.5));
+    nullItem->setFlags(Qt::NoItemFlags);
+    ui->listWidget_lrc->addItem(nullItem);
+    // 滚动到歌名所在行
     ui->listWidget_lrc->setCurrentItem(songNameItem);
     ui->listWidget_lrc->scrollToItem(songNameItem);
 }
@@ -140,10 +147,9 @@ void HaoMusic::showLrc()
 void HaoMusic::lrcRoll(int position)
 {
     static int row = 0;
-    if (lrcMap.isEmpty()) {     // 歌词为空，直接返回
+    if (lrcKeys.isEmpty()) {     // 歌词为空，直接返回
         return;
     }
-    QList<int> keys = lrcMap.keys();
     if (position == 0) {
         row = 0;
     }
@@ -151,12 +157,12 @@ void HaoMusic::lrcRoll(int position)
     int lastKey = 0;
     int nextKey = 0;
 
-    while (row >= 0 && row < keys.size() - 1) {
-        key = keys.at(row);
+    while (row >= 0 && row < lrcKeys.size() - 1) {
+        key = lrcKeys.at(row);
         if (row != 0) {
-            lastKey = keys.at(row - 1);
+            lastKey = lrcKeys.at(row - 1);
         }
-        nextKey = keys.at(row + 1);
+        nextKey = lrcKeys.at(row + 1);
         if (key <= position && nextKey <= position)
             row++;
         else if (key > position && lastKey > position)
@@ -596,6 +602,8 @@ void HaoMusic::on_pushButton_localmusic_clicked()
 // 点击歌词改变歌曲进度
 void HaoMusic::on_listWidget_lrc_itemClicked(QListWidgetItem *item)
 {
+    if (item->data(Qt::StatusTipRole).isNull())
+        return;
     int position = item->data(Qt::StatusTipRole).toInt();
     mediaPlayer->setPosition(position);
     if (QMediaPlayer::PausedState == mediaPlayer->state()) {
