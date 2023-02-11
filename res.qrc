@@ -27,6 +27,7 @@
         <file>icon/noVolume.svg</file>
         <file>icon/pkq.jpg</file>
         <file>icon/loading.gif</file>
-        <file>icon/arowDown.svg</file>
+        <file>icon/downArow_black.svg</file>
+        <file>icon/downArow_gray.svg</file>
     </qresource>
 </RCC>

@@ -37,7 +37,7 @@ QTabBar::tab {
 QWidget#inner_widget{
 	margin:0px;
 	border:1px solid #FFFFFF;
-	border-radius:7px;
+	border-radius:6px;
 	background-color:white;
 }
 QTabWidget::pane {
@@ -66,8 +66,13 @@ QPushButton:hover {
     background-color: rgb(228, 237, 242);
 }
 QPushButton#pushButton_dropDown {
+	padding-top:10px;
 	margin-left:15px;
-margin-top:15px;
+	margin-top:15px;
+	icon: url(:/icon/downArow_gray.svg);
+}
+QPushButton#pushButton_dropDown:hover {
+	icon: url(:/icon/downArow_black.svg);
 }
 QPushButton#pushButton_search{
 	background-color:#f2f2f4;
@@ -249,6 +254,9 @@ QSlider::handle:horizontal {
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QWidget" name="inner_widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -286,6 +294,21 @@ QSlider::handle:horizontal {
           <string>主页</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
+           <number>11</number>
+          </property>
           <item>
            <widget class="QWidget" name="widget_header" native="true">
             <property name="sizePolicy">
@@ -922,8 +945,11 @@ QSlider::handle:horizontal {
              <property name="topMargin">
               <number>0</number>
              </property>
-             <property name="bottomMargin">
+             <property name="rightMargin">
               <number>11</number>
+             </property>
+             <property name="bottomMargin">
+              <number>5</number>
              </property>
              <item>
               <widget class="QWidget" name="widget_bottomMusicInfo" native="true">
@@ -1539,10 +1565,6 @@ QSlider::handle:horizontal {
                   <property name="text">
                    <string/>
                   </property>
-                  <property name="icon">
-                   <iconset resource="res.qrc">
-                    <normaloff>:/icon/arowDown.svg</normaloff>:/icon/arowDown.svg</iconset>
-                  </property>
                   <property name="iconSize">
                    <size>
                     <width>40</width>
@@ -1673,7 +1695,7 @@ QSlider::handle:horizontal {
                 <bool>false</bool>
                </property>
                <property name="dragDropMode">
-                <enum>QAbstractItemView::NoDragDrop</enum>
+                <enum>QAbstractItemView::DragOnly</enum>
                </property>
                <property name="verticalScrollMode">
                 <enum>QAbstractItemView::ScrollPerPixel</enum>

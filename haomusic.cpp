@@ -10,7 +10,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QPainter>
-#include <QGraphicsDropShadowEffect>
+
 
 HaoMusic::HaoMusic(QWidget *parent)
     : QWidget(parent)
@@ -46,13 +46,14 @@ void HaoMusic::mousePressEvent(QMouseEvent *event)
 
 // 鼠标移动
 void HaoMusic::mouseMoveEvent(QMouseEvent *event)
-{
-    if (this->isMaximized()) {// 窗口最大化则恢复正常大小
-        this->showNormal();
-        ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/max.svg")));
-    }
+{ 
     if(mousePress)// 若是鼠标左键按下则移动窗口
     {
+        if (this->isMaximized()) {// 窗口最大化则恢复正常大小
+            on_pushButton_maxsize_clicked();
+    //        this->showNormal();
+    //        ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/max.svg")));
+        }
         QPoint movePos = event->globalPos();// 鼠标现在位置
         this->move(movePos - movePoint);// 窗口应当移动到的坐标=鼠标当前全局坐标-鼠标初始相对窗口坐标
     }
@@ -77,16 +78,27 @@ void HaoMusic::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 // 绘制圆角阴影窗体边框
-void HaoMusic::paintEvent(QPaintEvent *event)
+void HaoMusic::paintShadowRadiusWidget()
 {
-    //外层窗口显示为透明
-    setAttribute(Qt::WA_TranslucentBackground,true);
-    //内层窗口添加对应的阴影效果
+    this->layout()->setContentsMargins(11, 11, 11, 11);
+    // 阴影
     QGraphicsDropShadowEffect *shadow_effect = new QGraphicsDropShadowEffect(this);
+    //内层窗口添加对应的阴影效果
     shadow_effect->setOffset(0, 0);
     shadow_effect->setColor(QColor(150,150,150));
     shadow_effect->setBlurRadius(6);
     ui->inner_widget->setGraphicsEffect(shadow_effect);
+}
+
+void HaoMusic::paintEvent(QPaintEvent *event)
+{
+    // 阴影在最大化的情况下不显示
+    if (!this->isMaximized()) {
+        ui->inner_widget->graphicsEffect()->setEnabled(true);
+    }else {
+        this->layout()->setContentsMargins(0, 0, 0, 0);
+        ui->inner_widget->graphicsEffect()->setEnabled(false);
+    }
     updateLayout();
     QWidget::paintEvent(event);
 }
@@ -203,8 +215,6 @@ void HaoMusic::changeCurrentPlayingItem(CustomItem *item)
     // 设置当前播放项的颜色为蓝色
     currentPlayingItem = item;
     currentPlayingItem->changeFontColor("blue");
-
-
 }
 
 // 双击托盘图标显示窗口
@@ -260,6 +270,7 @@ void HaoMusic::setTrayIcon()
 // 初始化
 void HaoMusic::initPlayer()
 {
+    paintShadowRadiusWidget();
     // 网络处理类初始化
     search = new MyHttp(this);
     // 播放器初始化
@@ -492,12 +503,13 @@ void HaoMusic::on_pushButton_minsize_clicked()
 void HaoMusic::on_pushButton_maxsize_clicked()
 {
     if (this->isMaximized()) {// 恢复正常大小
-        this->showNormal();
         ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/max.svg")));
+        this->showNormal();
     }
     else {// 最大化
-        this->showMaximized();
         ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/Max2normal.svg")));
+        this->showMaximized();
+
     }
 }
 

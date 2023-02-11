@@ -16,6 +16,7 @@
 #include <QPixmap>
 #include <QSize>
 #include <QTableWidgetItem>
+#include <QGraphicsDropShadowEffect>
 #include "music.h"
 #include "myhttp.h"
 #include "customitem.h"
@@ -69,6 +70,8 @@ private:
     MyHttp          *search             = nullptr;  // 网络搜索
     CustomItem      *currentPlayingItem = nullptr;  // 当前正在播放的item
 
+
+
     QPoint  m_mousePoint;       // 鼠标坐标
     QPoint  movePoint;          // 窗口移动距离
     bool    mousePress = false; // 鼠标左键是否按下
@@ -86,6 +89,8 @@ private:
     QList<Music>         musicList;             // 播放列表音乐列表
     QList<Music>         searchResultMusicList; //搜索结果音乐列表
 
+    // 绘制圆角阴影窗口
+    void paintShadowRadiusWidget();
     // 向listwidget添加行
     void addItemToListWidget(Music music);
     // 设置托盘图标

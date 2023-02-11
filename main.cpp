@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     w.setFixedSize(1503, 970);
     //去掉标题栏 点击任务栏图标显示/隐藏窗口
     w.setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinMaxButtonsHint);
+    // 外层窗口透明
     w.setAttribute(Qt::WA_TranslucentBackground);
     w.show();
     return a.exec();
