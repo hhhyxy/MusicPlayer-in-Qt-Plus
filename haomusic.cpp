@@ -94,6 +94,7 @@ void HaoMusic::paintEvent(QPaintEvent *event)
 {
     // 阴影在最大化的情况下不显示
     if (!this->isMaximized()) {
+        this->layout()->setContentsMargins(11, 11, 11, 11);
         ui->inner_widget->graphicsEffect()->setEnabled(true);
     }else {
         this->layout()->setContentsMargins(0, 0, 0, 0);
@@ -503,13 +504,12 @@ void HaoMusic::on_pushButton_minsize_clicked()
 void HaoMusic::on_pushButton_maxsize_clicked()
 {
     if (this->isMaximized()) {// 恢复正常大小
-        ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/max.svg")));
         this->showNormal();
+        ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/max.svg")));
     }
     else {// 最大化
-        ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/Max2normal.svg")));
         this->showMaximized();
-
+        ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/Max2normal.svg")));
     }
 }
 
