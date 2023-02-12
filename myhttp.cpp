@@ -4,6 +4,7 @@
 #include <QJsonParseError>
 #include <QDebug>
 #include <customitem.h>
+#include <QUrlQuery>
 
 MyHttp::MyHttp(QObject *parent)
     : QObject{parent}
@@ -19,26 +20,42 @@ MyHttp::~MyHttp()
     request = nullptr;
 }
 
-QList<Music> MyHttp::search(QString keywords)
+QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 15*/, int type/* = 1*/)
 {
     // 清空歌曲id列表和搜索结果列表
     musicIdList.clear();
     musicList.clear();
 
     // 搜索并解析返回的Json数据，获取歌曲id列表
-    QString url = QString(netease_keywords).append(keywords);
-    searchByUrl(QUrl(url));
+    QUrl url(netease_keywords);
+    QUrlQuery query;
+    // keywords关键词
+    query.addQueryItem("keywords", keywords);
+    // limit返回数量
+    query.addQueryItem("limit", QString::number(limit));
+    // offset偏移量
+    query.addQueryItem("offset", QString::number(offset));
+    /* type搜索类型
+     * 默认为 1 即单曲
+     * 取值意义 :
+     * 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单,
+     * 1002: 用户, 1004: MV, 1006: 歌词,
+     * 1009: 电台, 1014: 视频, 1018:综合,
+     * 2000:声音(搜索声音返回字段格式会不一样)
+    */
+    query.addQueryItem("type", QString::number(type));
+    url.setQuery(query);
+    searchByUrl(url);
     parseForMusicId();
-
     // 搜索并解析返回的Json数据，获取歌曲信息列表
-    url = QString(netease_songsInfo_Ids);
+    QString urlStr = QString(netease_songsInfo_Ids);
     for (int i = 0; i < musicIdList.size(); i++) {
-        url.append(QString::number(musicIdList.at(i)));
+        urlStr.append(QString::number(musicIdList.at(i)));
         if (i != musicIdList.size() - 1)
-            url.append(",");
+            urlStr.append(",");
     }
-    qDebug()<< __FILE__<<__LINE__ << url;
-    searchByUrl(QUrl(url));
+
+    searchByUrl(QUrl(urlStr));
     parseForMusicInfo();
     return musicList;
 }
@@ -90,23 +107,16 @@ QPixmap MyHttp::showAlbumPic(QString albumPicUrl)
         img.loadFromData(bytes);
         QImage image;
         image.loadFromData(bytes);
-//        //处理大尺寸的图片
-//        if (image.width() > 1000) {
-//            image.scaled(1000, 1000);
-//        }
-//        QPixmap pixmap = QPixmap::fromImage(image);
-//        //获取图片尺寸
-//        int imageWidth = pixmap.width();
-//        qDebug() << __FILE__ << __LINE__ << imageWidth;
-
+        reply->deleteLater();
         return CustomItem::image2Radius(img);
     }
     else
     {
         qDebug()<< __FILE__<<__LINE__<<"searchByUrl_Erro:"<< reply->errorString().toUtf8();
+        reply->deleteLater();
         return QPixmap();
     }
-    reply->deleteLater();
+
 }
 
 void MyHttp::searchByUrl(QUrl url)
@@ -234,7 +244,7 @@ void MyHttp::parseForMusicInfo()
 
         // 获取歌曲时长
         songDuration = song.value("dt").toInt();
-        if (NULL == songDuration) {
+        if (0 == songDuration) {
             qDebug()<< __FILE__<<__LINE__ << "歌曲时长解析错误";
             return;
         }

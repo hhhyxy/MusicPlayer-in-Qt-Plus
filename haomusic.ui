@@ -32,7 +32,24 @@
 QTabBar::tab {
       	width: 0;
 		height:0;
-        color: transparent;
+}
+QMenu {
+	margin:8px;
+	padding:10px;
+	border:none;
+	border-radius:10px;
+	background-color:white;
+}
+QMenu::item {
+	padding:10px;
+	border:none;
+	border-radius:6px;
+	background-color: white;
+	color: black;
+}
+QMenu::item:selected {
+	background-color:#eaeffd;
+	color:blue;
 }
 QWidget#inner_widget{
 	margin:0px;
@@ -102,6 +119,7 @@ QLabel#label_songName {
 QLabel#label_author,
 QLabel#label_lrc_author
 {
+	color:#727272;
 	margin:0;
 	font: 12pt &quot;华文楷体&quot;;
 }
@@ -256,6 +274,18 @@ QSlider::handle:horizontal {
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <property name="spacing">
     <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>11</number>
+   </property>
+   <property name="topMargin">
+    <number>11</number>
+   </property>
+   <property name="rightMargin">
+    <number>11</number>
+   </property>
+   <property name="bottomMargin">
+    <number>11</number>
    </property>
    <item>
     <widget class="QWidget" name="inner_widget" native="true">
@@ -461,14 +491,14 @@ QSlider::handle:horizontal {
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>60</width>
-                 <height>60</height>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="baseSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>40</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="toolTip">
@@ -508,14 +538,14 @@ QSlider::handle:horizontal {
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>60</width>
-                 <height>60</height>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="baseSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>40</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="toolTip">
@@ -552,14 +582,14 @@ QSlider::handle:horizontal {
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>60</width>
-                 <height>60</height>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="baseSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>40</width>
+                 <height>40</height>
                 </size>
                </property>
                <property name="toolTip">
@@ -672,6 +702,9 @@ QSlider::handle:horizontal {
                   <property name="text">
                    <string>本地音乐</string>
                   </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -702,6 +735,31 @@ QSlider::handle:horizontal {
                   </property>
                   <property name="text">
                    <string>最近播放</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_favorite">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>80</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>我喜欢的音乐</string>
                   </property>
                  </widget>
                 </item>
@@ -875,6 +933,11 @@ QSlider::handle:horizontal {
                <widget class="QWidget" name="tab_defalutSongList">
                 <attribute name="title">
                  <string>默认歌单</string>
+                </attribute>
+               </widget>
+               <widget class="QWidget" name="tab_favorite">
+                <attribute name="title">
+                 <string>我喜欢的音乐</string>
                 </attribute>
                </widget>
                <widget class="QWidget" name="tab_loading">
@@ -1058,9 +1121,6 @@ QSlider::handle:horizontal {
                   </property>
                   <property name="textFormat">
                    <enum>Qt::PlainText</enum>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap resource="res.qrc">:/icon/pkq.jpg</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>

@@ -1,12 +1,15 @@
 #include "customitem.h"
 #include "ui_customitem.h"
+#include "haomusic.h"
+
+#include <QBitmap>
 #include <QTime>
 #include <QTimer>
 #include <QPainter>
 #include <QPainterPath>
-#include <QBitmap>
 #include <QMouseEvent>
 #include <QStyleOption>
+#include <QGraphicsEffect>
 
 CustomItem::CustomItem(Music music, QWidget *parent) :
     QWidget(parent),
@@ -21,6 +24,8 @@ CustomItem::CustomItem(Music music, QWidget *parent) :
     request = new QNetworkRequest();
     connect(networkManager, &QNetworkAccessManager::finished, this, &CustomItem::replyFinished);
     setData();
+//    initMenu();
+    connect(this, CustomItem::customContextMenuRequested, this, CustomItem::showMenu);
 }
 
 CustomItem::~CustomItem()
@@ -42,14 +47,14 @@ void CustomItem::setData()
     ui->label_duration->setText(music.getSongDuration());
 }
 
-bool CustomItem::albumPicLoadingIsFinished() const
-{
-    return albumPicLoadingFinished;
-}
+//bool CustomItem::albumPicLoadingIsFinished() const
+//{
+//    return albumPicLoadingFinished;
+//}
 
 void CustomItem::changeFontColor(QString color)
 {
-    QString qss = QString("*{color:%1}").arg(color);
+    QString qss = QString("#label_songName,#label_author,#label_albumName,#label_duration{color:%1}").arg(color);
     this->setStyleSheet(qss);
 }
 
@@ -67,8 +72,8 @@ QPixmap CustomItem::image2Radius(QPixmap img, int radius)
         return QPixmap();
     }
     //处理大尺寸的图片
-    if (img.width() > 700) {
-        img = img.scaledToWidth(700);
+    if (img.width() > 600) {
+        img = img.scaledToWidth(600);
     }
 
     QSize size = img.size();
@@ -93,6 +98,37 @@ void CustomItem::showAlbumPic()
 
 }
 
+// 初始化菜单
+void CustomItem::initMenu()
+{
+    menu = new QMenu(this);
+    menu->addAction("播放音乐", [=] {
+        emit musicPlay(this);
+    });
+    menu->addAction("添加到我喜欢的音乐", [=] {
+        emit addToMyFavoriteMusic(this);
+    });
+    menu->addAction("添加到歌单", [=] {
+        emit addToSonglist(this);
+    });
+}
+
+// 显示右键菜单
+void CustomItem::showMenu()
+{
+    initMenu();
+    menu->setWindowFlags(menu->windowFlags()  | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    menu->setAttribute(Qt::WA_TranslucentBackground);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
+    effect->setOffset(0,0);
+    effect->setColor(QColor(150,150,150));
+    effect->setBlurRadius(10);
+    menu->setGraphicsEffect(effect);
+    menu->exec(QCursor::pos());
+    menu->deleteLater();
+    menu = nullptr;
+}
+
 void CustomItem::replyFinished(QNetworkReply *reply)
 {
     // 获取响应状态码，200表示正常
@@ -104,13 +140,13 @@ void CustomItem::replyFinished(QNetworkReply *reply)
         // 加载图片
         QPixmap pixmap;
         pixmap.loadFromData(bytes);
-        music.setAlbumPic(image2Radius(pixmap));
-        albumPicLoadingFinished = true;
-        ui->label_albumPic->setPixmap(music.albumPic().scaled(ui->label_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-
+        pixmap = image2Radius(pixmap);
+        music.setAlbumPic(pixmap);
+//        albumPicLoadingFinished = true;
+//        ui->label_albumPic->setPixmap(music.albumPic().scaled(ui->label_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        ui->label_albumPic->setPixmap(pixmap);
     }else {
         qDebug()<<__FILE__<<__LINE__<<"获取专辑图片失败";
-        QTimer::singleShot(1000, this, CustomItem::showAlbumPic);
     }
     reply->deleteLater();
     reply = nullptr;

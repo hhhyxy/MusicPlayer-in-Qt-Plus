@@ -17,14 +17,14 @@ class MyHttp : public QObject
 public:
     explicit MyHttp(QObject *parent = nullptr);
     ~MyHttp();
-    QList<Music> search(QString keywords);
+    QList<Music> search(QString keywords, int offset = 0, int limit = 15, int type = 1);
     QString searchForSongUrl(int id);
     QMap<int, QString> searchForLrc(int id);
 
     static QPixmap showAlbumPic(QString albumPicUrl);
 
 private:
-    const QString netease_keywords      = "https://netease.haohao666.top/search?keywords="; // 关键词搜索
+    const QString netease_keywords      = "https://netease.haohao666.top/search"; // 关键词搜索
     const QString netease_songsInfo_Ids = "https://netease.haohao666.top/song/detail?ids="; // 通过id获取歌曲信息
     const QString netease_songUrl_Id    = "https://netease.haohao666.top/song/url?id=%1";   // 通id获取歌曲播放链接
     const QString netease_songLrc_Id    = "https://netease.haohao666.top/lyric?id=%1";      // 通过id获取歌词

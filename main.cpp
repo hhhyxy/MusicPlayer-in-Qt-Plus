@@ -1,6 +1,7 @@
 #include "haomusic.h"
 
 #include <QApplication>
+#include <QSplashScreen>
 
 int main(int argc, char *argv[])
 {

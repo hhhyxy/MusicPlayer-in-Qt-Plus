@@ -33,6 +33,8 @@ class HaoMusic : public QWidget
 public:
     HaoMusic(QWidget *parent = nullptr);
     ~HaoMusic();
+    static HaoMusic* getInstance();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -78,9 +80,11 @@ private:
 
     int     volume          = 50;   // 音量
     int     currentLrcRow   = 1;    // 当前歌词所在行
+    int     loadingTimes    = 2000; // 加载所需事件（ms）
     QString searchKeywords  = "";   // 搜索关键词
     QMovie *loadingMovie;           // 加载动画
     Music   currentMusic;           // 当前播放的音乐
+
 
 
     QListWidgetItem     *currentLrcItem;        // 当前歌词所在item
@@ -88,7 +92,7 @@ private:
     QList<int>           lrcKeys;               // 歌词对应的时间帧
     QList<Music>         musicList;             // 播放列表音乐列表
     QList<Music>         searchResultMusicList; //搜索结果音乐列表
-
+    QList<Music>         favoriteMusicList;     // 我喜欢的音乐
     // 绘制圆角阴影窗口
     void paintShadowRadiusWidget();
     // 向listwidget添加行
@@ -117,15 +121,22 @@ private:
     void showLoadingPage();
     // 更改当前播放项的样式
     void changeCurrentPlayingItem(CustomItem *item);
+    // 播放当前项
+    void playingTheItem(CustomItem *item);
 private slots:
     void onPositionChanged(qint64);
     void onDurationChanged(qint64);
-
     void on_horizontalSlider_volume_valueChanged(int value);
+    void on_listWidget_lrc_itemClicked(QListWidgetItem *item);
     void on_pushButton_recentlyplayed_clicked();
     void on_pushButton_defaultSongList_clicked();
     void on_pushButton_localmusic_clicked();
-    void on_listWidget_lrc_itemClicked(QListWidgetItem *item);
     void on_pushButton_dropDown_clicked();
+    void on_pushButton_favorite_clicked();
+    // 右键菜单点击事件
+    void menuPlayMusicClicked(CustomItem *item);
+    void menuAddToMyFavoriteClicked(CustomItem *item);
+    void menuAddToSonglistClicked(CustomItem *item);
 };
+
 #endif // HAOMUSIC_H
