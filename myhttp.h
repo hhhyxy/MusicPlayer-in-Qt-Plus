@@ -17,11 +17,9 @@ class MyHttp : public QObject
 public:
     explicit MyHttp(QObject *parent = nullptr);
     ~MyHttp();
-    QList<Music> search(QString keywords, int offset = 0, int limit = 15, int type = 1);
+    QList<Music> search(QString keywords, int offset = 0, int limit = 25, int type = 1);
     QString searchForSongUrl(int id);
     QMap<int, QString> searchForLrc(int id);
-
-    static QPixmap showAlbumPic(QString albumPicUrl);
 
 private:
     const QString netease_keywords      = "https://netease.haohao666.top/search"; // 关键词搜索

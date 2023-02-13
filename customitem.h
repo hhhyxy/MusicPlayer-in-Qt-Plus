@@ -23,11 +23,12 @@ public:
 
     Music getMusic() const;
 
-    static QPixmap image2Radius(QPixmap pixmap, int radius = 0);
     // 改变字体颜色
     void changeFontColor(QString color);
-protected:
-    void paintEvent(QPaintEvent *event);
+    // 获取专辑图片
+    QPixmap getAlbumPic();
+    // 显示信息
+    void showInfo();
 signals:
     // 播放
     void musicPlay(CustomItem * item);
@@ -35,23 +36,23 @@ signals:
     void addToMyFavoriteMusic(CustomItem * item);
     // 添加到歌单
     void addToSonglist(CustomItem * item);
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
+
 private:
     Ui::CustomItem          *ui;
-    QNetworkAccessManager   *networkManager;
-    QNetworkRequest         *request;
     QMenu *menu = nullptr;
     Music music;
-//    bool albumPicLoadingFinished = false;  // 图片是否加载完成
-bool ischange = false;
+
+    bool ischange = false;
     // 显示专辑图片
     void showAlbumPic();
     // 初始化菜单
     void initMenu();
     // 显示右键菜单
     void showMenu();
-
-private slots:
-    void replyFinished(QNetworkReply *reply);
 };
 
 #endif // CUSTOMITEM_H

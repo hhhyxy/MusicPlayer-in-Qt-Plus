@@ -419,9 +419,10 @@ void HaoMusic::addItemToListWidget(Music music)
 {
     QListWidgetItem* qItem = new QListWidgetItem(ui->listWidget_searchResult);
     ui->listWidget_searchResult->addItem(qItem);
-    qItem->setSizeHint(QSize(0, 80));
+    qItem->setSizeHint(QSize(0, 75));
 
     CustomItem *myItem = new CustomItem(music, ui->listWidget_searchResult);
+    myItem->showInfo();
     // 绑定右键菜单的信号和槽
     connect(myItem, CustomItem::musicPlay, this, HaoMusic::menuPlayMusicClicked);
     connect(myItem, CustomItem::musicPlay, this, HaoMusic::menuAddToMyFavoriteClicked);
@@ -590,6 +591,11 @@ void HaoMusic::showSearchResult()
     for (int i = 0; i < searchResultMusicList.size(); i++) {
         addItemToListWidget(searchResultMusicList.at(i));
     }
+    QListWidgetItem* qItem = new QListWidgetItem(ui->listWidget_searchResult);
+    qItem->setSizeHint(QSize(120, 80));
+    ui->listWidget_searchResult->addItem(qItem);
+    QPushButton *btn = new QPushButton("继续加载 。。。", this);
+    ui->listWidget_searchResult->setItemWidget(qItem, btn);
 }
 
 // 搜索结果列表双击播放
@@ -616,21 +622,22 @@ void HaoMusic::updateBottomMusicInfo()
     int duration = currentMusic.songDuration();
     ui->horizontalSlider_musicProgress->setRange(0, duration);//根据播放时长来设置滑块的范围
     ui->horizontalSlider_musicProgress->setEnabled(duration>0);
-    ui->horizontalSlider_musicProgress->setSingleStep(100);
+    ui->horizontalSlider_musicProgress->setSingleStep(10);
     ui->horizontalSlider_musicProgress->setPageStep(duration/20);//以及每一步的步数
     // 设置歌曲信息
     ui->label_author->setText(currentMusic.getAuthor());
     ui->label_songname->setText(currentMusic.getSongName());
     ui->label_lrc_author->setText(currentMusic.getAuthor());
     ui->label_lrc_songName->setText(currentMusic.getSongName());
-
-    QPixmap pixmap = currentMusic.albumPic();
-    // 如果图片为空,重新加载
-    if (pixmap.isNull()) {
-        pixmap = MyHttp::showAlbumPic(currentMusic.albumPicUrl());
+    QPixmap pixmap = currentPlayingItem->getAlbumPic();
+    if (!pixmap.isNull()) {
+        ui->label_albumPic->setPixmap(pixmap);
+        ui->label_lrc_albumPic->setPixmap(pixmap);
+    }else {
+        ui->label_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
+        pixmap = *ui->label_albumPic->pixmap();
+        ui->label_lrc_albumPic->setPixmap(pixmap);
     }
-    ui->label_albumPic->setPixmap(pixmap);
-    ui->label_lrc_albumPic->setPixmap(pixmap);
 }
 
 // 打开播放历史页面

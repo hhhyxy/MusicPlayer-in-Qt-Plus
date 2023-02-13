@@ -1,6 +1,6 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia network
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia network concurrent
 
 CONFIG += c++17
 
@@ -23,7 +23,7 @@ QMAKE_TARGET_DESCRIPTION = QQ: 1589967693
 #DEFINES += QT_NO_DEBUG_OUTPUT
 
 #关闭编译警告提示 眼不见为净
-#CONFIG      += warn_off
+CONFIG      += warn_off
 
 #指定编译生成的文件到temp目录 分门别类存储
 #MOC_DIR     = temp/moc
@@ -42,6 +42,7 @@ SOURCES += \
     music.cpp \
     mybottombar.cpp \
     myhttp.cpp \
+    mylabel.cpp \
     mylineedit.cpp
 
 HEADERS += \
@@ -51,6 +52,7 @@ HEADERS += \
     music.h \
     mybottombar.h \
     myhttp.h \
+    mylabel.h \
     mylineedit.h
 
 FORMS += \

@@ -41,9 +41,6 @@ public:
 
     void setSongDuration(int newSongDuration);
 
-    QPixmap albumPic() const;
-    void setAlbumPic(const QPixmap &newAlbumPic);
-
 private:
     int         m_id = 0;               // 歌曲Id
     QString     m_songName = "";        // 歌曲名称

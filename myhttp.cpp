@@ -20,7 +20,7 @@ MyHttp::~MyHttp()
     request = nullptr;
 }
 
-QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 15*/, int type/* = 1*/)
+QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 25*/, int type/* = 1*/)
 {
     // 清空歌曲id列表和搜索结果列表
     musicIdList.clear();
@@ -75,48 +75,6 @@ QMap<int, QString> MyHttp::searchForLrc(int id)
     parseForSongLrc();
 
     return lrcMap;
-}
-
-QPixmap MyHttp::showAlbumPic(QString albumPicUrl)
-{
-    QNetworkAccessManager   *networkManager = new QNetworkAccessManager(); // 网络接口管理
-    QNetworkRequest         *request = new QNetworkRequest();        // 网络请求
-    QNetworkReply           *reply;          // 网络应答
-    request->setUrl(QUrl(albumPicUrl));
-    reply = networkManager->get(*request);
-    //阻塞网络请求，请求成功或6秒后没得到响应，则终止阻塞，
-    QEventLoop eventLoop;
-    QTimer::singleShot(10000, &eventLoop,
-        [&]() {
-            if (eventLoop.isRunning()) {
-                eventLoop.quit();
-            }
-        });
-    connect(reply, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
-    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
-
-    // 状态码
-    int status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    qDebug() << __FILE__ << __LINE__ << QString("状态码：") << status_code;
-
-    //response
-    if (reply->error() == QNetworkReply::NoError)
-    {
-        QByteArray bytes = reply->readAll();  //获取字节
-        QPixmap img;
-        img.loadFromData(bytes);
-        QImage image;
-        image.loadFromData(bytes);
-        reply->deleteLater();
-        return CustomItem::image2Radius(img);
-    }
-    else
-    {
-        qDebug()<< __FILE__<<__LINE__<<"searchByUrl_Erro:"<< reply->errorString().toUtf8();
-        reply->deleteLater();
-        return QPixmap();
-    }
-
 }
 
 void MyHttp::searchByUrl(QUrl url)

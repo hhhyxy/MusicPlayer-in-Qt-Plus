@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>891</width>
-    <height>80</height>
+    <width>813</width>
+    <height>75</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>0</width>
-    <height>80</height>
+    <height>75</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>15645623</width>
-    <height>80</height>
+    <width>13534645</width>
+    <height>75</height>
    </size>
   </property>
   <property name="font">
@@ -61,9 +61,18 @@
    <property name="bottomMargin">
     <number>10</number>
    </property>
-   <item>
+   <item alignment="Qt::AlignVCenter">
     <widget class="QWidget" name="widget_song" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -77,7 +86,7 @@
        <number>0</number>
       </property>
       <item alignment="Qt::AlignVCenter">
-       <widget class="QLabel" name="label_albumPic">
+       <widget class="MyLabel" name="label_albumPic">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -86,14 +95,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>60</width>
-          <height>60</height>
+          <width>55</width>
+          <height>55</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>60</width>
-          <height>60</height>
+          <width>55</width>
+          <height>55</height>
          </size>
         </property>
         <property name="baseSize">
@@ -115,6 +124,9 @@
         <property name="spacing">
          <number>0</number>
         </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
         <property name="topMargin">
          <number>0</number>
         </property>
@@ -124,7 +136,7 @@
         <item>
          <widget class="QLabel" name="label_songName">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -151,7 +163,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -161,7 +173,7 @@
         <item>
          <widget class="QLabel" name="label_author">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -182,7 +194,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
           </property>
           <property name="margin">
            <number>-2</number>
@@ -200,7 +212,7 @@
    <item>
     <widget class="QLabel" name="label_albumName">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -228,7 +240,7 @@
    <item>
     <widget class="QLabel" name="label_duration">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -240,6 +252,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">mylabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

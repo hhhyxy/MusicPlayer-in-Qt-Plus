@@ -65,16 +65,6 @@ void Music::setSongDuration(int newSongDuration)
     m_songDuration = newSongDuration;
 }
 
-QPixmap Music::albumPic() const
-{
-    return m_albumPic;
-}
-
-void Music::setAlbumPic(const QPixmap &newAlbumPic)
-{
-    m_albumPic = newAlbumPic;
-}
-
 QString Music::getSongDuration() const
 {
     return QTime(0, 0, 0, 0).addMSecs(m_songDuration).toString("mm:ss");

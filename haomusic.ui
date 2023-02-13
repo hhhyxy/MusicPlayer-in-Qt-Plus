@@ -114,14 +114,14 @@ QLabel#label_lrc_songName
 	font: 16pt &quot;华文楷体&quot;;
 }
 QLabel#label_songName {
-	font: 15pt &quot;华文楷体&quot;;
+	font: 14pt &quot;华文楷体&quot;;
 }
 QLabel#label_author,
 QLabel#label_lrc_author
 {
 	color:#727272;
 	margin:0;
-	font: 12pt &quot;华文楷体&quot;;
+	font: 10pt &quot;华文楷体&quot;;
 }
 QLabel#label_lrc_songName,
 QLabel#label_lrc_author
@@ -134,7 +134,7 @@ QLabel#label_lrc_songName {
 
 }
 QLabel#label_albumName {
-	font: 14pt &quot;华文楷体&quot;;
+	font: 12pt &quot;华文楷体&quot;;
 }	
 QLabel#label_duration {
 	font: 12pt &quot;华文楷体&quot;;
@@ -317,7 +317,7 @@ QSlider::handle:horizontal {
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab_homePage">
          <attribute name="title">
@@ -424,6 +424,9 @@ QSlider::handle:horizontal {
                  <width>150</width>
                  <height>40</height>
                 </size>
+               </property>
+               <property name="contextMenuPolicy">
+                <enum>Qt::NoContextMenu</enum>
                </property>
                <property name="frame">
                 <bool>false</bool>
@@ -1069,7 +1072,7 @@ QSlider::handle:horizontal {
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_albumPic">
+                 <widget class="MyLabel" name="label_albumPic">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
@@ -1620,7 +1623,7 @@ QSlider::handle:horizontal {
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QLabel" name="label_lrc_albumPic">
+                    <widget class="MyLabel" name="label_lrc_albumPic">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                        <horstretch>0</horstretch>
@@ -1641,9 +1644,6 @@ QSlider::handle:horizontal {
                      </property>
                      <property name="text">
                       <string/>
-                     </property>
-                     <property name="pixmap">
-                      <pixmap resource="res.qrc">:/icon/pkq.jpg</pixmap>
                      </property>
                      <property name="scaledContents">
                       <bool>true</bool>
@@ -1767,6 +1767,11 @@ QSlider::handle:horizontal {
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>MyLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">mylabel.h</header>
+  </customwidget>
   <customwidget>
    <class>CustomSlider</class>
    <extends>QSlider</extends>
