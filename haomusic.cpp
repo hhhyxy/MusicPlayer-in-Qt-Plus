@@ -17,7 +17,7 @@ HaoMusic::HaoMusic(QWidget *parent)
 {
     ui->setupUi(this);
 
-    volume = 50;// 初始化音量
+    volume = 40;// 初始化音量
 
     // 设置托盘图标
     setTrayIcon();
@@ -134,7 +134,7 @@ void HaoMusic::connectSignalsAndSlots()
     });
     // 底部栏点击显示歌词
     connect(ui->widget_bottombar, MyBottomBar::clicked, this, [=] {
-        ui->tabWidget->setCurrentWidget(ui->tab_lrc);
+        showLrcPage();
     });
 
     // 播放模式改变，更新模式图标和提示
@@ -261,8 +261,8 @@ void HaoMusic::updateLayout()
     // 设置歌词界面左侧栏布局
     ui->widget_lrc_songInfo->setFixedWidth(width()*0.45);
     ui->label_lrc_albumPic->setFixedSize(0.8*ui->widget_lrc_songInfo->width(),0.8*ui->widget_lrc_songInfo->width());
-    ui->label_lrc_songName->setIndent(ui->label_lrc_albumPic->width()*0.12);
-    ui->label_lrc_author->setIndent(ui->label_lrc_albumPic->width()*0.12 + 5);
+    ui->label_lrc_songName->setIndent(ui->label_lrc_albumPic->width()*0.01);
+    ui->label_lrc_author->setIndent(ui->label_lrc_albumPic->width()*0.01 + 5);
     //设置歌词鼠标左键拖动
     QScroller::grabGesture(ui->listWidget_lrc,QScroller::LeftMouseButtonGesture);
     ui->listWidget_lrc->verticalScrollBar()->setSingleStep(20);
@@ -419,7 +419,7 @@ void HaoMusic::addItemToListWidget(Music music)
 {
     QListWidgetItem* qItem = new QListWidgetItem(ui->listWidget_searchResult);
     ui->listWidget_searchResult->addItem(qItem);
-    qItem->setSizeHint(QSize(0, 100));
+    qItem->setSizeHint(QSize(0, 80));
 
     CustomItem *myItem = new CustomItem(music, ui->listWidget_searchResult);
     // 绑定右键菜单的信号和槽
@@ -559,7 +559,6 @@ void HaoMusic::sliderClicked()
 // 搜索
 void HaoMusic::on_pushButton_search_clicked()
 {
-
     if (searchKeywords == ui->lineEdit_search->text()) {  // 禁止重复搜索
         ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_searchResult);
         return;
@@ -570,6 +569,7 @@ void HaoMusic::on_pushButton_search_clicked()
     }
     ui->lineEdit_search->clearFocus();      // 清除搜索框焦点
     ui->listWidget_searchResult->clear();   // 清空搜索结果列表
+    currentPlayingItem = nullptr;           // 当前播放项置为空
     // 进入加载动画页面
     showLoadingPage();
     // 切换到搜索页面,暂停加载动画
@@ -582,7 +582,6 @@ void HaoMusic::on_pushButton_search_clicked()
     // 搜索关键词，返回搜索结果列表
     searchResultMusicList = search->search(searchKeywords);
     showSearchResult();
-
 }
 
 // 显示搜索结果
@@ -632,8 +631,6 @@ void HaoMusic::updateBottomMusicInfo()
     }
     ui->label_albumPic->setPixmap(pixmap);
     ui->label_lrc_albumPic->setPixmap(pixmap);
-//    ui->label_albumPic->setPixmap(pixmap.scaled(ui->label_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-//    ui->label_lrc_albumPic->setPixmap(pixmap.scaled(ui->label_lrc_albumPic->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 }
 
 // 打开播放历史页面
@@ -671,6 +668,9 @@ void HaoMusic::on_pushButton_favorite_clicked()
         ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_favorite);
         loadingMovie->stop();
     });
+    if (!favoriteMusicList.isEmpty()) {
+
+    }
 }
 
 // 右键菜单点击播放音乐
@@ -691,3 +691,9 @@ void HaoMusic::menuAddToSonglistClicked(CustomItem *item)
 
 }
 
+// 显示歌词界面
+void HaoMusic::showLrcPage()
+{
+    ui->tabWidget->setCurrentWidget(ui->tab_lrc);
+    ui->listWidget_lrc->scrollToItem(currentLrcItem);
+}

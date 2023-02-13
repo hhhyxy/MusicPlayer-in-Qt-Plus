@@ -21,15 +21,13 @@ public:
 
     ~CustomItem();
 
-    void setData();
-
     Music getMusic() const;
 
     static QPixmap image2Radius(QPixmap pixmap, int radius = 0);
-    // 专辑图片是否加载完成
-//    bool albumPicLoadingIsFinished() const;
     // 改变字体颜色
     void changeFontColor(QString color);
+protected:
+    void paintEvent(QPaintEvent *event);
 signals:
     // 播放
     void musicPlay(CustomItem * item);

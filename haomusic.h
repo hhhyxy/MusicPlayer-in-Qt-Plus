@@ -123,6 +123,8 @@ private:
     void changeCurrentPlayingItem(CustomItem *item);
     // 播放当前项
     void playingTheItem(CustomItem *item);
+    // 显示歌词页面
+    void showLrcPage();
 private slots:
     void onPositionChanged(qint64);
     void onDurationChanged(qint64);

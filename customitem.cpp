@@ -16,15 +16,15 @@ CustomItem::CustomItem(Music music, QWidget *parent) :
     ui(new Ui::CustomItem)
 {
     ui->setupUi(this);
-    ui->label_albumPic->setFixedSize(70, 70);
-    setWindowFlags(Qt::FramelessWindowHint);//窗口仅用于输出，不接收任何输入事件
+
+    setWindowFlags(Qt::FramelessWindowHint);
     this->music = music;
     // 初始化网络请求
     networkManager = new QNetworkAccessManager(this);
     request = new QNetworkRequest();
     connect(networkManager, &QNetworkAccessManager::finished, this, &CustomItem::replyFinished);
-    setData();
-//    initMenu();
+    // 显示专辑图片
+    showAlbumPic();
     connect(this, CustomItem::customContextMenuRequested, this, CustomItem::showMenu);
 }
 
@@ -35,27 +35,27 @@ CustomItem::~CustomItem()
     request = nullptr;
 }
 
-void CustomItem::setData()
-{
-    // 显示专辑图片
-    showAlbumPic();
-    // 显示歌名、歌手、专辑名、时长
-    qDebug()<<__FILE__<<__LINE__ << tr("songName:") << music.getSongName();
-    ui->label_songName->setText(music.getSongName());
-    ui->label_author->setText(music.getAuthor());
-    ui->label_albumName->setText(music.getAlbumName());
-    ui->label_duration->setText(music.getSongDuration());
-}
-
-//bool CustomItem::albumPicLoadingIsFinished() const
-//{
-//    return albumPicLoadingFinished;
-//}
-
+// 改变字体颜色
 void CustomItem::changeFontColor(QString color)
 {
     QString qss = QString("#label_songName,#label_author,#label_albumName,#label_duration{color:%1}").arg(color);
     this->setStyleSheet(qss);
+}
+
+void CustomItem::paintEvent(QPaintEvent *event)
+{
+    ui->label_albumName->setGeometry(width()*0.45, 0, width()*0.5, height());
+    ui->widget_song->setMaximumWidth(width()*0.4);
+
+    QString songName = ui->label_songName->fontMetrics().elidedText(music.getSongName(), Qt::ElideRight, ui->label_songName->width());
+    QString author    = ui->label_author->fontMetrics().elidedText(music.getAuthor(), Qt::ElideRight, ui->label_author->width());
+    QString albumName = ui->label_songName->fontMetrics().elidedText(music.getAlbumName(), Qt::ElideRight, ui->label_albumName->width());
+    ui->label_songName->setText(songName);
+    ui->label_author->setText(author);
+    ui->label_albumName->setText(albumName);
+    ui->label_duration->setText(music.getSongDuration());
+
+    QWidget::paintEvent(event);
 }
 
 Music CustomItem::getMusic() const
