@@ -1,10 +1,9 @@
-#ifndef MYLABEL_H
+﻿#ifndef MYLABEL_H
 #define MYLABEL_H
 
 #include <QLabel>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
-
 
 class MyLabel : public QLabel
 {
@@ -13,17 +12,19 @@ public:
     explicit MyLabel(QWidget *parent = nullptr);
     ~MyLabel();
     void setRadiusPixmap(QString url);
-    void makeRadiusPixmap(QPixmap pixmap);
+    void makeRadiusPixmap(QByteArray bytes);
     QPixmap getImg() const;
 
-signals:
-//    void signalSetPixmap(QPixmap pixmap);
 private:
-    QNetworkAccessManager   *networkManager;
-    QNetworkRequest         *request;
+    QNetworkAccessManager   *networkManager = nullptr;
+    QNetworkRequest         *request = nullptr;
     QPixmap img;
+    QString picUrl = "";
 
-    void onPicReplyFinished(QNetworkReply *reply);
+
+
+private slots:
+    void onReplyFinished(QNetworkReply *reply);
 };
 
 #endif // MYLABEL_H

@@ -1,4 +1,4 @@
-#include "mylineedit.h"
+﻿#include "mylineedit.h"
 #include <QFocusEvent>
 
 MyLineEdit::MyLineEdit(QWidget *parent)
@@ -18,5 +18,3 @@ void MyLineEdit::focusOutEvent(QFocusEvent *e)
     emit focusOut();
     QLineEdit::focusOutEvent(e);
 }
-
-

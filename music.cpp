@@ -1,4 +1,4 @@
-#include "music.h"
+﻿#include "music.h"
 #include <QTime>
 
 Music::Music()
@@ -26,8 +26,6 @@ Music::Music(int id, QString songName, QString author, QString albumName, QStrin
     m_songDuration(songDuration),
     m_songUrl(songUrl)
 {
-
-
 }
 
 bool Music::operator ==(const Music &music)
@@ -79,8 +77,6 @@ void Music::setSongUrl(const QString &newSongUrl)
 {
     m_songUrl = newSongUrl;
 }
-
-
 
 QString Music::getSongUrl() const
 {

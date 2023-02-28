@@ -1,14 +1,16 @@
-#ifndef MUSIC_H
+﻿#ifndef MUSIC_H
 #define MUSIC_H
 #include <QString>
 #include <QPixmap>
 
+
+
 class Music
 {
 public:
-    Music();
-    Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration);
-    Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration, QString songUrl);
+    explicit Music();
+    explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration);
+    explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration, QString songUrl);
 
     // geter and setter
     int getId() const;
@@ -42,15 +44,14 @@ public:
     void setSongDuration(int newSongDuration);
 
 private:
-    int         m_id = 0;               // 歌曲Id
-    QString     m_songName = "";        // 歌曲名称
-    QString     m_author = "";          // 歌手
-    QString     m_albumName = "";       // 专辑名称
-    QString     m_albumPicUrl = "";     // 专辑图片链接
-    QPixmap     m_albumPic;             // 专辑图片
-    int         m_songDuration = 0;     // 歌曲时长
-    QString     m_songUrl = "";         // 歌曲链接
+    int         m_id;              // 歌曲Id
+    QString     m_songName;        // 歌曲名称
+    QString     m_author;          // 歌手
+    QString     m_albumName;       // 专辑名称
+    QString     m_albumPicUrl;     // 专辑图片链接
+    int         m_songDuration;    // 歌曲时长
+    QString     m_songUrl;         // 歌曲链接
 
 };
-
+Q_DECLARE_METATYPE(Music);
 #endif // MUSIC_H

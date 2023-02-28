@@ -6,12 +6,12 @@ CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 #程序版本
 VERSION  = 1.0
 #程序图标
-#RC_ICONS = ../icon/MusicPlayer.ico
+#RC_ICONS = :/icon/MusicPlayer.ico
 #产品名称
 QMAKE_TARGET_PRODUCT = MusicPlayer
 #版权所有
@@ -23,7 +23,7 @@ QMAKE_TARGET_DESCRIPTION = QQ: 1589967693
 #DEFINES += QT_NO_DEBUG_OUTPUT
 
 #关闭编译警告提示 眼不见为净
-CONFIG      += warn_off
+#CONFIG      += warn_off
 
 #指定编译生成的文件到temp目录 分门别类存储
 #MOC_DIR     = temp/moc
@@ -35,6 +35,7 @@ CONFIG      += warn_off
 #DESTDIR     = bin
 
 SOURCES += \
+    addsonglistpage.cpp \
     customitem.cpp \
     customslider.cpp \
     main.cpp \
@@ -43,9 +44,11 @@ SOURCES += \
     mybottombar.cpp \
     myhttp.cpp \
     mylabel.cpp \
-    mylineedit.cpp
+    mylineedit.cpp \
+    mylistwidget.cpp
 
 HEADERS += \
+    addsonglistpage.h \
     customslider.h \
     customitem.h \
     haomusic.h \
@@ -53,9 +56,11 @@ HEADERS += \
     mybottombar.h \
     myhttp.h \
     mylabel.h \
-    mylineedit.h
+    mylineedit.h \
+    mylistwidget.h
 
 FORMS += \
+    addsonglistpage.ui \
     customitem.ui \
     haomusic.ui
 

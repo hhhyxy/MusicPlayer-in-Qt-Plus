@@ -1,4 +1,4 @@
-#include "myhttp.h"
+﻿#include "myhttp.h"
 #include <QEventLoop>
 #include <QTimer>
 #include <QJsonParseError>
@@ -20,7 +20,15 @@ MyHttp::~MyHttp()
     request = nullptr;
 }
 
-QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 25*/, int type/* = 1*/)
+/*
+ * @return 搜索结果（音乐列表）
+ * @param keywords 搜索关键词
+ * @param offset：偏移量
+ * @param limit：返回结果数量
+ * @param type：搜索类型，取值意义 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单,
+ *              1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音(搜索声音返回字段格式会不一样)
+*/
+QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 20*/, int type/* = 1*/)
 {
     // 清空歌曲id列表和搜索结果列表
     musicIdList.clear();
@@ -29,24 +37,15 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
     // 搜索并解析返回的Json数据，获取歌曲id列表
     QUrl url(netease_keywords);
     QUrlQuery query;
-    // keywords关键词
     query.addQueryItem("keywords", keywords);
-    // limit返回数量
     query.addQueryItem("limit", QString::number(limit));
-    // offset偏移量
     query.addQueryItem("offset", QString::number(offset));
-    /* type搜索类型
-     * 默认为 1 即单曲
-     * 取值意义 :
-     * 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单,
-     * 1002: 用户, 1004: MV, 1006: 歌词,
-     * 1009: 电台, 1014: 视频, 1018:综合,
-     * 2000:声音(搜索声音返回字段格式会不一样)
-    */
     query.addQueryItem("type", QString::number(type));
     url.setQuery(query);
+
     searchByUrl(url);
     parseForMusicId();
+
     // 搜索并解析返回的Json数据，获取歌曲信息列表
     QString urlStr = QString(netease_songsInfo_Ids);
     for (int i = 0; i < musicIdList.size(); i++) {
@@ -57,26 +56,52 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
 
     searchByUrl(QUrl(urlStr));
     parseForMusicInfo();
+
+    // 获取歌曲播放链接
+    searchForSongUrls(musicIdList);
     return musicList;
 }
 
+/*
+ *@return 返回歌曲播放链接
+ *@param id:歌曲id
+ */
 QString MyHttp::searchForSongUrl(int id)
 {
-    QString url = QString(netease_songUrl_Id).arg(id);
+    QString url = QString(netease_songUrl_Id).append(QString::number(id));
     searchByUrl(url);
     parseForSongUrl();
     return songUrl;
 }
 
+void MyHttp::searchForSongUrls(QList<int> musicIdList)
+{
+    QString urlStr = QString(netease_songUrl_Id);
+    for (int i = 0; i < musicIdList.size(); i++) {
+        urlStr.append(QString::number(musicIdList.at(i)));
+        if (i != musicIdList.size() - 1)
+            urlStr.append(",");
+    }
+    searchByUrl(urlStr);
+    parseForSongUrl();
+}
+
+/*
+ *@return 返回歌词
+ *@param id:歌曲id
+ */
 QMap<int, QString> MyHttp::searchForLrc(int id)
 {
     QString url = QString(netease_songLrc_Id).arg(id);
     searchByUrl(url);
     parseForSongLrc();
-
     return lrcMap;
 }
 
+/*
+ *@param url:请求链接
+ *@func 返回的数据存储到QByteArray中
+ */
 void MyHttp::searchByUrl(QUrl url)
 {
     // 以get方式请求url
@@ -110,6 +135,7 @@ void MyHttp::searchByUrl(QUrl url)
     reply->deleteLater();
 }
 
+// 解析QByteArray，得到歌曲id
 void MyHttp::parseForMusicId()
 {
     // 将json解析为编码为UTF-8的json文档
@@ -142,6 +168,7 @@ void MyHttp::parseForMusicId()
     }
 }
 
+// 解析QByteArray，得到歌曲信息，包括歌名、歌手、专辑名、专辑图片链接、歌曲时长
 void MyHttp::parseForMusicInfo()
 {
     // 将json解析为编码为UTF-8的json文档
@@ -163,7 +190,7 @@ void MyHttp::parseForMusicInfo()
 
     QString songName;       // 歌名
     QString author;         // 歌手
-    QString albumName;      // 专辑
+    QString albumName;      // 专辑名称
     QString albumPicUrl;    // 专辑图片链接
     int     songDuration;   // 时长
 
@@ -213,8 +240,10 @@ void MyHttp::parseForMusicInfo()
     }
 }
 
+// 解析QByteArray，得到歌曲播放链接
 void MyHttp::parseForSongUrl()
 {
+
     // 将json解析未编码未UTF-8的json文档
     QJsonParseError json_error; // 错误信息
     QJsonDocument parse_doucment = QJsonDocument::fromJson(bytes, &json_error);
@@ -223,14 +252,28 @@ void MyHttp::parseForSongUrl()
         return;
     }
 
+    QJsonArray array = parse_doucment.object().value("data").toArray();
+
     // 将data下的url提取出来
-    songUrl = parse_doucment.object().value("data").toArray().at(0).toObject().value("url").toString();
-    if (songUrl.isEmpty()) {
-        qDebug()<< __FILE__<<__LINE__ << "songUrl解析错误";
-        return;
+
+    for (int i = 0; i < array.size(); i++) {
+        int id = array[i].toObject().value("id").toInt();
+        QString songUrl = array[i].toObject().value("url").toString();
+
+        if (songUrl.isEmpty()) {
+//            qDebug()<< __FILE__<<__LINE__<< id << "songUrl is empty";
+            continue;
+        }
+        urlMap.insert(id, songUrl);
+    }
+    for (int i = 0; i < musicList.size(); i++) {
+        QString url = urlMap.value(musicList.at(i).getId());
+        musicList[i].setSongUrl(url);
+//        qDebug()<< __FILE__<<__LINE__<< musicList.at(i).getSongName() << musicList.at(i).getSongUrl();
     }
 }
 
+// 解析QByteArray，得到歌词
 void MyHttp::parseForSongLrc()
 {
     // 将json解析未编码未UTF-8的json文档

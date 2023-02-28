@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>813</width>
-    <height>75</height>
+    <width>855</width>
+    <height>80</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>0</width>
-    <height>75</height>
+    <height>80</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>13534645</width>
-    <height>75</height>
+    <height>80</height>
    </size>
   </property>
   <property name="font">
@@ -45,7 +45,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="4,4,0">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -95,14 +95,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>55</width>
-          <height>55</height>
+          <width>60</width>
+          <height>60</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>55</width>
-          <height>55</height>
+          <width>60</width>
+          <height>60</height>
          </size>
         </property>
         <property name="baseSize">
@@ -136,15 +136,15 @@
         <item>
          <widget class="QLabel" name="label_songName">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="maximumSize">
            <size>
-            <width>35045</width>
-            <height>15346</height>
+            <width>1726660</width>
+            <height>1726660</height>
            </size>
           </property>
           <property name="font">
@@ -173,7 +173,7 @@
         <item>
          <widget class="QLabel" name="label_author">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -212,7 +212,7 @@
    <item>
     <widget class="QLabel" name="label_albumName">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -225,7 +225,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>546543</width>
+       <width>16777215</width>
        <height>16777215</height>
       </size>
      </property>

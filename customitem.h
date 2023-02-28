@@ -1,12 +1,9 @@
-#ifndef CUSTOMITEM_H
+﻿#ifndef CUSTOMITEM_H
 #define CUSTOMITEM_H
 
 #include "music.h"
 #include <QWidget>
 #include <QMenu>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 
 namespace Ui {
 class CustomItem;
@@ -16,7 +13,15 @@ class CustomItem : public QWidget
 {
     Q_OBJECT
 
+
 public:
+    enum {
+        SEARCHRESULT,
+        FAVORITE,
+        SONGLIST,
+        LOCAL,
+        RECENTLY
+    };
     explicit CustomItem(Music music, QWidget *parent = nullptr);
 
     ~CustomItem();
@@ -27,26 +32,28 @@ public:
     void changeFontColor(QString color);
     // 获取专辑图片
     QPixmap getAlbumPic();
-    // 显示信息
-    void showInfo();
+    // 设置item类型
+    void setItemType(int itemType);
+    int getItemType() const;
+
 signals:
     // 播放
-    void musicPlay(CustomItem * item);
+    void musicPlay(CustomItem *item);
     // 添加到我喜欢的音乐
-    void addToMyFavoriteMusic(CustomItem * item);
+    void addToMyFavoriteMusic(CustomItem *item);
     // 添加到歌单
-    void addToSonglist(CustomItem * item);
+    void addToSonglist(CustomItem *item);
+    // 双击信号
+    void myItemDoubleClicked(CustomItem *item);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-
-
+    void mouseDoubleClickEvent(QMouseEvent *event);
 private:
-    Ui::CustomItem          *ui;
-    QMenu *menu = nullptr;
-    Music music;
+    Ui::CustomItem *ui;
 
-    bool ischange = false;
+    QMenu   *menu = nullptr;
+    Music   music;
+    int     itemType;
     // 显示专辑图片
     void showAlbumPic();
     // 初始化菜单

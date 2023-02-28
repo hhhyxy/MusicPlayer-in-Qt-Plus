@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1282</width>
-    <height>912</height>
+    <width>924</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,6 +80,9 @@ QPushButton {
 }
 
 QPushButton:hover {
+    background-color: rgb(228, 237, 242);
+}
+QPushButton:selected {
     background-color: rgb(228, 237, 242);
 }
 QPushButton#pushButton_dropDown {
@@ -381,7 +384,7 @@ QSlider::handle:horizontal {
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item alignment="Qt::AlignVCenter">
+             <item>
               <widget class="QLabel" name="label_title">
                <property name="font">
                 <font>
@@ -430,6 +433,9 @@ QSlider::handle:horizontal {
                </property>
                <property name="frame">
                 <bool>false</bool>
+               </property>
+               <property name="cursorMoveStyle">
+                <enum>Qt::VisualMoveStyle</enum>
                </property>
               </widget>
              </item>
@@ -618,7 +624,7 @@ QSlider::handle:horizontal {
           </item>
           <item>
            <widget class="QWidget" name="widget_content" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="3,8">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -871,7 +877,7 @@ QSlider::handle:horizontal {
                   </widget>
                  </item>
                  <item row="1" column="0" colspan="2">
-                  <widget class="QListWidget" name="listWidget_searchResult">
+                  <widget class="MyListWidget" name="listWidget_searchResult">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                      <horstretch>0</horstretch>
@@ -901,19 +907,28 @@ QSlider::handle:horizontal {
                 <attribute name="title">
                  <string>本地音乐</string>
                 </attribute>
-                <widget class="QLabel" name="label">
-                 <property name="geometry">
-                  <rect>
-                   <x>10</x>
-                   <y>10</y>
-                   <width>121</width>
-                   <height>61</height>
-                  </rect>
-                 </property>
-                 <property name="text">
-                  <string>本地音乐</string>
-                 </property>
-                </widget>
+                <layout class="QVBoxLayout" name="verticalLayout_11">
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>本地音乐</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="MyListWidget" name="listWidget_localMusic">
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::DoubleClicked</set>
+                   </property>
+                   <property name="defaultDropAction">
+                    <enum>Qt::IgnoreAction</enum>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::ExtendedSelection</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
                <widget class="QWidget" name="tab_recentlyPlayed">
                 <attribute name="title">
@@ -942,6 +957,25 @@ QSlider::handle:horizontal {
                 <attribute name="title">
                  <string>我喜欢的音乐</string>
                 </attribute>
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <item>
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>我喜欢的音乐</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="MyListWidget" name="listWidget_favorite">
+                   <property name="verticalScrollMode">
+                    <enum>QAbstractItemView::ScrollPerPixel</enum>
+                   </property>
+                   <property name="horizontalScrollMode">
+                    <enum>QAbstractItemView::ScrollPerPixel</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
                <widget class="QWidget" name="tab_loading">
                 <attribute name="title">
@@ -1007,7 +1041,7 @@ QSlider::handle:horizontal {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,2,5">
              <property name="leftMargin">
               <number>20</number>
              </property>
@@ -1021,37 +1055,10 @@ QSlider::handle:horizontal {
               <number>5</number>
              </property>
              <item>
-              <widget class="QWidget" name="widget_bottomMusicInfo" native="true">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <layout class="QGridLayout" name="gridLayout">
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <property name="horizontalSpacing">
-                 <number>11</number>
-                </property>
-               </layout>
-              </widget>
-             </item>
-             <item>
               <widget class="QWidget" name="widget_song" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
+                 <horstretch>1</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
@@ -1077,21 +1084,21 @@ QSlider::handle:horizontal {
                    <bool>true</bool>
                   </property>
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
-                    <height>80</height>
+                    <width>70</width>
+                    <height>70</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
-                    <height>80</height>
+                    <width>70</width>
+                    <height>70</height>
                    </size>
                   </property>
                   <property name="baseSize">
@@ -1128,8 +1135,8 @@ QSlider::handle:horizontal {
                   <item>
                    <widget class="QLabel" name="label_songname">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>0</horstretch>
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
@@ -1154,7 +1161,7 @@ QSlider::handle:horizontal {
                      </font>
                     </property>
                     <property name="text">
-                     <string>歌名</string>
+                     <string/>
                     </property>
                     <property name="wordWrap">
                      <bool>false</bool>
@@ -1167,8 +1174,8 @@ QSlider::handle:horizontal {
                   <item>
                    <widget class="QLabel" name="label_author">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>0</horstretch>
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
@@ -1185,7 +1192,7 @@ QSlider::handle:horizontal {
                      </size>
                     </property>
                     <property name="text">
-                     <string>歌手</string>
+                     <string/>
                     </property>
                     <property name="wordWrap">
                      <bool>false</bool>
@@ -1353,10 +1360,16 @@ QSlider::handle:horizontal {
              <item>
               <widget class="QWidget" name="widget_elsecontrol" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>100</height>
+                </size>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <property name="spacing">
@@ -1375,7 +1388,7 @@ QSlider::handle:horizontal {
                  <number>0</number>
                 </property>
                 <item>
-                 <spacer name="horizontalSpacer_5">
+                 <spacer name="horizontalSpacer">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
@@ -1527,18 +1540,18 @@ QSlider::handle:horizontal {
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QWidget" name="widget_lrc" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="4,6">
              <property name="spacing">
               <number>0</number>
              </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>10</number>
              </property>
              <property name="topMargin">
               <number>0</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>10</number>
              </property>
              <property name="bottomMargin">
               <number>0</number>
@@ -1557,7 +1570,7 @@ QSlider::handle:horizontal {
                  <height>2000</height>
                 </size>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_6">
+               <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,9">
                 <property name="spacing">
                  <number>0</number>
                 </property>
@@ -1606,18 +1619,27 @@ QSlider::handle:horizontal {
                 </item>
                 <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                  <widget class="QWidget" name="widget_lrc_song" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_4">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>1</horstretch>
+                    <verstretch>1</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_12" stretch="8,1">
                    <property name="leftMargin">
-                    <number>0</number>
+                    <number>40</number>
                    </property>
                    <property name="topMargin">
                     <number>0</number>
                    </property>
                    <property name="rightMargin">
-                    <number>0</number>
+                    <number>40</number>
                    </property>
                    <property name="bottomMargin">
                     <number>0</number>
@@ -1626,14 +1648,14 @@ QSlider::handle:horizontal {
                     <widget class="MyLabel" name="label_lrc_albumPic">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
+                       <horstretch>1</horstretch>
+                       <verstretch>1</verstretch>
                       </sizepolicy>
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>0</width>
-                       <height>0</height>
+                       <width>550</width>
+                       <height>550</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -1648,41 +1670,48 @@ QSlider::handle:horizontal {
                      <property name="scaledContents">
                       <bool>true</bool>
                      </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_lrc_songName">
-                     <property name="maximumSize">
-                      <size>
-                       <width>500</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>华文楷体</family>
-                       <pointsize>16</pointsize>
-                       <italic>false</italic>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>歌名：</string>
-                     </property>
-                     <property name="indent">
-                      <number>0</number>
+                     <property name="textInteractionFlags">
+                      <set>Qt::NoTextInteraction</set>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_lrc_author">
-                     <property name="text">
-                      <string>歌手：</string>
-                     </property>
-                     <property name="indent">
-                      <number>0</number>
-                     </property>
-                    </widget>
+                    <layout class="QVBoxLayout" name="verticalLayout_4">
+                     <item>
+                      <widget class="QLabel" name="label_lrc_songName">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <family>华文楷体</family>
+                         <pointsize>16</pointsize>
+                         <italic>false</italic>
+                         <bold>false</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="indent">
+                        <number>10</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_lrc_author">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="indent">
+                        <number>12</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </item>
                   </layout>
                  </widget>
@@ -1787,6 +1816,11 @@ QSlider::handle:horizontal {
    <class>MyLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">mylineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyListWidget</class>
+   <extends>QListWidget</extends>
+   <header location="global">mylistwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -1,7 +1,6 @@
-#include "haomusic.h"
+﻿#include "haomusic.h"
 
 #include <QApplication>
-#include <QSplashScreen>
 #include <QThreadPool>
 
 int main(int argc, char *argv[])
@@ -14,7 +13,7 @@ int main(int argc, char *argv[])
     w.setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinMaxButtonsHint);
     // 外层窗口透明
     w.setAttribute(Qt::WA_TranslucentBackground);
-    QThreadPool::globalInstance()->setMaxThreadCount(8);	// 设置最大线程个数为16
+    QThreadPool::globalInstance()->setMaxThreadCount(20);	// 设置最大线程个数为30
     w.show();
     return a.exec();
 }
