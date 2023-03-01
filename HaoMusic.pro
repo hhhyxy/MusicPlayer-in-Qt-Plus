@@ -38,6 +38,8 @@ SOURCES += \
     addsonglistpage.cpp \
     customitem.cpp \
     customslider.cpp \
+    gaussianblur.cpp \
+    lrcwidget.cpp \
     main.cpp \
     haomusic.cpp \
     music.cpp \
@@ -51,7 +53,9 @@ HEADERS += \
     addsonglistpage.h \
     customslider.h \
     customitem.h \
+    gaussianblur.h \
     haomusic.h \
+    lrcwidget.h \
     music.h \
     mybottombar.h \
     myhttp.h \

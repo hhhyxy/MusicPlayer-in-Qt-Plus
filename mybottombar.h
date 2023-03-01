@@ -1,4 +1,4 @@
-#ifndef MYBOTTOMBAR_H
+﻿#ifndef MYBOTTOMBAR_H
 #define MYBOTTOMBAR_H
 
 #include <QWidget>
@@ -13,7 +13,6 @@ signals:
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event);
-signals:
 
 };
 

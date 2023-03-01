@@ -85,16 +85,22 @@ QString Music::getSongUrl() const
 
 QString Music::getAuthor() const
 {
+    if (m_author.isEmpty())
+        return "未知";
     return m_author;
 }
 
 QString Music::getAlbumName() const
 {
+    if (m_albumName.isEmpty())
+        return "未知";
     return m_albumName;
 }
 
 QString Music::getSongName() const
 {
+    if (m_songName.isEmpty())
+        return "未知";
     return m_songName;
 }
 

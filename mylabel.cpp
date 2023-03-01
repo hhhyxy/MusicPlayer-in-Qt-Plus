@@ -33,7 +33,7 @@ void MyLabel::setRadiusPixmap(QString url)
     picUrl = url;
     request->setUrl(QUrl(url));
     networkManager->get(*request);
-    connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished);
+    connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished, Qt::UniqueConnection);
 }
 
 void MyLabel::onReplyFinished(QNetworkReply *reply)
@@ -73,5 +73,6 @@ void MyLabel::makeRadiusPixmap(QByteArray bytes)
     pixmap.setMask(mask);
     img = pixmap;
     QMetaObject::invokeMethod(this, "setPixmap", Q_ARG(QPixmap, pixmap));
+    this->setAutoFillBackground(true);
 }
 

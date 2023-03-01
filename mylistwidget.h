@@ -1,4 +1,4 @@
-#ifndef MYLISTWIDGET_H
+﻿#ifndef MYLISTWIDGET_H
 #define MYLISTWIDGET_H
 
 #include "music.h"

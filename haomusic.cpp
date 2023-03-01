@@ -124,6 +124,7 @@ void HaoMusic::connectSignalsAndSlots()
                 break;
         }
     });
+    // 播放歌曲改变
     connect(mediaPlayer, QMediaPlayer::currentMediaChanged, this, [=] {
         int index = mediaPlaylist->currentIndex();
         qDebug()<<"index:"<<index;
@@ -306,6 +307,7 @@ void HaoMusic::on_pushButton_maxsize_clicked()
         this->showMaximized();
         ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/Max2normal.svg")));
     }
+//    ui->tab_lrc->repaintBackground();
 }
 
 // 显示加载动画
@@ -636,6 +638,8 @@ void HaoMusic::updateBottomMusicInfo()
 
     ui->label_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
     ui->label_lrc_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
+    ui->tab_lrc->setGaussblurBackground(currentMusic.albumPicUrl());
+//    ui->label_albumPic->setPixmap(ui->label_lrc_albumPic->pixmap());
 
 }
 

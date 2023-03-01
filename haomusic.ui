@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>924</width>
-    <height>625</height>
+    <width>966</width>
+    <height>763</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,6 +57,10 @@ QWidget#inner_widget{
 	border-radius:6px;
 	background-color:white;
 }
+QTabWidget#tab_lrc{
+	border:1px solid #FFFFFF;
+	border-radius:10px;
+}
 QTabWidget::pane {
 	bottom:-11px;
 	top:-11px;
@@ -76,7 +80,7 @@ QLineEdit {
 QPushButton {
     icon-size: 32px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 QPushButton:hover {
@@ -116,6 +120,9 @@ QLabel#label_lrc_songName
  {
 	font: 16pt &quot;华文楷体&quot;;
 }
+QLabel#label_lrc_songName {
+	color:white;
+}
 QLabel#label_songName {
 	font: 14pt &quot;华文楷体&quot;;
 }
@@ -129,6 +136,7 @@ QLabel#label_lrc_author
 QLabel#label_lrc_songName,
 QLabel#label_lrc_author
  {
+	color: white;
 	margin-top:2px;
 	padding-left:0px;
 }
@@ -142,6 +150,10 @@ QLabel#label_albumName {
 QLabel#label_duration {
 	font: 12pt &quot;华文楷体&quot;;
 }	
+QLabel#label_lrc_albumPic {
+	border: 1px solid rgba(255,255, 255, 200);
+	border-radius: 35px;
+}
 QToolTip {
 	color:black;
 	background-color:white;
@@ -161,7 +173,8 @@ QListWidget::item {
 	border-radius:10px;
  	background-color: transparent;
 }
-#listWidget_lrc::item {
+QListWidget#listWidget_lrc::item {
+	color:rgba(255, 255, 255, 150);
 	padding-top: 15px;
 	padding-bottom:15px;
 }
@@ -169,20 +182,20 @@ QListWidget#listWidget_searchResult::item:!pressed {
 	color:black;
 }
 QListWidget::item:hover {
-    background-color:rgb(245, 245, 247);
+    background-color:rgba(245, 245, 247, 150);
 }
 QListWidget::item:selected {
 	color:blue;
-    background-color:#eaeffd;
+    background-color:rgba(234, 239, 253, 150);
 }
 QListWidget#listWidget_lrc {
 	font-size:40px;
 }
-QListWidget#listWidget_lrc:hover {
-	font:blue;
+QListWidget#listWidget_lrc::item:selected {
+	color:rgba(0, 0, 255, 100);
 }
-QListWidget#listWidget_lrc:selected {
-	font:blue;
+QListWidget#listWidget_lrc::item:hover {
+	color:rgba(255, 255, 255, 100);
 }
 
 QScrollBar:vertical {
@@ -1466,8 +1479,8 @@ QSlider::handle:horizontal {
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
-                    <height>60</height>
+                    <width>50</width>
+                    <height>50</height>
                    </size>
                   </property>
                   <property name="baseSize">
@@ -1533,11 +1546,26 @@ QSlider::handle:horizontal {
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_lrc">
+        <widget class="LrcWidget" name="tab_lrc">
          <attribute name="title">
           <string>歌词</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="topMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <property name="bottomMargin">
+           <number>51</number>
+          </property>
           <item>
            <widget class="QWidget" name="widget_lrc" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="4,6">
@@ -1570,7 +1598,7 @@ QSlider::handle:horizontal {
                  <height>2000</height>
                 </size>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_6" stretch="1,9">
+               <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,9">
                 <property name="spacing">
                  <number>0</number>
                 </property>
@@ -1821,6 +1849,12 @@ QSlider::handle:horizontal {
    <class>MyListWidget</class>
    <extends>QListWidget</extends>
    <header location="global">mylistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LrcWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">lrcwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
