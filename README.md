@@ -29,7 +29,7 @@ MinGW 8.1.0
 ![搜索结果页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/searchResult_Page.png)
 
 ### 歌词页面
-![歌词页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/lrc_Page.png)
+![歌词页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/tree/main/static/lrc_Page_gaussionBackground.png)
 
 ### 右键菜单
 ![右键菜单](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/menu_buttonRight.png)
