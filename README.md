@@ -26,13 +26,13 @@ MinGW 8.1.0
 ## 界面展示
 
 ### 搜索结果页面
-![搜索结果页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/searchResult_Page.png)
+![搜索结果页面](https://raw.githubusercontent.com/hhhyxy/MusicPlayer-in-Qt-Plus/main/static/searchResult_Page.png)
 
 ### 歌词页面
-![歌词页面](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/tree/main/static/lrc_Page_gaussionBackground.png)
+![歌词页面](https://raw.githubusercontent.com/hhhyxy/MusicPlayer-in-Qt-Plus/main/static/lrc_Page_gaussionBackground.png)
 
 ### 右键菜单
-![右键菜单](https://github.com/hhhyxy/MusicPlayer-in-Qt-Plus/blob/main/static/menu_buttonRight.png)
+![右键菜单](https://raw.githubusercontent.com/hhhyxy/MusicPlayer-in-Qt-Plus/main/static/menu_buttonRight.png)
 
 ## 灵感来源
 [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
