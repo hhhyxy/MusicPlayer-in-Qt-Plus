@@ -33,9 +33,9 @@ MinGW 8.1.0
 ### 搜索结果页面
 ![搜索结果页面](https://raw.githubusercontent.com/hhhyxy/MusicPlayer-in-Qt-Plus/main/static/searchResult_Page.png)
 
-#### 功能介绍
+##### 功能介绍
 - 实现圆角阴影边框、拖动顶部可移动界面，双击可最大化，实现基本界面切换
-- 实现整体UI界面，并优化动态交互效果
+- 实现整体UI界面，并优化动态交互效果，实现界面切换、加载动画
 - 实现音乐搜索功能，搜索结果最大80条，使用**多线程**和**懒加载**方式提升页面加载速度
 - 双击列表播放选中音乐，并可以在底部栏控制音乐切换、播放暂停、播放模式、音量
 - 点击底部栏空白处可切换到歌词界面
@@ -43,15 +43,15 @@ MinGW 8.1.0
 ### 歌词页面
 ![歌词页面](https://raw.githubusercontent.com/hhhyxy/MusicPlayer-in-Qt-Plus/main/static/lrc_Page_gaussionBackground.png)
 
-#### 功能介绍
+##### 功能介绍
 - 实现歌词实时滚动，可使用鼠标上下拖动歌词
 - 点击歌词可更新音乐播放进度
-- 实现歌词页面模糊背景，采用高斯模糊的方式模糊专辑图片
+- 实现歌词页面**模糊背景**，采用高斯模糊的方式模糊专辑图片
 
 ### 右键菜单
 ![右键菜单](https://raw.githubusercontent.com/hhhyxy/MusicPlayer-in-Qt-Plus/main/static/menu_buttonRight.png)
 
-#### 功能介绍
+##### 功能介绍
 - 鼠标右键菜单可执行额外的操作
 
 ## 灵感来源
