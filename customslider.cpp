@@ -1,4 +1,4 @@
-#include "customslider.h"
+﻿#include "customslider.h"
 
 CustomSlider::CustomSlider(QWidget *parent)
     : QSlider(parent)
@@ -6,6 +6,7 @@ CustomSlider::CustomSlider(QWidget *parent)
 
 }
 
+// 鼠标点击事件
 void CustomSlider::mousePressEvent(QMouseEvent *ev)
 {
     if (Qt::LeftButton == ev->button()) {
@@ -20,6 +21,3 @@ void CustomSlider::mousePressEvent(QMouseEvent *ev)
     }
 }
 
-void CustomSlider::mouseReleaseEvent(QMouseEvent *ev)
-{
-}

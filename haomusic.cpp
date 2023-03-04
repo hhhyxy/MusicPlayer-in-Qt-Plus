@@ -2,6 +2,7 @@
 #include "ui_haomusic.h"
 #include "mybottombar.h"
 #include "mylineedit.h"
+#include "mycache.h"
 
 #include <QButtonGroup>
 #include <QScroller>
@@ -13,6 +14,7 @@
 #include <QPainter>
 #include <QListWidgetItem>
 #include <QThreadPool>
+
 
 HaoMusic::HaoMusic(QWidget *parent)
     : QWidget(parent)
@@ -33,6 +35,7 @@ HaoMusic::HaoMusic(QWidget *parent)
 HaoMusic::~HaoMusic()
 {
     delete ui;
+    MyCache::release();
 }
 
 // 初始化
@@ -190,19 +193,22 @@ void HaoMusic::connectSignalsAndSlots()
         ui->pushButton_search->setStyleSheet("background-color:#f2f2f4;");
         ui->lineEdit_search->setStyleSheet("color:black;background-color:#f2f2f4;");
     });
-    // 播放歌曲改变
-    connect(mediaPlaylist, QMediaPlaylist::currentMediaChanged, [=] {
-
-    });
     // 绑定列表项双击事件
     connect(ui->listWidget_favorite, MyListWidget::customItemDoubleClicked, this, HaoMusic::onCustomItemDoubleClicked);
     connect(ui->listWidget_searchResult, MyListWidget::customItemDoubleClicked, this, HaoMusic::onCustomItemDoubleClicked);
     connect(ui->listWidget_localMusic, MyListWidget::customItemDoubleClicked, this, HaoMusic::onCustomItemDoubleClicked);
+
+    // 绑定列表菜单点击事件
+    QList<MyListWidget *> listwidgets = this->findChildren<MyListWidget *>();
+    foreach (MyListWidget *listwidget, listwidgets) {
+        connect(listwidget, &MyListWidget::menuClicked, this, &HaoMusic::onMenuClicked);
+    }
 }
 
 // 鼠标按下
 void HaoMusic::mousePressEvent(QMouseEvent *event)
 {
+    this->setFocus();
     if(event->button() == Qt::LeftButton && event->y() < (ui->widget_header->height() + ui->widget_header->y()))// 判断是否是鼠标左键按下
     {
         mousePress = true;
@@ -307,7 +313,6 @@ void HaoMusic::on_pushButton_maxsize_clicked()
         this->showMaximized();
         ui->pushButton_maxsize->setIcon(QIcon(QPixmap(":/icon/Max2normal.svg")));
     }
-//    ui->tab_lrc->repaintBackground();
 }
 
 // 显示加载动画
@@ -553,7 +558,7 @@ void HaoMusic::sliderClicked()
 // 获取编辑框输入
 void HaoMusic::on_lineEdit_search_textChanged(const QString &arg1)
 {
-//    searchKeywords = arg1;
+    //    searchKeywords = arg1;
 }
 
 // 搜索
@@ -587,15 +592,7 @@ void HaoMusic::on_pushButton_search_clicked()
 // 显示搜索结果
 void HaoMusic::showSearchResult()
 {
-    QList<CustomItem *> items = ui->listWidget_searchResult->addCustomItems(searchResultMusicList);
-    // 绑定信号和槽
-    for (int i = 0; i < items.size(); i++) {
-        CustomItem* item = items.at(i);
-        item->setItemType(CustomItem::SEARCHRESULT);
-        connect(item, CustomItem::musicPlay, this, HaoMusic::menuPlayMusicClicked);
-        connect(item, CustomItem::addToMyFavoriteMusic, this, HaoMusic::menuAddToMyFavoriteClicked);
-        connect(item, CustomItem::addToSonglist, this, HaoMusic::menuAddToSonglistClicked);
-    }
+    ui->listWidget_searchResult->setMusicList(searchResultMusicList);
 }
 
 // 双击列表项播放
@@ -639,8 +636,7 @@ void HaoMusic::updateBottomMusicInfo()
     ui->label_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
     ui->label_lrc_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
     ui->tab_lrc->setGaussblurBackground(currentMusic.albumPicUrl());
-//    ui->label_albumPic->setPixmap(ui->label_lrc_albumPic->pixmap());
-
+//    ui->inner_widget->setGaussblurBackground(currentMusic.albumPicUrl());
 }
 
 // 打开播放历史页面
@@ -686,14 +682,22 @@ void HaoMusic::on_pushButton_favorite_clicked()
 // 显示所有我喜欢的音乐
 void HaoMusic::showMyFavoriteMusicList()
 {
-    QList<CustomItem *> items = ui->listWidget_favorite->addCustomItems(favoriteMusicList);
-    // 绑定信号和槽
-    for (int i = 0; i < items.size(); i++) {
-        CustomItem* item = items.at(i);
-        item->setItemType(CustomItem::FAVORITE);
-        connect(item, CustomItem::musicPlay, this, HaoMusic::menuPlayMusicClicked);
-        connect(item, CustomItem::addToSonglist, this, HaoMusic::menuAddToSonglistClicked);
-    }
+    ui->listWidget_favorite->setMusicList(favoriteMusicList);
+}
+
+// 菜单点击处理事件
+void HaoMusic::onMenuClicked(CustomItem *item, int itemType)
+{
+    if (itemType == CustomItem::PLAY)
+        menuPlayMusicClicked(item);
+    if (itemType == CustomItem::ADDTOFAVORITE)
+        menuAddToMyFavoriteClicked(item);
+    if (itemType == CustomItem::ADDTOSONGLIST)
+        menuAddToSonglistClicked(item);
+    if (itemType == CustomItem::REMOVEFROMFAVORITE)
+        return;
+    if (itemType == CustomItem::REMOVEFROMSONGLIST)
+        return;
 }
 
 // 右键菜单点击播放音乐
@@ -728,5 +732,3 @@ void HaoMusic::showLrcPage()
     ui->listWidget_lrc->setCurrentItem(currentLrcItem);
     ui->listWidget_lrc->scrollToItem(currentLrcItem);
 }
-
-

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>966</width>
-    <height>763</height>
+    <width>974</width>
+    <height>807</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,7 +59,7 @@ QWidget#inner_widget{
 }
 QTabWidget#tab_lrc{
 	border:1px solid #FFFFFF;
-	border-radius:10px;
+	border-radius:20px;
 }
 QTabWidget::pane {
 	bottom:-11px;
@@ -97,6 +97,8 @@ QPushButton#pushButton_dropDown {
 }
 QPushButton#pushButton_dropDown:hover {
 	icon: url(:/icon/downArow_black.svg);
+	margin-top:15px;
+	margin-left:15px;
 }
 QPushButton#pushButton_search{
 	background-color:#f2f2f4;
@@ -150,10 +152,10 @@ QLabel#label_albumName {
 QLabel#label_duration {
 	font: 12pt &quot;华文楷体&quot;;
 }	
-QLabel#label_lrc_albumPic {
+/*QLabel#label_lrc_albumPic {
 	border: 1px solid rgba(255,255, 255, 200);
 	border-radius: 35px;
-}
+}*/
 QToolTip {
 	color:black;
 	background-color:white;
@@ -287,7 +289,7 @@ QSlider::handle:horizontal {
 
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <layout class="QHBoxLayout" name="horizontalLayout_9">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -305,7 +307,7 @@ QSlider::handle:horizontal {
    </property>
    <item>
     <widget class="QWidget" name="inner_widget" native="true">
-     <layout class="QVBoxLayout" name="verticalLayout_5">
+     <layout class="QHBoxLayout" name="horizontalLayout_10">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -356,13 +358,7 @@ QSlider::handle:horizontal {
            <number>11</number>
           </property>
           <item>
-           <widget class="QWidget" name="widget_header" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QWidget" name="widget" native="true">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -375,13 +371,7 @@ QSlider::handle:horizontal {
               <height>100</height>
              </size>
             </property>
-            <property name="baseSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout">
+            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,8">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -399,6 +389,18 @@ QSlider::handle:horizontal {
              </property>
              <item>
               <widget class="QLabel" name="label_title">
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
                  <family>华文楷体</family>
@@ -415,90 +417,8 @@ QSlider::handle:horizontal {
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignVCenter">
-              <widget class="MyLineEdit" name="lineEdit_search">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>500</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>150</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="contextMenuPolicy">
-                <enum>Qt::NoContextMenu</enum>
-               </property>
-               <property name="frame">
-                <bool>false</bool>
-               </property>
-               <property name="cursorMoveStyle">
-                <enum>Qt::VisualMoveStyle</enum>
-               </property>
-              </widget>
-             </item>
-             <item alignment="Qt::AlignVCenter">
-              <widget class="QPushButton" name="pushButton_search">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>50</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>搜索</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="res.qrc">
-                 <normaloff>:/icon/search.svg</normaloff>:/icon/search.svg</iconset>
-               </property>
-              </widget>
-             </item>
              <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_minsize">
+              <widget class="QWidget" name="widget_header" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
@@ -507,129 +427,256 @@ QSlider::handle:horizontal {
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>0</width>
+                 <height>80</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>16777215</width>
+                 <height>100</height>
                 </size>
                </property>
                <property name="baseSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="res.qrc">
-                 <normaloff>:/icon/min.svg</normaloff>:/icon/min.svg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-               <property name="autoRepeatDelay">
-                <number>100</number>
-               </property>
-              </widget>
-             </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_maxsize">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
                  <width>50</width>
                  <height>50</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>50</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="res.qrc">
-                 <normaloff>:/icon/max.svg</normaloff>:/icon/max.svg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_close">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>50</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>50</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="res.qrc">
-                 <normaloff>:/icon/close.svg</normaloff>:/icon/close.svg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item alignment="Qt::AlignVCenter">
+                 <widget class="MyLineEdit" name="lineEdit_search">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>500</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>150</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::NoContextMenu</enum>
+                  </property>
+                  <property name="frame">
+                   <bool>false</bool>
+                  </property>
+                  <property name="cursorMoveStyle">
+                   <enum>Qt::VisualMoveStyle</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignVCenter">
+                 <widget class="QPushButton" name="pushButton_search">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>搜索</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res.qrc">
+                    <normaloff>:/icon/search.svg</normaloff>:/icon/search.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item alignment="Qt::AlignTop">
+                 <widget class="QPushButton" name="pushButton_minsize">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res.qrc">
+                    <normaloff>:/icon/min.svg</normaloff>:/icon/min.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="autoRepeatDelay">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignTop">
+                 <widget class="QPushButton" name="pushButton_maxsize">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res.qrc">
+                    <normaloff>:/icon/max.svg</normaloff>:/icon/max.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignTop">
+                 <widget class="QPushButton" name="pushButton_close">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="baseSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string/>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="res.qrc">
+                    <normaloff>:/icon/close.svg</normaloff>:/icon/close.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -1555,16 +1602,16 @@ QSlider::handle:horizontal {
            <number>0</number>
           </property>
           <property name="leftMargin">
-           <number>15</number>
+           <number>0</number>
           </property>
           <property name="topMargin">
-           <number>15</number>
+           <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>15</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>51</number>
+           <number>0</number>
           </property>
           <item>
            <widget class="QWidget" name="widget_lrc" native="true">
@@ -1576,13 +1623,13 @@ QSlider::handle:horizontal {
               <number>10</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>10</number>
              </property>
              <property name="rightMargin">
               <number>10</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>10</number>
              </property>
              <item>
               <widget class="QWidget" name="widget_lrc_songInfo" native="true">
@@ -1595,10 +1642,10 @@ QSlider::handle:horizontal {
                <property name="maximumSize">
                 <size>
                  <width>2000</width>
-                 <height>2000</height>
+                 <height>16777215</height>
                 </size>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,9">
+               <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0">
                 <property name="spacing">
                  <number>0</number>
                 </property>
@@ -1682,8 +1729,8 @@ QSlider::handle:horizontal {
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>550</width>
-                       <height>550</height>
+                       <width>500</width>
+                       <height>500</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -1757,8 +1804,8 @@ QSlider::handle:horizontal {
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>80</width>
-                 <height>80</height>
+                 <width>0</width>
+                 <height>0</height>
                 </size>
                </property>
                <property name="sizeIncrement">

@@ -45,7 +45,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="4,4,0">
+  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,0">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -61,7 +61,7 @@
    <property name="bottomMargin">
     <number>10</number>
    </property>
-   <item alignment="Qt::AlignVCenter">
+   <item>
     <widget class="QWidget" name="widget_song" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">

@@ -1,12 +1,12 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia network concurrent
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia network concurrent sql
 
 CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 #程序版本
 VERSION  = 1.0
@@ -39,6 +39,7 @@ SOURCES += \
     customitem.cpp \
     customslider.cpp \
     gaussianblur.cpp \
+    imageloader.cpp \
     lrcwidget.cpp \
     main.cpp \
     haomusic.cpp \
@@ -47,7 +48,8 @@ SOURCES += \
     myhttp.cpp \
     mylabel.cpp \
     mylineedit.cpp \
-    mylistwidget.cpp
+    mylistwidget.cpp \
+    threaddownloader.cpp
 
 HEADERS += \
     addsonglistpage.h \
@@ -55,13 +57,15 @@ HEADERS += \
     customitem.h \
     gaussianblur.h \
     haomusic.h \
+    imageloader.h \
     lrcwidget.h \
     music.h \
     mybottombar.h \
     myhttp.h \
     mylabel.h \
     mylineedit.h \
-    mylistwidget.h
+    mylistwidget.h \
+    threaddownloader.h
 
 FORMS += \
     addsonglistpage.ui \

@@ -1,11 +1,13 @@
 ﻿#include "mylabel.h"
-#include <QTimer>
+#include "mycache.h"
+
 #include <QPainter>
 #include <QBitmap>
 #include <QPixmap>
+#include <QGraphicsDropShadowEffect>
 #include <QNetworkReply>
-#include <QEventLoop>
 #include <QtConcurrent>
+
 
 MyLabel::MyLabel(QWidget *parent)
     : QLabel{parent}
@@ -13,7 +15,7 @@ MyLabel::MyLabel(QWidget *parent)
     // 初始化网络请求
     networkManager = new QNetworkAccessManager(this);
     request = new QNetworkRequest();
-
+    setShadow();
 }
 
 MyLabel::~MyLabel()
@@ -21,9 +23,27 @@ MyLabel::~MyLabel()
     delete request;
 }
 
+// 获取专辑图片
 QPixmap MyLabel::getImg() const
 {
-    return img;
+    if (imgLoaded)
+        return img;
+    return QPixmap();
+}
+
+// 设置阴影
+void MyLabel::setShadow()
+{
+    //实例阴影shadow
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+    //设置阴影距离
+    shadow->setOffset(0, 0);
+    //设置阴影颜色
+    shadow->setColor(QColor("#444444"));
+    //设置阴影长度
+    shadow->setBlurRadius(5);
+    //给窗体设置阴影
+    this->setGraphicsEffect(shadow);
 }
 
 void MyLabel::setRadiusPixmap(QString url)
@@ -31,11 +51,26 @@ void MyLabel::setRadiusPixmap(QString url)
     if (picUrl == url)
         return;
     picUrl = url;
+    if (MyCache::getInstance().contains(url)) {
+        img = MyCache::getInstance().value(url);
+        imgLoaded = true;
+        this->setPixmap(img);
+        return;
+    }
+
+    if (!img.isNull()) {
+        this->setPixmap(img);
+        return;
+    }
+
+//    getAlbumSize(url);
+//    downLoader->downLoad(url);
     request->setUrl(QUrl(url));
     networkManager->get(*request);
     connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished, Qt::UniqueConnection);
 }
 
+// 图片下载完成
 void MyLabel::onReplyFinished(QNetworkReply *reply)
 {
     // 获取响应状态码，200表示正常
@@ -51,6 +86,13 @@ void MyLabel::onReplyFinished(QNetworkReply *reply)
     reply->deleteLater();
 }
 
+// 多线程下载完成
+void MyLabel::onMultiDownLoadFinished(QByteArray bytes)
+{
+    QtConcurrent::run(this, &MyLabel::makeRadiusPixmap, bytes);
+}
+
+// 把图片处理为圆角并显示
 void MyLabel::makeRadiusPixmap(QByteArray bytes)
 {
     QPixmap pixmap;
@@ -72,7 +114,8 @@ void MyLabel::makeRadiusPixmap(QByteArray bytes)
     painter.drawRoundedRect(0, 0, size.width(), size.height(), radius, radius);//修改这个值，可以改弧度，和直径相等就是圆形
     pixmap.setMask(mask);
     img = pixmap;
+    imgLoaded = true;
     QMetaObject::invokeMethod(this, "setPixmap", Q_ARG(QPixmap, pixmap));
-    this->setAutoFillBackground(true);
 }
+
 

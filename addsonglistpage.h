@@ -1,4 +1,4 @@
-#ifndef ADDSONGLISTPAGE_H
+﻿#ifndef ADDSONGLISTPAGE_H
 #define ADDSONGLISTPAGE_H
 
 #include <QWidget>
@@ -6,7 +6,9 @@
 namespace Ui {
 class AddSongListPage;
 }
-
+/*
+ * 添加到歌单的弹出界面
+*/
 class AddSongListPage : public QWidget
 {
     Q_OBJECT

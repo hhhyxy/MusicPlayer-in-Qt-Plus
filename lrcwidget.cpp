@@ -1,32 +1,48 @@
 ﻿#include "lrcwidget.h"
 
-#include <QPaintEvent>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QPalette>
 #include <QImage>
+#include <QPixmap>
+#include <QBitmap>
 #include <QtConcurrent>
-#include <QLabel>
+#include <QPainterPath>
 
 LrcWidget::LrcWidget(QWidget *parent)
     : QWidget{parent}
 {
+    // 初始化
     manager = new QNetworkAccessManager(this);
     gauss = new GaussianBlur(this);
+    radius = 500;
+
+    // 网络请求完成
     connect(manager, QNetworkAccessManager::finished, this, LrcWidget::onRequestFinished);
+    // 图片模糊处理完成
     connect(gauss, GaussianBlur::finished, this, LrcWidget::onGaussianFinished);
 }
 
+// 绘图事件
+void LrcWidget::paintEvent(QPaintEvent *event)
+{
+    // 重绘背景
+    repaintBackground();
+    QWidget::paintEvent(event);
+}
+
+// 设置背景为高斯模糊后的专辑图片
 void LrcWidget::setGaussblurBackground(const QString &url)
 {
-//    draw = true;
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     manager->get(request);
 }
 
+// 重新绘制背景图
 void LrcWidget::repaintBackground()
 {
+    // 背景图不为空
     if (img.isNull())
         return;
     // 绘制背景图片
@@ -34,15 +50,9 @@ void LrcWidget::repaintBackground()
     QPalette pal = this->palette();
     pal.setBrush(QPalette::Window, QBrush(img.scaled(this->size())));
     this->setPalette(pal);
-    qDebug()<<"update";
 }
 
-void LrcWidget::paintEvent(QPaintEvent *event)
-{
-    repaintBackground();
-    QWidget::paintEvent(event);
-}
-
+// 网络应答处理
 void LrcWidget::onRequestFinished(QNetworkReply *reply)
 {
     // 获取响应状态码，200表示正常
@@ -50,31 +60,24 @@ void LrcWidget::onRequestFinished(QNetworkReply *reply)
     qDebug()<<__FILE__<<__LINE__ << "状态码：" << status_code;
 
     if (reply->error() == QNetworkReply::NoError) {
-        QByteArray bytes = reply->readAll();  //获取字节
+        // 获取字节数据
+        QByteArray bytes = reply->readAll();
+        // 转换为图片
         QImage img;
         img.loadFromData(bytes);
-//        gauss.gaussBlur(img, 200);
-        QtConcurrent::run(gauss, GaussianBlur::gaussBlur, img, 300);
-
-//        QLabel *label = new QLabel(this);
-//        QPixmap pixmap;
-//        pixmap.convertFromImage(img);
-//        label->setPixmap(pixmap);
-//        label->setGeometry(this->rect());
-//        label->show();
-
-        // 绘制背景图片
-//        QPalette pal = this->palette();
-//        pal.setBrush(QPalette::Window, QBrush(img));
-//        this->setPalette(pal);
+        // 在线程中模糊背景图片
+        QtConcurrent::run(gauss, GaussianBlur::gaussBlur, img, radius);
     }else {
         qDebug()<<__FILE__<<__LINE__<<"获取专辑图片失败";
     }
     reply->deleteLater();
 }
 
+// 高斯模糊图片显示
 void LrcWidget::onGaussianFinished(QImage image)
 {
     img = image;
-    repaintBackground();
+    update();
 }
+
+

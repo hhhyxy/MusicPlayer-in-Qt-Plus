@@ -22,6 +22,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class HaoMusic; }
 QT_END_NAMESPACE
 
+/*
+ * 主界面
+ */
 class HaoMusic : public QWidget
 {
     Q_OBJECT
@@ -29,15 +32,17 @@ class HaoMusic : public QWidget
 public:
     HaoMusic(QWidget *parent = nullptr);
     ~HaoMusic();
-    static HaoMusic* getInstance();
-
 protected:
+    // 鼠标按下事件
     void mousePressEvent(QMouseEvent *event);
+    // 鼠标移动事件
     void mouseMoveEvent(QMouseEvent *event);
+    // 鼠标释放事件
     void mouseReleaseEvent(QMouseEvent *event);
+    // 鼠标双击事件
     void mouseDoubleClickEvent(QMouseEvent *event);
+    // 绘图事件
     void paintEvent(QPaintEvent *event);
-
 private:
     Ui::HaoMusic    *ui;
     QMediaPlaylist  *mediaPlaylist      = nullptr;  // 媒体播放列表
@@ -53,7 +58,7 @@ private:
     int     offset          = 0;    // 搜索偏移量
     int     volume          = 50;   // 音量
     int     currentLrcRow   = 1;    // 当前歌词所在行
-    int     loadingTimes    = 2000; // 加载所需事件（ms）
+    int     loadingTimes    = 3000; // 加载所需事件（ms）
     QString searchKeywords  = "";   // 搜索关键词
     QMovie *loadingMovie;           // 加载动画
     Music   currentMusic;           // 当前播放的音乐
@@ -100,52 +105,52 @@ private:
     void onCustomItemDoubleClicked(CustomItem *item);
 
 private slots:
+    // 双击托盘图标显示界面
     void iconActived(QSystemTrayIcon::ActivationReason);
-
+    // 关闭窗口
     void on_pushButton_close_clicked();
-
+    // 窗口最大化
     void on_pushButton_maxsize_clicked();
-
+    // 窗口最小化
     void on_pushButton_minsize_clicked();
-
+    // 点击搜索按钮
     void on_pushButton_search_clicked();
-
+    // 点击上一首
     void on_pushButton_lastsong_clicked();
-
+    // 点击播放按钮
     void on_pushButton_switch_clicked();
-
+    // 点击下一首
     void on_pushButton_nextsong_clicked();
-
+    // 点击播放模式切换按钮
     void on_pushButton_mode_clicked();
-
+    // 点击静音按钮
     void on_pushButton_volume_clicked();
-
+    // 正在播放音乐的当前时刻变化处理函数
     void onPositionChanged(qint64);
-
+    // 当前音乐播放时长变化处理函数
     void onDurationChanged(qint64);
-
+    // 音量条变化处理函数
     void on_horizontalSlider_volume_valueChanged(int value);
-
+    // 点击历史播放按钮
     void on_pushButton_recentlyplayed_clicked();
-
+    // 点击默认歌单按钮
     void on_pushButton_defaultSongList_clicked();
-
+    // 点击本地音乐按钮
     void on_pushButton_localmusic_clicked();
-
+    // 点击歌词界面下拉按钮
     void on_pushButton_dropDown_clicked();
-
+    // 点击我喜欢的音乐按钮
     void on_pushButton_favorite_clicked();
-
     // 右键菜单点击事件
     void menuPlayMusicClicked(CustomItem *item);
-
     void menuAddToMyFavoriteClicked(CustomItem *item);
-
     void menuAddToSonglistClicked(CustomItem *item);
-
+    // 点击列表的某一行
     void on_listWidget_lrc_itemClicked(QListWidgetItem *item);
-
+    // 搜索框内容变化处理函数
     void on_lineEdit_search_textChanged(const QString &arg1);
+    // 菜单点击事件处理函数
+    void onMenuClicked(CustomItem *item, int itemType);
 };
 
 #endif // HAOMUSIC_H

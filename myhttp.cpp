@@ -34,7 +34,7 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
     musicIdList.clear();
     musicList.clear();
 
-    // 搜索并解析返回的Json数据，获取歌曲id列表
+    // 拼接关键词搜索链接
     QUrl url(netease_keywords);
     QUrlQuery query;
     query.addQueryItem("keywords", keywords);
@@ -42,21 +42,20 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
     query.addQueryItem("offset", QString::number(offset));
     query.addQueryItem("type", QString::number(type));
     url.setQuery(query);
-
+    // 搜索关键词并解析返回的Json数据，获取歌曲id列表
     searchByUrl(url);
     parseForMusicId();
 
-    // 搜索并解析返回的Json数据，获取歌曲信息列表
+    // 通过歌曲id列表拼接链接
     QString urlStr = QString(netease_songsInfo_Ids);
     for (int i = 0; i < musicIdList.size(); i++) {
         urlStr.append(QString::number(musicIdList.at(i)));
         if (i != musicIdList.size() - 1)
             urlStr.append(",");
     }
-
+    // 搜索并解析返回的Json数据，获取歌曲信息列表
     searchByUrl(QUrl(urlStr));
     parseForMusicInfo();
-
     // 获取歌曲播放链接
     searchForSongUrls(musicIdList);
     return musicList;

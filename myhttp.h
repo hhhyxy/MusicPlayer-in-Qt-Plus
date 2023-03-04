@@ -11,13 +11,16 @@
 #include <QJsonArray>
 #include <QLabel>
 
+/*
+ * 网络请求处理类
+ */
 class MyHttp : public QObject
 {
     Q_OBJECT
 public:
     explicit MyHttp(QObject *parent = nullptr);
     ~MyHttp();
-    QList<Music> search(QString keywords, int offset = 0, int limit = 20, int type = 1);
+    QList<Music> search(QString keywords, int offset = 0, int limit = 80, int type = 1);
     QString searchForSongUrl(int id);
     void searchForSongUrls(QList<int> musicIdList);
     QMap<int, QString> searchForLrc(int id);
