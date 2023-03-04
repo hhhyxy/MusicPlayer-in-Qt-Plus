@@ -2,7 +2,6 @@
 #include "ui_haomusic.h"
 #include "mybottombar.h"
 #include "mylineedit.h"
-#include "mycache.h"
 
 #include <QButtonGroup>
 #include <QScroller>
@@ -35,7 +34,6 @@ HaoMusic::HaoMusic(QWidget *parent)
 HaoMusic::~HaoMusic()
 {
     delete ui;
-    MyCache::release();
 }
 
 // 初始化

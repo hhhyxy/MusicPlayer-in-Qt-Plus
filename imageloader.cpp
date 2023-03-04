@@ -9,11 +9,11 @@ ImageLoader::ImageLoader(QObject *parent)
 }
 
 // 加载图片
-void ImageLoader::loadImage(const QString &url)
+void ImageLoader::loadImage(QString url)
 {
     if (m_cache.contains(url)) {
         // 如果图片已经缓存，则直接从缓存中获取
-//        emit imageLoaded(url, m_cache.object(url));
+        emit imageLoaded(url, m_cache.object(url));
         return;
     }
     QNetworkRequest request(url);
@@ -21,10 +21,8 @@ void ImageLoader::loadImage(const QString &url)
     connect(reply, &QNetworkReply::finished, this, [this, url, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
             // 下载成功，缓存图片并发出信号
-            QPixmap pixmap;
-            pixmap.loadFromData(reply->readAll());
-//            m_cache.insert(url, QSharedPointer<QImage>::create(pixmap));
-            emit imageLoaded(url, pixmap);
+            m_cache.insert(url, reply);
+            emit imageLoaded(url, reply);
         } else {
             // 下载失败，发出错误信号
             emit loadError(url, reply->errorString());

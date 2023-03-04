@@ -14,14 +14,14 @@ class ImageLoader : public QObject
     Q_OBJECT
 public:
     explicit ImageLoader(QObject *parent = nullptr);
-    void loadImage(const QString &url);
+    void loadImage(QString url);
 signals:
-    void imageLoaded(const QString &url, const QPixmap &image);
+    void imageLoaded(QString url, QNetworkReply* reply);
     void loadError(const QString &url, const QString &errorString);
 
 private:
     QNetworkAccessManager *m_networkAccessManager;
-    QCache<QString, QSharedPointer<QPixmap>> m_cache;
+    QCache<QString, QNetworkReply> m_cache;
 };
 
 class ImageLoaderThread : public QRunnable

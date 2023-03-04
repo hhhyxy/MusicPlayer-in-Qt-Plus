@@ -1,5 +1,4 @@
 ﻿#include "mylabel.h"
-#include "mycache.h"
 
 #include <QPainter>
 #include <QBitmap>
@@ -51,20 +50,10 @@ void MyLabel::setRadiusPixmap(QString url)
     if (picUrl == url)
         return;
     picUrl = url;
-    if (MyCache::getInstance().contains(url)) {
-        img = MyCache::getInstance().value(url);
-        imgLoaded = true;
-        this->setPixmap(img);
-        return;
-    }
-
     if (!img.isNull()) {
         this->setPixmap(img);
         return;
     }
-
-//    getAlbumSize(url);
-//    downLoader->downLoad(url);
     request->setUrl(QUrl(url));
     networkManager->get(*request);
     connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished, Qt::UniqueConnection);
