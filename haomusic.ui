@@ -51,6 +51,10 @@ QMenu::item:selected {
 	background-color:#eaeffd;
 	color:blue;
 }
+#widget_sidebar QPushButton:checked {
+	background-color:#f3f6fe;
+
+}
 QWidget#inner_widget{
 	margin:0px;
 	border:1px solid #FFFFFF;
@@ -89,6 +93,9 @@ QPushButton:hover {
 QPushButton:selected {
     background-color: rgb(228, 237, 242);
 }
+QPushButton:disabled {
+color:black;
+}
 QPushButton#pushButton_dropDown {
 	padding-top:10px;
 	margin-left:15px;
@@ -114,7 +121,10 @@ QPushButton#pushButton_close:hover {
 QLabel#label_title {
 	font-size:30px;
 }
-QLabel#label_searchKeywords {
+QLabel#label_searchKeywords,
+#label_favorite,
+#label_local,
+#label_recently {
 	font: 26pt &quot;华文楷体&quot;;
 }
 QLabel#label_songname,
@@ -335,7 +345,7 @@ QSlider::handle:horizontal {
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab_homePage">
          <attribute name="title">
@@ -525,6 +535,9 @@ QSlider::handle:horizontal {
                   <property name="icon">
                    <iconset resource="res.qrc">
                     <normaloff>:/icon/search.svg</normaloff>:/icon/search.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -771,6 +784,12 @@ QSlider::handle:horizontal {
                   <property name="text">
                    <string>本地音乐</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="autoExclusive">
+                   <bool>true</bool>
+                  </property>
                   <property name="flat">
                    <bool>false</bool>
                   </property>
@@ -805,6 +824,12 @@ QSlider::handle:horizontal {
                   <property name="text">
                    <string>最近播放</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="autoExclusive">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -829,6 +854,12 @@ QSlider::handle:horizontal {
                   </property>
                   <property name="text">
                    <string>我喜欢的音乐</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="autoExclusive">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -860,6 +891,12 @@ QSlider::handle:horizontal {
                   </property>
                   <property name="text">
                    <string>默认歌单</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="autoExclusive">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -897,7 +934,7 @@ QSlider::handle:horizontal {
                 <enum>QTabWidget::Rounded</enum>
                </property>
                <property name="currentIndex">
-                <number>4</number>
+                <number>2</number>
                </property>
                <property name="elideMode">
                 <enum>Qt::ElideMiddle</enum>
@@ -969,9 +1006,12 @@ QSlider::handle:horizontal {
                 </attribute>
                 <layout class="QVBoxLayout" name="verticalLayout_11">
                  <item>
-                  <widget class="QLabel" name="label">
+                  <widget class="QLabel" name="label_local">
                    <property name="text">
                     <string>本地音乐</string>
+                   </property>
+                   <property name="margin">
+                    <number>2</number>
                    </property>
                   </widget>
                  </item>
@@ -994,17 +1034,15 @@ QSlider::handle:horizontal {
                 <attribute name="title">
                  <string>最近播放</string>
                 </attribute>
-                <widget class="QLabel" name="label_3">
-                 <property name="geometry">
-                  <rect>
-                   <x>30</x>
-                   <y>20</y>
-                   <width>101</width>
-                   <height>31</height>
-                  </rect>
+                <widget class="QLabel" name="label_recently">
+                 <property name="enabled">
+                  <bool>true</bool>
                  </property>
                  <property name="text">
                   <string>最近播放</string>
+                 </property>
+                 <property name="margin">
+                  <number>2</number>
                  </property>
                 </widget>
                </widget>
@@ -1019,9 +1057,12 @@ QSlider::handle:horizontal {
                 </attribute>
                 <layout class="QVBoxLayout" name="verticalLayout_10">
                  <item>
-                  <widget class="QLabel" name="label_4">
+                  <widget class="QLabel" name="label_favorite">
                    <property name="text">
                     <string>我喜欢的音乐</string>
+                   </property>
+                   <property name="margin">
+                    <number>2</number>
                    </property>
                   </widget>
                  </item>

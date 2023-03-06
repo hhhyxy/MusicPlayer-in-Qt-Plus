@@ -6,17 +6,6 @@ Music::Music()
 
 }
 
-Music::Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration)
-    :m_id(id),
-    m_songName(songName),
-    m_author(author),
-    m_albumName(albumName),
-    m_albumPicUrl(albumPicUrl),
-    m_songDuration(songDuration)
-{
-
-}
-
 Music::Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration, QString songUrl)
     :m_id(id),
     m_songName(songName),

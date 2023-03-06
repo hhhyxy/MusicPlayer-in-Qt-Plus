@@ -50,14 +50,18 @@ void MyLabel::setRadiusPixmap(QString url)
     if (picUrl == url)
         return;
     picUrl = url;
-    if (!img.isNull()) {
-        this->setPixmap(img);
-        return;
-    }
     request->setUrl(QUrl(url));
     networkManager->get(*request);
     connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished, Qt::UniqueConnection);
 }
+
+//void MyLabel::setRoundedPicInThread(QString url)
+//{
+//    downLoader->downLoad(url);
+//    connect(downLoader, &ThreadDownLoader::finished, this, [=](QByteArray bytes) {
+//        QtConcurrent::run(this, &MyLabel::makeRadiusPixmap, bytes);
+//    });
+//}
 
 // 图片下载完成
 void MyLabel::onReplyFinished(QNetworkReply *reply)
@@ -73,12 +77,6 @@ void MyLabel::onReplyFinished(QNetworkReply *reply)
         qDebug()<<__FILE__<<__LINE__<<"获取专辑图片失败";
     }
     reply->deleteLater();
-}
-
-// 多线程下载完成
-void MyLabel::onMultiDownLoadFinished(QByteArray bytes)
-{
-    QtConcurrent::run(this, &MyLabel::makeRadiusPixmap, bytes);
 }
 
 // 把图片处理为圆角并显示

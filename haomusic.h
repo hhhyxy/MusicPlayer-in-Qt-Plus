@@ -7,7 +7,7 @@
 
 #include <QListWidgetItem>
 #include <QSystemTrayIcon>
-
+#include <QAbstractButton>
 #include <QUrl>
 #include <QPixmap>
 #include <QSize>
@@ -16,7 +16,7 @@
 #include "music.h"
 #include "myhttp.h"
 #include "customitem.h"
-
+#include "musicdb.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class HaoMusic; }
@@ -53,28 +53,37 @@ private:
     QPoint  m_mousePoint;       // 鼠标坐标
     QPoint  movePoint;          // 窗口移动距离
     bool    mousePress = false; // 鼠标左键是否按下
-    int     itemType = 100;
 
-    int     offset          = 0;    // 搜索偏移量
-    int     volume          = 50;   // 音量
-    int     currentLrcRow   = 1;    // 当前歌词所在行
-    int     loadingTimes    = 3000; // 加载所需事件（ms）
+    int     listType = -1;      // 列表类型
+
+    int     volume          = 30;   // 初始音量
+    bool    isSearchResultUpdate    = false;    // 搜索结果是否更新
+    bool    isFavoriteMusicListShow = false;    // 我喜欢的音乐列表是否显示
+    bool    isLocalMusicListShow    = false;    // 本地音乐列表是否显示
+    bool    isSonglistShow          = false;    // 我的歌单是否显示
+
+    int     loadingTimes    = 1000; // 加载所需时间（ms）
     QString searchKeywords  = "";   // 搜索关键词
     QMovie *loadingMovie;           // 加载动画
-    Music   currentMusic;           // 当前播放的音乐
 
+    Music                currentMusic;          // 当前播放的音乐
+    int                  currentLrcRow   = 1;   // 当前歌词所在行
     QListWidgetItem     *currentLrcItem;        // 当前歌词所在item
     QMap<int,QString>    lrcMap;                // 歌词
     QList<int>           lrcKeys;               // 歌词对应的时间帧
     QList<Music>         musicList;             // 播放列表音乐列表
-    QList<Music>         searchResultMusicList; //搜索结果音乐列表
-    QList<Music>         favoriteMusicList;     // 我喜欢的音乐
+    QList<Music>         searchResultMusicList; // 搜索结果音乐列表
+    QList<Music>         favoriteMusicList;     // 我喜欢的音乐列表
+    QList<Music>         localMusicList;        // 本地音乐列表
+    MusicDB m_db;   // 音乐数据库
     // 绘制圆角阴影窗口
     void paintShadowRadiusWidget();
     // 设置托盘图标
     void setTrayIcon();
     // 初始化播放器
     void initPlayer();
+    // 初始化音乐列表
+    void initMusicList();
     // 连接信号和槽
     void connectSignalsAndSlots();
     // 音乐进度条点击事件处理函数
@@ -85,8 +94,6 @@ private:
     void updateMediaPlaylist();
     // 更新底部栏音乐信息
     void updateBottomMusicInfo();
-    // 更新布局
-    void updateLayout();
     // 显示歌词
     void showLrc();
     // 歌词滚动
@@ -127,8 +134,6 @@ private slots:
     void on_pushButton_volume_clicked();
     // 正在播放音乐的当前时刻变化处理函数
     void onPositionChanged(qint64);
-    // 当前音乐播放时长变化处理函数
-    void onDurationChanged(qint64);
     // 音量条变化处理函数
     void on_horizontalSlider_volume_valueChanged(int value);
     // 点击历史播放按钮

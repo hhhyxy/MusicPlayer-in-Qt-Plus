@@ -39,11 +39,11 @@ SOURCES += \
     customitem.cpp \
     customslider.cpp \
     gaussianblur.cpp \
-    imageloader.cpp \
     lrcwidget.cpp \
     main.cpp \
     haomusic.cpp \
     music.cpp \
+    musicdb.cpp \
     mybottombar.cpp \
     myhttp.cpp \
     mylabel.cpp \
@@ -57,9 +57,9 @@ HEADERS += \
     customitem.h \
     gaussianblur.h \
     haomusic.h \
-    imageloader.h \
     lrcwidget.h \
     music.h \
+    musicdb.h \
     mybottombar.h \
     myhttp.h \
     mylabel.h \

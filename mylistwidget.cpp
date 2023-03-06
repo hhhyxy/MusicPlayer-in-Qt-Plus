@@ -1,5 +1,6 @@
 ﻿#include "mylistwidget.h"
 #include <QScrollBar>
+#include <QThreadPool>
 
 MyListWidget::MyListWidget(QWidget *parent)
     : QListWidget{parent}
@@ -7,18 +8,26 @@ MyListWidget::MyListWidget(QWidget *parent)
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &MyListWidget::onScrollBarValueChange);
 }
 
-// 设置音乐列表，并加载前15项
+// 设置音乐列表，并加载前10项
 void MyListWidget::setMusicList(const QList<Music> &musicList)
 {
     // 清空列表并滚动到顶部
     this->clear();
     this->scrollToTop();
-    // 更新音乐列表，加载前15项
+    // 更新音乐列表，加载前10项
     m_musicList = musicList;
     itemsNum = 10;
     if (itemsNum > musicList.size())
         itemsNum = musicList.size();
     addCustomItems(0, itemsNum);
+}
+
+// 插入item
+void MyListWidget::insertCustomItem(Music music, int row)
+{
+    // 如果插入位置正常
+    if (row >= 0 && row < itemsNum)
+        addCustomItem(music, row);
 }
 
 // 设置列表类型
@@ -43,13 +52,11 @@ void MyListWidget::loadMore()
         return;
     // 需加载的第一项
     int begin = itemsNum;
-    // 更新item数量
-    itemsNum = itemsNum + 10;
-    // item数量不大于音乐数量
-    if (itemsNum > m_musicList.size())
-        itemsNum = m_musicList.size();
     // 需加载的最后一项
-    int end = itemsNum;
+    int end = itemsNum + 4;
+    // item数量不大于音乐数量
+    if (end > m_musicList.size())
+        end = m_musicList.size();
     // 添加item
     addCustomItems(begin, end);
 }
@@ -58,15 +65,19 @@ void MyListWidget::loadMore()
 void MyListWidget::addCustomItems(int begin, int end)
 {
     for (int i = begin; i < end; i++) {
-        addCustomItem(m_musicList.at(i));
+        Music music = m_musicList.at(i);
+        addCustomItem(music);
     }
 }
 
 // 加载自定义item
-void MyListWidget::addCustomItem(const Music music)
+void MyListWidget::addCustomItem(const Music music, int row/* = -1*/)
 {
-    QListWidgetItem* qItem = new QListWidgetItem(this);
-    this->addItem(qItem);
+    QListWidgetItem* qItem = new QListWidgetItem();
+    if (row == -1)
+        row = itemsNum;
+    this->insertItem(row, qItem);
+    itemsNum++;
     qItem->setSizeHint(QSize(0, 80));
 
     CustomItem *myItem = new CustomItem(music, this);

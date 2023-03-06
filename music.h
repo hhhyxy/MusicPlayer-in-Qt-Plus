@@ -10,8 +10,7 @@ class Music
 {
 public:
     explicit Music();
-    explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration);
-    explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration, QString songUrl);
+    explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration, QString songUrl = "");
     // 重写==操作符
     bool operator ==(const Music &music);
     // geter
@@ -30,18 +29,19 @@ public:
     void setAlbumName(const QString &newAlbumName);
     void setAlbumPicUrl(const QString &newAlbumPicUrl);
     void setSongDuration(int newSongDuration);
+
 private:
     int         m_id;              // 歌曲Id
+    int         m_songDuration;    // 歌曲时长
     QString     m_songName;        // 歌曲名称
-    QString     m_author;          // 歌手
+    QString     m_author;          // 歌手名称
     QString     m_albumName;       // 专辑名称
     QString     m_albumPicUrl;     // 专辑图片链接
-    int         m_songDuration;    // 歌曲时长
-    QString     m_songUrl;         // 歌曲链接
+    QString     m_songUrl;         // 歌曲播放链接
 
 };
 
 // 注册Qariant
-Q_DECLARE_METATYPE(Music);
+Q_DECLARE_METATYPE(Music)
 
 #endif // MUSIC_H
