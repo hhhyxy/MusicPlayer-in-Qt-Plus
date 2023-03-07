@@ -22,7 +22,7 @@ public:
     ~MyHttp();
     QList<Music> search(QString keywords, int offset = 0, int limit = 80, int type = 1);
     QString searchForSongUrl(int id);
-    void searchForSongUrls(QList<int> musicIdList);
+    QStringList searchForSongUrls(QVector<int> musicIdList);
     QMap<int, QString> searchForLrc(int id);
 
 private:
@@ -39,7 +39,8 @@ private:
     QByteArray              bytes;           // 返回的字节流数据
 
     QList<Music>        musicList;      // 搜索结果列表
-    QList<int>          musicIdList;    // 歌曲id列表
+    QVector<int>        musicIdList;    // 歌曲id列表
+    QList<QString>      musicUrlList;   // 歌曲链接列表
     QMap<int, QString>  lrcMap;         // 歌词
     QMap<int, QString>  urlMap;         // 歌曲链接
 

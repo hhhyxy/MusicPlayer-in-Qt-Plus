@@ -1,7 +1,7 @@
 ﻿#include "mylistwidget.h"
 #include <QScrollBar>
 #include <QThreadPool>
-
+#include <QDebug>
 MyListWidget::MyListWidget(QWidget *parent)
     : QListWidget{parent}
 {
@@ -15,6 +15,7 @@ void MyListWidget::setMusicList(const QList<Music> &musicList)
     this->clear();
     this->scrollToTop();
     // 更新音乐列表，加载前10项
+    m_musicList.clear();
     m_musicList = musicList;
     itemsNum = 10;
     if (itemsNum > musicList.size())
@@ -77,6 +78,7 @@ void MyListWidget::addCustomItem(const Music music, int row/* = -1*/)
     if (row == -1)
         row = itemsNum;
     this->insertItem(row, qItem);
+    qDebug()<< __FILE__ << __LINE__ << row;
     itemsNum++;
     qItem->setSizeHint(QSize(0, 80));
 

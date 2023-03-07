@@ -39,7 +39,6 @@ void MusicDB::open()
                              "album TEXT NOT NULL,"
                              "picurl TEXT NOT NULL,"
                              "duration integer NOT NULL,"
-                             "songurl TEXT,"
                              "PRIMARY KEY ('list_type', 'idx', 'id')"
                            ");";
         song_query.prepare(create_sql);
@@ -55,8 +54,8 @@ void MusicDB::open()
 void MusicDB::insert(Music &music, int listType, int index)
 {
     QSqlQuery song_query;
-    QString insert_sql = "INSERT INTO song (list_type, idx, id, name, author, album, picurl, duration, songurl) "
-                         "VALUES (:list_type, :idx, :id, :name, :author, :album, :picurl, :duration, :songurl);";
+    QString insert_sql = "INSERT INTO song (list_type, idx, id, name, author, album, picurl, duration) "
+                         "VALUES (:list_type, :idx, :id, :name, :author, :album, :picurl, :duration);";
     song_query.prepare(insert_sql);
     song_query.bindValue(":list_type", listType);
     song_query.bindValue(":idx", index);
@@ -66,7 +65,6 @@ void MusicDB::insert(Music &music, int listType, int index)
     song_query.bindValue(":album", music.getAlbumName());
     song_query.bindValue(":picurl", music.albumPicUrl());
     song_query.bindValue(":duration", music.songDuration());
-    song_query.bindValue(":songurl", music.getSongUrl());
     if(!song_query.exec()) {
         qDebug() << __FILE__ << __LINE__ << "insert error: "<<song_query.lastError();
     }
@@ -80,7 +78,7 @@ void MusicDB::insert(Music &music, int listType, int index)
 QList<Music> MusicDB::query(int listType, int index)
 {
     QSqlQuery song_query;
-    QString querySql = "SELECT id, name, author, album, picurl, duration, songurl FROM song WHERE list_type = :list_type and idx = :idx ORDER BY rowid desc;";
+    QString querySql = "SELECT id, name, author, album, picurl, duration FROM song WHERE list_type = :list_type and idx = :idx ORDER BY rowid desc;";
     song_query.prepare(querySql);
     song_query.bindValue(":list_type", listType);
     song_query.bindValue(":idx", index);
@@ -95,8 +93,8 @@ QList<Music> MusicDB::query(int listType, int index)
         QString album = song_query.value(3).toString();
         QString picurl = song_query.value(4).toString();
         int duration = song_query.value(5).toInt();
-        QString songurl = song_query.value(6).toString();
-        Music music(id, name, author, album, picurl, duration, songurl);
+        qDebug()<< __FILE__ << __LINE__ << name << author << album;
+        Music music(id, name, author, album, picurl, duration);
         musicList.push_back(music);
     }
     song_query.finish();

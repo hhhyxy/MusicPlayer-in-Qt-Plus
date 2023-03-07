@@ -17,6 +17,7 @@
 #include "myhttp.h"
 #include "customitem.h"
 #include "musicdb.h"
+#include "mymediaplaylist.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class HaoMusic; }
@@ -45,7 +46,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 private:
     Ui::HaoMusic    *ui;
-    QMediaPlaylist  *mediaPlaylist      = nullptr;  // 媒体播放列表
+    MyMediaPlaylist  *mediaPlaylist      = nullptr;  // 媒体播放列表
     QMediaPlayer    *mediaPlayer        = nullptr;  // 媒体播放器
     MyHttp          *search             = nullptr;  // 网络搜索
     CustomItem      *currentPlayingItem = nullptr;  // 当前正在播放的item

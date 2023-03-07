@@ -68,12 +68,13 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
 QString MyHttp::searchForSongUrl(int id)
 {
     QString url = QString(netease_songUrl_Id).append(QString::number(id));
-    searchByUrl(url);
+    qDebug()<<__FILE__<<__LINE__<<url;
+    searchByUrl(QUrl(url));
     parseForSongUrl();
     return songUrl;
 }
 
-void MyHttp::searchForSongUrls(QList<int> musicIdList)
+QStringList MyHttp::searchForSongUrls(QVector<int> musicIdList)
 {
     QString urlStr = QString(netease_songUrl_Id);
     for (int i = 0; i < musicIdList.size(); i++) {
@@ -83,6 +84,7 @@ void MyHttp::searchForSongUrls(QList<int> musicIdList)
     }
     searchByUrl(urlStr);
     parseForSongUrl();
+    return musicUrlList;
 }
 
 /*
@@ -242,7 +244,6 @@ void MyHttp::parseForMusicInfo()
 // 解析QByteArray，得到歌曲播放链接
 void MyHttp::parseForSongUrl()
 {
-
     // 将json解析未编码未UTF-8的json文档
     QJsonParseError json_error; // 错误信息
     QJsonDocument parse_doucment = QJsonDocument::fromJson(bytes, &json_error);
@@ -257,7 +258,7 @@ void MyHttp::parseForSongUrl()
 
     for (int i = 0; i < array.size(); i++) {
         int id = array[i].toObject().value("id").toInt();
-        QString songUrl = array[i].toObject().value("url").toString();
+        songUrl = array[i].toObject().value("url").toString();
 
         if (songUrl.isEmpty()) {
 //            qDebug()<< __FILE__<<__LINE__<< id << "songUrl is empty";
@@ -267,7 +268,8 @@ void MyHttp::parseForSongUrl()
     }
     for (int i = 0; i < musicList.size(); i++) {
         QString url = urlMap.value(musicList.at(i).getId());
-        musicList[i].setSongUrl(url);
+        qDebug() << __LINE__ << __FILE__ << songUrl;
+        musicUrlList.push_back(url);
 //        qDebug()<< __FILE__<<__LINE__<< musicList.at(i).getSongName() << musicList.at(i).getSongUrl();
     }
 }

@@ -44,8 +44,8 @@ void HaoMusic::initPlayer()
     search = new MyHttp(this);
     // 播放器初始化
     mediaPlayer = new QMediaPlayer(this);
-    mediaPlaylist = new QMediaPlaylist(this);
-    mediaPlaylist->setPlaybackMode(QMediaPlaylist::Loop);//设置播放模式(顺序播放，单曲循环，随机播放等)
+    mediaPlaylist = new MyMediaPlaylist(this);
+    mediaPlaylist->setPlaybackMode(MyMediaPlaylist::Loop);//设置播放模式(顺序播放，单曲循环，随机播放等)
     mediaPlayer->setPlaylist(mediaPlaylist);
     mediaPlayer->setAudioRole(QAudio::MusicRole);
     mediaPlayer->setVolume(volume);
@@ -85,6 +85,12 @@ void HaoMusic::initMusicList()
     // 连接数据库
     m_db.open();
     favoriteMusicList = m_db.query(MyListWidget::FAVORITE);
+    QVector<int> idList;
+    foreach (Music music, favoriteMusicList) {
+        idList.push_back(music.getId());
+    }
+    QStringList urlList = search->searchForSongUrls(idList);
+
 }
 
 // 设置托盘图标
@@ -145,14 +151,17 @@ void HaoMusic::connectSignalsAndSlots()
                 ui->pushButton_switch->setIcon(QIcon(QPixmap(":/icon/Player, pause.svg")));
 
                 break;
-            case QMediaPlayer::PausedState:
-                ui->pushButton_switch->setToolTip("播放");
-                ui->pushButton_switch->setIcon(QIcon(QPixmap(":/icon/Player, play.svg")));
-                break;
             default:
                 ui->pushButton_switch->setToolTip("播放");
                 ui->pushButton_switch->setIcon(QIcon(QPixmap(":/icon/Player, play.svg")));
                 break;
+        }
+    });
+    // 当前媒体状体改变
+    connect(mediaPlayer, QMediaPlayer::mediaStatusChanged, [=]()
+    {
+        if (QMediaPlayer::EndOfMedia == mediaPlayer->mediaStatus()) {
+            mediaPlaylist->next();
         }
     });
     // 播放歌曲改变
@@ -163,12 +172,8 @@ void HaoMusic::connectSignalsAndSlots()
             return;
         }
         currentMusic = musicList.at(index);
-        // 当前歌曲播放链接为空，则切换下一首
-        if (currentMusic.getSongUrl().isEmpty()) {
-            mediaPlaylist->setCurrentIndex(index+1);
-            mediaPlayer->play();
-            return;
-        }
+        qDebug()<<__FILE__<<__LINE__<<currentMusic.getSongName();
+
         qDebug() << __FILE__ << __LINE__ << "the current playing music is:" << currentMusic.getSongName();
         updateBottomMusicInfo();
         // 获取、显示歌词
@@ -420,8 +425,8 @@ void HaoMusic::on_listWidget_lrc_itemClicked(QListWidgetItem *item)
         mediaPlayer->play();
     }
     if (QMediaPlayer::StoppedState == mediaPlayer->state()) {
-        mediaPlayer->setMedia(QUrl(currentMusic.getSongUrl()));
-        mediaPlayer->play();
+        mediaPlaylist->setCurrentIndex(mediaPlaylist->currentIndex());
+//        mediaPlayer->play();
     }
 }
 
@@ -481,11 +486,6 @@ void HaoMusic::playingTheItem(CustomItem *item)
     // 获取当前点击的音乐
     currentMusic = item->getMusic();
     mediaPlaylist->setCurrentIndex(musicList.lastIndexOf(currentMusic));
-    // 播放链接为空则播放下一首
-    if (currentMusic.getSongUrl().isEmpty()) {
-        qDebug()<<__FILE__<<__LINE__<<"songUrl is empty";
-        mediaPlaylist->setCurrentIndex(mediaPlaylist->nextIndex());
-    }
     // 音乐播放
     mediaPlayer->play();
 }
@@ -502,32 +502,32 @@ void HaoMusic::on_pushButton_mode_clicked()
 {
     switch (mediaPlaylist->playbackMode()) {
         //列表循环->顺序播放
-        case QMediaPlaylist::Loop:
-            mediaPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
+        case MyMediaPlaylist::Loop:
+            mediaPlaylist->setPlaybackMode(MyMediaPlaylist::Sequential);
             ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/order-play-fill.svg")));
             ui->pushButton_mode->setToolTip("顺序播放");
             break;
         //顺序播放->随机播放
-        case QMediaPlaylist::Sequential:
-            mediaPlaylist->setPlaybackMode(QMediaPlaylist::Random);
+        case MyMediaPlaylist::Sequential:
+            mediaPlaylist->setPlaybackMode(MyMediaPlaylist::Random);
             ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/random.svg")));
             ui->pushButton_mode->setToolTip("随机播放");
             break;
 
         //随机播放->单曲循环
-        case QMediaPlaylist::Random:
-            mediaPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+        case MyMediaPlaylist::Random:
+            mediaPlaylist->setPlaybackMode(MyMediaPlaylist::CurrentItemInLoop);
             ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/repeat-one-line.svg")));
             ui->pushButton_mode->setToolTip("单曲循环");
             break;
 
         //单曲循环->列表循环
-        case QMediaPlaylist::CurrentItemInLoop:
-            mediaPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
+        case MyMediaPlaylist::CurrentItemInLoop:
+            mediaPlaylist->setPlaybackMode(MyMediaPlaylist::Loop);
             ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/repeat.svg")));
             ui->pushButton_mode->setToolTip("列表循环");
             break;
-        case QMediaPlaylist::CurrentItemOnce:
+        case MyMediaPlaylist::CurrentItemOnce:
             break;
     }
 }
@@ -652,8 +652,8 @@ void HaoMusic::updateMediaPlaylist()
     mediaPlaylist->clear();
     // 初始化音乐播放列表
     for (int i = 0; i < musicList.size(); i++) {
-        QString songUrl = musicList.at(i).getSongUrl();
-        mediaPlaylist->insertMedia(i, QUrl(songUrl));
+        int id = musicList.at(i).getId();
+        mediaPlaylist->addMedia(id);
     }
 }
 
@@ -729,6 +729,7 @@ void HaoMusic::on_pushButton_favorite_clicked()
 // 显示所有我喜欢的音乐
 void HaoMusic::showMyFavoriteMusicList()
 {
+    // 显示喜欢的音乐
     ui->listWidget_favorite->setMusicList(favoriteMusicList);
 }
 
@@ -768,18 +769,18 @@ void HaoMusic::menuAddToMyFavoriteClicked(CustomItem *item)
     m_db.insert(music);
     // 如果我喜欢的音乐页面已经加载，直接插入item
     if (isFavoriteMusicListShow)
-        ui->listWidget_favorite->insertCustomItem(music);
+        ui->listWidget_favorite->insertCustomItem(music, 0);
     // 如果正在播放的是我喜欢的音乐，需要更新播放列表
     if (listType == MyListWidget::FAVORITE) {
         musicList.push_front(music);
-        int position = mediaPlayer->position();
-        mediaPlayer->pause();
+//        int position = mediaPlayer->position();
+//        mediaPlayer->pause();
 
         int index = mediaPlaylist->currentIndex();
-        mediaPlaylist->insertMedia(0, QUrl(music.getSongUrl()));
+        mediaPlaylist->insertMedia(0, music.getId());
         mediaPlaylist->setCurrentIndex(index+1);
-        mediaPlayer->setPosition(position);
-        mediaPlayer->play();
+//        mediaPlayer->setPosition(position);
+//        mediaPlayer->play();
     }
 }
 

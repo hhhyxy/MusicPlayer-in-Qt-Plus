@@ -6,14 +6,13 @@ Music::Music()
 
 }
 
-Music::Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration, QString songUrl)
+Music::Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration)
     :m_id(id),
     m_songName(songName),
     m_author(author),
     m_albumName(albumName),
     m_albumPicUrl(albumPicUrl),
-    m_songDuration(songDuration),
-    m_songUrl(songUrl)
+    m_songDuration(songDuration)
 {
 }
 
@@ -60,16 +59,6 @@ QString Music::getSongDuration() const
 int Music::songDuration() const
 {
     return m_songDuration;
-}
-
-void Music::setSongUrl(const QString &newSongUrl)
-{
-    m_songUrl = newSongUrl;
-}
-
-QString Music::getSongUrl() const
-{
-    return m_songUrl;
 }
 
 QString Music::getAuthor() const

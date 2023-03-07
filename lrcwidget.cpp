@@ -15,7 +15,7 @@ LrcWidget::LrcWidget(QWidget *parent)
     // 初始化
     manager = new QNetworkAccessManager(this);
     gauss = new GaussianBlur(this);
-    radius = 500;
+    radius = 300;
 
     // 网络请求完成
     connect(manager, QNetworkAccessManager::finished, this, LrcWidget::onRequestFinished);

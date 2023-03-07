@@ -49,6 +49,7 @@ SOURCES += \
     mylabel.cpp \
     mylineedit.cpp \
     mylistwidget.cpp \
+    mymediaplaylist.cpp \
     threaddownloader.cpp
 
 HEADERS += \
@@ -65,6 +66,7 @@ HEADERS += \
     mylabel.h \
     mylineedit.h \
     mylistwidget.h \
+    mymediaplaylist.h \
     threaddownloader.h
 
 FORMS += \
