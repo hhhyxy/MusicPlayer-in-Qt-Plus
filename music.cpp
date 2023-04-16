@@ -21,34 +21,9 @@ bool Music::operator ==(const Music &music)
     return this->getId() == music.getId();
 }
 
-void Music::setSongName(const QString &newSongName)
-{
-    m_songName = newSongName;
-}
-
-void Music::setAuthor(const QString &newAuthor)
-{
-    m_author = newAuthor;
-}
-
-void Music::setAlbumName(const QString &newAlbumName)
-{
-    m_albumName = newAlbumName;
-}
-
 QString Music::albumPicUrl() const
 {
     return m_albumPicUrl;
-}
-
-void Music::setAlbumPicUrl(const QString &newAlbumPicUrl)
-{
-    m_albumPicUrl = newAlbumPicUrl;
-}
-
-void Music::setSongDuration(int newSongDuration)
-{
-    m_songDuration = newSongDuration;
 }
 
 QString Music::getSongDuration() const

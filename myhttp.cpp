@@ -1,9 +1,9 @@
 ﻿#include "myhttp.h"
-#include <QEventLoop>
+#include <customitem.h>
 #include <QTimer>
+#include <QEventLoop>
 #include <QJsonParseError>
 #include <QDebug>
-#include <customitem.h>
 #include <QUrlQuery>
 
 MyHttp::MyHttp(QObject *parent)
@@ -65,11 +65,16 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
  *@return 返回歌曲播放链接
  *@param id:歌曲id
  */
-QString MyHttp::searchForSongUrl(int id)
+QString MyHttp::searchForSongUrl(int id, QString level)
 {
-    QString url = QString(netease_songUrl_Id).append(QString::number(id));
+    QUrl url(netease_songUrl_Id);
+    QUrlQuery query;
+    query.addQueryItem("id", QString::number(id));
+    query.addQueryItem("level", level);
+    url.setQuery(query);
+//    QString url = QString(netease_songUrl_Id).append(QString::number(id));
     qDebug()<<__FILE__<<__LINE__<<url;
-    searchByUrl(QUrl(url));
+    searchByUrl(url);
     parseForSongUrl();
     return songUrl;
 }

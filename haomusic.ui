@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>974</width>
-    <height>807</height>
+    <width>896</width>
+    <height>711</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -738,13 +738,13 @@ QSlider::handle:horizontal {
                  <number>0</number>
                 </property>
                 <property name="leftMargin">
-                 <number>0</number>
+                 <number>5</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
                 </property>
                 <property name="rightMargin">
-                 <number>0</number>
+                 <number>5</number>
                 </property>
                 <property name="bottomMargin">
                  <number>0</number>
@@ -890,7 +890,7 @@ QSlider::handle:horizontal {
                    </size>
                   </property>
                   <property name="text">
-                   <string>默认歌单</string>
+                   <string>我的歌单</string>
                   </property>
                   <property name="checkable">
                    <bool>true</bool>
@@ -934,7 +934,7 @@ QSlider::handle:horizontal {
                 <enum>QTabWidget::Rounded</enum>
                </property>
                <property name="currentIndex">
-                <number>2</number>
+                <number>4</number>
                </property>
                <property name="elideMode">
                 <enum>Qt::ElideMiddle</enum>
@@ -1026,6 +1026,15 @@ QSlider::handle:horizontal {
                    <property name="selectionMode">
                     <enum>QAbstractItemView::ExtendedSelection</enum>
                    </property>
+                   <property name="textElideMode">
+                    <enum>Qt::ElideNone</enum>
+                   </property>
+                   <property name="verticalScrollMode">
+                    <enum>QAbstractItemView::ScrollPerPixel</enum>
+                   </property>
+                   <property name="horizontalScrollMode">
+                    <enum>QAbstractItemView::ScrollPerPixel</enum>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -1034,17 +1043,34 @@ QSlider::handle:horizontal {
                 <attribute name="title">
                  <string>最近播放</string>
                 </attribute>
-                <widget class="QLabel" name="label_recently">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>最近播放</string>
-                 </property>
-                 <property name="margin">
-                  <number>2</number>
-                 </property>
-                </widget>
+                <layout class="QVBoxLayout" name="verticalLayout_5">
+                 <item>
+                  <widget class="QLabel" name="label_recently">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="text">
+                    <string>最近播放</string>
+                   </property>
+                   <property name="margin">
+                    <number>2</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="MyListWidget" name="listWidget_history">
+                   <property name="defaultDropAction">
+                    <enum>Qt::IgnoreAction</enum>
+                   </property>
+                   <property name="verticalScrollMode">
+                    <enum>QAbstractItemView::ScrollPerPixel</enum>
+                   </property>
+                   <property name="horizontalScrollMode">
+                    <enum>QAbstractItemView::ScrollPerPixel</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
                <widget class="QWidget" name="tab_defalutSongList">
                 <attribute name="title">
@@ -1068,6 +1094,12 @@ QSlider::handle:horizontal {
                  </item>
                  <item>
                   <widget class="MyListWidget" name="listWidget_favorite">
+                   <property name="defaultDropAction">
+                    <enum>Qt::IgnoreAction</enum>
+                   </property>
+                   <property name="textElideMode">
+                    <enum>Qt::ElideNone</enum>
+                   </property>
                    <property name="verticalScrollMode">
                     <enum>QAbstractItemView::ScrollPerPixel</enum>
                    </property>
@@ -1874,7 +1906,13 @@ QSlider::handle:horizontal {
                 <bool>false</bool>
                </property>
                <property name="dragDropMode">
-                <enum>QAbstractItemView::DragOnly</enum>
+                <enum>QAbstractItemView::NoDragDrop</enum>
+               </property>
+               <property name="defaultDropAction">
+                <enum>Qt::IgnoreAction</enum>
+               </property>
+               <property name="textElideMode">
+                <enum>Qt::ElideNone</enum>
                </property>
                <property name="verticalScrollMode">
                 <enum>QAbstractItemView::ScrollPerPixel</enum>

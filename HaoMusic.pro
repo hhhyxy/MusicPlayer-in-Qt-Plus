@@ -11,13 +11,13 @@ CONFIG += c++17
 #程序版本
 VERSION  = 1.0
 #程序图标
-#RC_ICONS = :/icon/MusicPlayer.ico
+RC_ICONS = icon/MusicPlayer.ico
 #产品名称
 QMAKE_TARGET_PRODUCT = MusicPlayer
 #版权所有
-QMAKE_TARGET_COPYRIGHT = yanghao
+QMAKE_TARGET_COPYRIGHT = hao
 #文件说明
-QMAKE_TARGET_DESCRIPTION = QQ: 1589967693
+QMAKE_TARGET_DESCRIPTION = HaoMusic
 
 #禁用qdebug打印输出
 #DEFINES += QT_NO_DEBUG_OUTPUT

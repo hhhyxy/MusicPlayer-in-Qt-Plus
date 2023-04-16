@@ -2,14 +2,12 @@
 #define MYHTTP_H
 
 #include "music.h"
-#include <QObject>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QLabel>
 
 /*
  * 网络请求处理类
@@ -21,14 +19,14 @@ public:
     explicit MyHttp(QObject *parent = nullptr);
     ~MyHttp();
     QList<Music> search(QString keywords, int offset = 0, int limit = 80, int type = 1);
-    QString searchForSongUrl(int id);
+    QString searchForSongUrl(int id, QString level = "hires");
     QStringList searchForSongUrls(QVector<int> musicIdList);
     QMap<int, QString> searchForLrc(int id);
 
 private:
-    const QString netease_keywords      = "https://netease.haohao666.top/search";           // 关键词搜索
+    const QString netease_keywords      = "https://netease.haohao666.top/cloudsearch";           // 关键词搜索
     const QString netease_songsInfo_Ids = "https://netease.haohao666.top/song/detail?ids="; // 通过id获取歌曲信息
-    const QString netease_songUrl_Id    = "https://netease.haohao666.top/song/url?id=";     // 通id获取歌曲播放链接
+    const QString netease_songUrl_Id    = "https://netease.haohao666.top/song/url/v1";     // 通id获取歌曲播放链接
     const QString netease_songLrc_Id    = "https://netease.haohao666.top/lyric?id=%1";      // 通过id获取歌词
 
     QString songUrl = "";

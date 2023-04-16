@@ -22,6 +22,7 @@ public:
     QPixmap getImg() const;
     // 显示圆角图片
     void makeRadiusPixmap(QByteArray bytes);
+    void makeRadiusPixmap(QPixmap pixmap);
     // 设置图片阴影
     void setShadow();
 private:

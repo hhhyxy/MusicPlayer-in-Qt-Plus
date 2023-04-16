@@ -53,7 +53,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QListWidget" name="listWidget"/>
+    <widget class="QListWidget" name="listWidget_songlistWidget"/>
    </item>
   </layout>
  </widget>

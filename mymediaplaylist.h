@@ -13,7 +13,7 @@ public:
     QMediaContent media(int index) const;
     QMediaContent currentMedia() const;
     int currentIndex() const;
-    void setCurrentIndex(int index, bool songSwitch = true);
+    void setCurrentIndex(int index/*, bool songSwitch = true*/);
     int nextIndex(int steps = 1);
     int previousIndex(int steps = 1);
     void shuffle();
@@ -21,6 +21,7 @@ public:
     bool insertMedia(int index, const int id);
     bool removeMedia(int index);
     bool clear();
+    void last();
     void next();
 
 private:

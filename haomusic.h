@@ -1,22 +1,19 @@
 ﻿#ifndef HAOMUSIC_H
 #define HAOMUSIC_H
 
-#include <QWidget>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-
-#include <QListWidgetItem>
-#include <QSystemTrayIcon>
 #include <QAbstractButton>
-#include <QUrl>
+#include <QGraphicsDropShadowEffect>
+#include <QListWidgetItem>
+#include <QMediaPlayer>
 #include <QPixmap>
 #include <QSize>
+#include <QSystemTrayIcon>
+#include <QUrl>
 
-#include <QGraphicsDropShadowEffect>
-#include "music.h"
-#include "myhttp.h"
 #include "customitem.h"
+#include "music.h"
 #include "musicdb.h"
+#include "myhttp.h"
 #include "mymediaplaylist.h"
 
 QT_BEGIN_NAMESPACE
@@ -46,7 +43,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 private:
     Ui::HaoMusic    *ui;
-    MyMediaPlaylist  *mediaPlaylist      = nullptr;  // 媒体播放列表
+    MyMediaPlaylist *mediaPlaylist      = nullptr;  // 媒体播放列表
     QMediaPlayer    *mediaPlayer        = nullptr;  // 媒体播放器
     MyHttp          *search             = nullptr;  // 网络搜索
     CustomItem      *currentPlayingItem = nullptr;  // 当前正在播放的item
@@ -62,6 +59,7 @@ private:
     bool    isFavoriteMusicListShow = false;    // 我喜欢的音乐列表是否显示
     bool    isLocalMusicListShow    = false;    // 本地音乐列表是否显示
     bool    isSonglistShow          = false;    // 我的歌单是否显示
+    bool    isHistoryMusicListShow  = false;    // 历史音乐列表是否显示
 
     int     loadingTimes    = 1000; // 加载所需时间（ms）
     QString searchKeywords  = "";   // 搜索关键词
@@ -72,10 +70,13 @@ private:
     QListWidgetItem     *currentLrcItem;        // 当前歌词所在item
     QMap<int,QString>    lrcMap;                // 歌词
     QList<int>           lrcKeys;               // 歌词对应的时间帧
+
     QList<Music>         musicList;             // 播放列表音乐列表
     QList<Music>         searchResultMusicList; // 搜索结果音乐列表
     QList<Music>         favoriteMusicList;     // 我喜欢的音乐列表
     QList<Music>         localMusicList;        // 本地音乐列表
+    QList<Music>         historyMusicList;      // 播放历史列表
+
     MusicDB m_db;   // 音乐数据库
     // 绘制圆角阴影窗口
     void paintShadowRadiusWidget();
@@ -107,11 +108,10 @@ private:
     void playingTheItem(CustomItem *item);
     // 显示歌词页面
     void showLrcPage();
-    // 显示所有我喜欢的音乐
-    void showMyFavoriteMusicList();
     // 双击列表项
     void onCustomItemDoubleClicked(CustomItem *item);
-
+    // 添加到历史播放列表
+    void addToHistoryList(Music &music);
 private slots:
     // 双击托盘图标显示界面
     void iconActived(QSystemTrayIcon::ActivationReason);
@@ -151,6 +151,7 @@ private slots:
     void menuPlayMusicClicked(CustomItem *item);
     void menuAddToMyFavoriteClicked(CustomItem *item);
     void menuAddToSonglistClicked(CustomItem *item);
+    void menuRemoveFromSongList(CustomItem *item);
     // 点击列表的某一行
     void on_listWidget_lrc_itemClicked(QListWidgetItem *item);
     // 搜索框内容变化处理函数

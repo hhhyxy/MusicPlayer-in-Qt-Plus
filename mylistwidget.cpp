@@ -12,6 +12,7 @@ MyListWidget::MyListWidget(QWidget *parent)
 void MyListWidget::setMusicList(const QList<Music> &musicList)
 {
     // 清空列表并滚动到顶部
+    items.clear();
     this->clear();
     this->scrollToTop();
     // 更新音乐列表，加载前10项
@@ -31,10 +32,24 @@ void MyListWidget::insertCustomItem(Music music, int row)
         addCustomItem(music, row);
 }
 
+void MyListWidget::removeCustomItem(CustomItem *item)
+{
+    int index = items.indexOf(item);
+    items.removeAt(index);
+    QListWidgetItem *lItem =  this->takeItem(index);
+    delete lItem;
+    item = nullptr;
+}
+
 // 设置列表类型
 void MyListWidget::setListType(int listType)
 {
     this->listType = listType;
+}
+
+int MyListWidget::getListType()
+{
+    return listType;
 }
 
 // 当滚动到底部，加载更多项
@@ -78,11 +93,14 @@ void MyListWidget::addCustomItem(const Music music, int row/* = -1*/)
     if (row == -1)
         row = itemsNum;
     this->insertItem(row, qItem);
-    qDebug()<< __FILE__ << __LINE__ << row;
     itemsNum++;
     qItem->setSizeHint(QSize(0, 80));
 
-    CustomItem *myItem = new CustomItem(music, this);
+    CustomItem *myItem = new CustomItem(music);
+    if (row == 0)
+        items.push_front(myItem);
+    else
+        items.push_back(myItem);
     myItem->setItemType(listType);
     this->setItemWidget(qItem, myItem);
     connect(myItem, &CustomItem::myItemDoubleClicked, this, &MyListWidget::customItemDoubleClicked);

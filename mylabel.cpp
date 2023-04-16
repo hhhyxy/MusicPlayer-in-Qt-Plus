@@ -72,7 +72,7 @@ void MyLabel::onReplyFinished(QNetworkReply *reply)
 
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray bytes = reply->readAll();  //获取字节
-        QtConcurrent::run(this, &MyLabel::makeRadiusPixmap, bytes);
+        QtConcurrent::run(this, QOverload<QByteArray>::of(&MyLabel::makeRadiusPixmap), bytes);
     }else {
         qDebug()<<__FILE__<<__LINE__<<"获取专辑图片失败";
     }
@@ -87,9 +87,14 @@ void MyLabel::makeRadiusPixmap(QByteArray bytes)
     if (pixmap.isNull())
         return;
     //处理大尺寸的图片
-//    if (pixmap.width() > 600) {
-        pixmap = pixmap.scaledToWidth(this->width());
-//    }
+    pixmap = pixmap.scaledToWidth(this->width());
+//    pixmap = pixmap.scaledToWidth(600);
+    makeRadiusPixmap(pixmap);
+
+}
+
+void MyLabel::makeRadiusPixmap(QPixmap pixmap)
+{
     QSize size = pixmap.size();
     QBitmap mask(size);
     QPainter painter(&mask);

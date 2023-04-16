@@ -18,13 +18,16 @@ public:
         FAVORITE,
         SONGLIST,
         LOCAL,
-        RECENTLY,
+        HISTORY,
     };
     // 设置音乐列表
     void setMusicList(const QList<Music> &musicList);
     void insertCustomItem(Music music, int row = 0);
+    void removeCustomItem(CustomItem *item);
     // 设置列表类型
     void setListType(int listType);
+    int getListType();
+
 signals:
     // item双击信号
     void customItemDoubleClicked(CustomItem *item);
@@ -40,10 +43,11 @@ private:
 private slots:
     void onScrollBarValueChange(int value);
 private:
-    QList<Music> m_musicList;
     int listType;
     int itemsNum;
-    QMultiMap<QString, CustomItem*> m_multiMap;
+    QList<Music> m_musicList;
+    QList<CustomItem *> items;
+
 };
 
 #endif // MYLISTWIDGET_H
