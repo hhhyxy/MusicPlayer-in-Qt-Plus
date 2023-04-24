@@ -90,7 +90,7 @@ void CustomItem::initMenu()
     menu->addAction("播放音乐", [=] {
         emit menuClicked(this, CustomItem::PLAY);
     });
-    if (itemType == CustomItem::FAVORITE) {
+    if (itemType == MyListWidget::FAVORITE) {
         menu->addAction("从我喜欢的音乐中删除", [=] {
             emit menuClicked(this, CustomItem::REMOVEFROMFAVORITE);
         });

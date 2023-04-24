@@ -16,13 +16,12 @@ class CustomItem : public QWidget
     Q_OBJECT
 public:
     // item所在列表类型（枚举类型）
-    enum ListType{
-        SEARCHRESULT,
-        FAVORITE,
-        SONGLIST,
-        LOCAL,
-        HISTORY,
-    };
+//    enum ListType{
+//        SEARCHRESULT,
+//        LOCAL,
+//        HISTORY,
+//        FAVORITE
+//    };
     // 菜单项
     enum MenuType{
         PLAY,

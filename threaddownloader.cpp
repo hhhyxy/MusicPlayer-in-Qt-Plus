@@ -28,7 +28,7 @@ void ThreadDownLoader::onHeaderReplyFinished()
     if (headerReply->error() == QNetworkReply::NoError) {
         // 获取专辑图片大小
         qint64 totalBytes = headerReply->header(QNetworkRequest::ContentLengthHeader).toLongLong();
-        qDebug()<< "totalBytes:" <<totalBytes;
+        qDebug() << __FILE__ << __LINE__ << "totalBytes:" <<totalBytes;
         // 分段下载
         multiDownLoad(url, totalBytes);
     } else {
@@ -49,7 +49,7 @@ void ThreadDownLoader::multiDownLoad(QString &url, qint64 totalBytes)
 
     // 根据线程数分段，计算出每一段的大小
     qint64 partSize = totalBytes / numThreads;
-    qDebug()<<"partSize:"<<partSize;
+    qDebug() << __FILE__ << __LINE__ <<"partSize:"<<partSize;
     // 计算出每一段的开始和结束位置，存储在parts中
     QVector<QPair<qint64, qint64>> parts;
     qint64 startByte = 0;
@@ -61,7 +61,7 @@ void ThreadDownLoader::multiDownLoad(QString &url, qint64 totalBytes)
             endByte = totalBytes - 1;
         }
         parts.append(qMakePair(startByte, endByte));
-        qDebug()<<"index:"<<i<<"start:"<<startByte<<"end:"<<endByte;
+        qDebug() << __FILE__ << __LINE__ << "index:"<<i<<"start:"<<startByte<<"end:"<<endByte;
     }
     // 分段发送请求
     for (int i = 0; i < numThreads; i++) {

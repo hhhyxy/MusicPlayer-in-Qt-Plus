@@ -73,7 +73,6 @@ QString MyHttp::searchForSongUrl(int id, QString level)
     query.addQueryItem("level", level);
     url.setQuery(query);
 //    QString url = QString(netease_songUrl_Id).append(QString::number(id));
-    qDebug()<<__FILE__<<__LINE__<<url;
     searchByUrl(url);
     parseForSongUrl();
     return songUrl;

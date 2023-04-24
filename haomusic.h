@@ -10,6 +10,7 @@
 #include <QSystemTrayIcon>
 #include <QUrl>
 
+#include "addsonglistpage.h"
 #include "customitem.h"
 #include "music.h"
 #include "musicdb.h"
@@ -43,6 +44,9 @@ protected:
     void paintEvent(QPaintEvent *event);
 private:
     Ui::HaoMusic    *ui;
+    AddSongListPage *addSongListPage = nullptr;
+    QMap<int, MyListWidget*> songLists;
+
     MyMediaPlaylist *mediaPlaylist      = nullptr;  // 媒体播放列表
     QMediaPlayer    *mediaPlayer        = nullptr;  // 媒体播放器
     MyHttp          *search             = nullptr;  // 网络搜索
@@ -65,11 +69,11 @@ private:
     QString searchKeywords  = "";   // 搜索关键词
     QMovie *loadingMovie;           // 加载动画
 
-    Music                currentMusic;          // 当前播放的音乐
-    int                  currentLrcRow   = 1;   // 当前歌词所在行
-    QListWidgetItem     *currentLrcItem;        // 当前歌词所在item
-    QMap<int,QString>    lrcMap;                // 歌词
-    QList<int>           lrcKeys;               // 歌词对应的时间帧
+    Music                currentMusic;              // 当前播放的音乐
+    int                  currentLrcRow   = 1;       // 当前歌词所在行
+    QListWidgetItem     *currentLrcItem = nullptr;  // 当前歌词所在item
+    QMap<int,QString>    lrcMap;                    // 歌词
+    QList<int>           lrcKeys;                   // 歌词对应的时间帧
 
     QList<Music>         musicList;             // 播放列表音乐列表
     QList<Music>         searchResultMusicList; // 搜索结果音乐列表
@@ -77,7 +81,7 @@ private:
     QList<Music>         localMusicList;        // 本地音乐列表
     QList<Music>         historyMusicList;      // 播放历史列表
 
-    MusicDB m_db;   // 音乐数据库
+    MusicDB *m_db;   // 音乐数据库
     // 绘制圆角阴影窗口
     void paintShadowRadiusWidget();
     // 设置托盘图标
@@ -112,6 +116,8 @@ private:
     void onCustomItemDoubleClicked(CustomItem *item);
     // 添加到历史播放列表
     void addToHistoryList(Music &music);
+    // 打开我创建的音乐列表
+    void openMyMusicList(int id, QString name);
 private slots:
     // 双击托盘图标显示界面
     void iconActived(QSystemTrayIcon::ActivationReason);
@@ -149,15 +155,22 @@ private slots:
     void on_pushButton_favorite_clicked();
     // 右键菜单点击事件
     void menuPlayMusicClicked(CustomItem *item);
-    void menuAddToMyFavoriteClicked(CustomItem *item);
-    void menuAddToSonglistClicked(CustomItem *item);
+    void menuAddToMyFavoriteClicked(Music music);
+    void menuAddToSonglistClicked(Music music);
     void menuRemoveFromSongList(CustomItem *item);
     // 点击列表的某一行
     void on_listWidget_lrc_itemClicked(QListWidgetItem *item);
     // 搜索框内容变化处理函数
     void on_lineEdit_search_textChanged(const QString &arg1);
     // 菜单点击事件处理函数
-    void onMenuClicked(CustomItem *item, int itemType);
+    void onMenuClicked(CustomItem *item, int type);
+    // 向歌单添加歌曲
+    void addMusicToSonglist(int id, Music music);
+    // 创建歌单
+    void createSonglist(int id, QString name);
+    // 歌曲列表加载完成
+    void listLoaded(int id);
+    void on_listWidget_songList_itemClicked(QListWidgetItem *item);
 };
 
 #endif // HAOMUSIC_H

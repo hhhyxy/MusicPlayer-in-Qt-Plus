@@ -1,0 +1,296 @@
+﻿* {
+    border:1px solid transparent;
+    font-family:"华文楷体" ;
+    font: 20pt ;
+    font-size: 20px;
+    text-align: center;
+    background-color:transparent;
+}
+QTabBar::tab {
+      	width: 0;
+		height:0;
+}
+QMenu {
+	margin:8px;
+	padding:10px;
+	border:none;
+	border-radius:10px;
+	background-color:white;
+}
+QMenu::item {
+	padding:10px;
+	border:none;
+	border-radius:6px;
+	background-color: white;
+	color: black;
+}
+QMenu::item:selected {
+	background-color:#eaeffd;
+	color:blue;
+}
+
+#widget_sidebar QPushButton:checked {
+	background-color:#f3f6fe;
+
+}
+
+QWidget#inner_widget{
+	margin:0px;
+	border:1px solid #FFFFFF;
+	border-radius:6px;
+	background-color:white;
+}
+
+QTabWidget#tab_lrc{
+	border:1px solid #FFFFFF;
+	border-radius:20px;
+}
+
+QTabWidget::pane {
+	bottom:-11px;
+	top:-11px;
+	left:-11px;
+	right:-11px;
+}
+
+QLineEdit {
+	background-color:#f2f2f4;
+	font-size:20px;
+	color: #335eea;
+	padding: 10px;
+	border: none;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+
+QPushButton {
+    icon-size: 32px;
+    border: none;
+    border-radius: 10px;
+}
+
+QPushButton:hover {
+    background-color: rgb(228, 237, 242);
+}
+
+QPushButton:selected {
+    background-color: rgb(228, 237, 242);
+}
+
+QPushButton:disabled {
+        color:black;
+}
+
+QPushButton#pushButton_dropDown {
+    padding-top:10px;
+    margin-left:15px;
+    margin-top:15px;
+    icon: url(:/icon/downArow_gray.svg);
+}
+
+QPushButton#pushButton_dropDown:hover {
+    icon: url(:/icon/downArow_black.svg);
+    margin-top:15px;
+    margin-left:15px;
+}
+
+QPushButton#pushButton_search{
+    background-color:#f2f2f4;
+    margin:0px;
+    margin-left:-5px;
+    padding: 5px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+QPushButton#pushButton_close:hover {
+    background-color:red;
+}
+
+QPushButton#pushButton_newSongList {
+    icon-size: 40px;
+    padding: 15px;
+}
+
+QLabel#label_title {
+    font-size: 30px;
+}
+
+QLabel#label_searchKeywords,
+#label_favorite,
+#label_local,
+#label_recently,
+#label_mySonglist,
+#label_listName {
+	font: 26pt "华文楷体";
+}
+QLabel#label_songname,
+QLabel#label_lrc_songName
+ {
+	font: 16pt "华文楷体";
+}
+QLabel#label_lrc_songName {
+	color:white;
+}
+QLabel#label_songName {
+	font: 14pt "华文楷体";
+}
+QLabel#label_author,
+QLabel#label_lrc_author
+{
+	color:#727272;
+	margin:0;
+	font: 10pt "华文楷体";
+}
+QLabel#label_lrc_songName,
+QLabel#label_lrc_author
+ {
+	color: white;
+	margin-top:2px;
+	padding-left:0px;
+}
+QLabel#label_lrc_songName {
+	margin-top:10px;
+
+}
+QLabel#label_albumName {
+	font: 12pt "华文楷体";
+}	
+QLabel#label_duration {
+	font: 12pt "华文楷体";
+}	
+/*QLabel#label_lrc_albumPic {
+	border: 1px solid rgba(255,255, 255, 200);
+	border-radius: 35px;
+}*/
+QToolTip {
+	color:black;
+	background-color:white;
+	border: 1px solid white;
+    border-radius: 2px;
+}
+
+QTabWidget::pane{
+	border:none;
+}
+QListWidget {
+	outline:0px;
+}
+QListWidget::item {
+	border: none;
+	border-radius:10px;
+ 	background-color: transparent;
+}
+QListWidget#listWidget_lrc::item {
+	color:rgba(255, 255, 255, 150);
+	padding-top: 15px;
+	padding-bottom:15px;
+}
+QListWidget#listWidget_searchResult::item:!pressed {
+	color:black;
+}
+QListWidget::item:hover {
+    background-color:rgba(245, 245, 247, 150);
+}
+QListWidget::item:selected {
+	color:blue;
+    background-color:rgba(234, 239, 253, 150);
+}
+QListWidget#listWidget_lrc {
+	font-size:40px;
+}
+QListWidget#listWidget_songlistWidget::item {
+	font-size:25px;
+        padding: 10px;
+}
+QListWidget#listWidget_lrc::item:selected {
+	color:rgba(0, 0, 255, 100);
+}
+QListWidget#listWidget_lrc::item:hover {
+	color:rgba(255, 255, 255, 100);
+}
+
+QScrollBar:vertical {
+    margin: 5px 0px 5px 0px;
+    background-color: white;
+    border: 0px;
+    width: 8px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: rgba(153, 153, 153, 0.735);
+    border-radius: 4px;
+    width: 8px;
+    height: 15px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #999;
+}
+
+QScrollBar::sub-line:vertical {
+    height: 0px;
+    color:  white;
+}
+
+QScrollBar::add-line:vertical {
+    height: 0px;
+    color:  white;
+}
+
+QScrollBar::up-arrow:vertical {
+    width: 12px;
+    height: 0px;
+    color:  white;
+}
+
+QScrollBar::down-arrow:vertical {
+    width: 12px;
+    height: 0px;
+    color:  white;
+}
+
+QScrollBar::sub-page:vertical,
+QScrollBar::add-page:vertical {
+    background-color: white;
+}
+
+QSlider {
+	background-color:transparent;
+}
+QSlider::groove:horizontal {
+	margin-top:0px;
+	margin-left:-7px;
+	margin-right:-7px;
+    border: 1px solid #bbb;
+    background: transparent;
+    height: 3px;
+	border-radius:1px;
+}
+
+QSlider::sub-page:horizontal {
+    background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1, stop: 0 #bbf, stop: 1 #55f);
+    border: 1px solid #777;
+    height: 2px;
+	border-radius:1px;
+}
+QSlider::add-page:horizontal {
+    background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1, stop: 0 #bbf, stop: 1 #55f);
+    border: 1px solid #777;
+	height: 2px;
+	border-radius:1px;
+}
+
+QSlider::handle:horizontal {
+    border: 1px solid gray;
+    background-color:white;
+    width: 8px;
+    height:8px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+    border-radius: 4px;
+}
+#horizontalSlider_volume::groove:horizontal {
+	margin-left:2px;
+	padding-left:-4px;
+}

@@ -29,5 +29,10 @@
         <file>icon/loading.gif</file>
         <file>icon/downArow_black.svg</file>
         <file>icon/downArow_gray.svg</file>
+        <file>icon/add.svg</file>
+        <file>icon/rounded .svg</file>
+    </qresource>
+    <qresource prefix="/qss">
+        <file>style.css</file>
     </qresource>
 </RCC>

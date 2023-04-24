@@ -46,6 +46,7 @@ void LrcWidget::repaintBackground()
     if (img.isNull())
         return;
     // 绘制背景图片
+    std::lock_guard<std::mutex> lck(mutex);
     this->setAutoFillBackground(true);
     QPalette pal = this->palette();
     pal.setBrush(QPalette::Window, QBrush(img.scaled(this->size())));

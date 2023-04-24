@@ -39,6 +39,7 @@ SOURCES += \
     customitem.cpp \
     customslider.cpp \
     gaussianblur.cpp \
+    iconlist.cpp \
     lrcwidget.cpp \
     main.cpp \
     haomusic.cpp \
@@ -50,6 +51,7 @@ SOURCES += \
     mylineedit.cpp \
     mylistwidget.cpp \
     mymediaplaylist.cpp \
+    shadowwidget.cpp \
     threaddownloader.cpp
 
 HEADERS += \
@@ -58,6 +60,7 @@ HEADERS += \
     customitem.h \
     gaussianblur.h \
     haomusic.h \
+    iconlist.h \
     lrcwidget.h \
     music.h \
     musicdb.h \
@@ -67,6 +70,7 @@ HEADERS += \
     mylineedit.h \
     mylistwidget.h \
     mymediaplaylist.h \
+    shadowwidget.h \
     threaddownloader.h
 
 FORMS += \

@@ -68,13 +68,13 @@ void MyLabel::onReplyFinished(QNetworkReply *reply)
 {
     // 获取响应状态码，200表示正常
     int status_code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    qDebug()<<__FILE__<<__LINE__ << "状态码：" << status_code;
+    qDebug() << __FILE__ << __LINE__ << "状态码：" << status_code;
 
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray bytes = reply->readAll();  //获取字节
         QtConcurrent::run(this, QOverload<QByteArray>::of(&MyLabel::makeRadiusPixmap), bytes);
     }else {
-        qDebug()<<__FILE__<<__LINE__<<"获取专辑图片失败";
+        qDebug() << __FILE__ << __LINE__ << "获取专辑图片失败";
     }
     reply->deleteLater();
 }
@@ -88,9 +88,7 @@ void MyLabel::makeRadiusPixmap(QByteArray bytes)
         return;
     //处理大尺寸的图片
     pixmap = pixmap.scaledToWidth(this->width());
-//    pixmap = pixmap.scaledToWidth(600);
     makeRadiusPixmap(pixmap);
-
 }
 
 void MyLabel::makeRadiusPixmap(QPixmap pixmap)
@@ -107,6 +105,8 @@ void MyLabel::makeRadiusPixmap(QPixmap pixmap)
     pixmap.setMask(mask);
     img = pixmap;
     imgLoaded = true;
+    // 显示图片
+    std::lock_guard<std::mutex> lck(mutex);
     QMetaObject::invokeMethod(this, "setPixmap", Q_ARG(QPixmap, pixmap));
 }
 

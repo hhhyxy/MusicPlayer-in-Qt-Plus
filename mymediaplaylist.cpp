@@ -17,7 +17,7 @@ int MyMediaPlaylist::mediaCount() const
 // 通过播放列表索引获取音乐
 QMediaContent MyMediaPlaylist::media(int index) const
 {
-    qDebug()<<"media";
+    qDebug() << __FILE__ << __LINE__ << "media";
     if (index < 0 || index >= m_idList.size())
         return QMediaContent();
     int id = m_idList.at(index);
@@ -48,6 +48,8 @@ void MyMediaPlaylist::setCurrentIndex(int index)
     // 更新当前索引
     m_currentIndex = index;
     // 加入历史播放列表
+    if (m_recentIndex.size() > 50)
+        m_recentIndex.removeFirst();
     m_recentIndex.push_back(index);
     // 通过索引获取当前音乐id，在此基础上获取音乐播放链接
     int id = m_idList.at(index);
@@ -59,7 +61,7 @@ void MyMediaPlaylist::setCurrentIndex(int index)
         setCurrentIndex(m_currentIndex);
         return;
     }
-    Q_EMIT  currentIndexChanged(m_currentIndex);
+//    Q_EMIT  currentIndexChanged(m_currentIndex);
     Q_EMIT  currentMediaChanged(QMediaContent(url));
 }
 
@@ -80,12 +82,12 @@ int MyMediaPlaylist::nextIndex(int steps)
         break;
     case QMediaPlaylist::Sequential:        // 顺序播放
         next = m_currentIndex + steps;
-        if (next >= m_idList.size())
+        if (next >= m_idList.size() - 1)
             return -1;
         break;
     case QMediaPlaylist::Loop:              // 列表循环
         next = m_currentIndex + steps;
-        if (next >= m_idList.size())
+        if (next >= m_idList.size() - 1)
             return 0;
         break;
     case QMediaPlaylist::CurrentItemInLoop: // 单曲循环
@@ -100,14 +102,37 @@ int MyMediaPlaylist::nextIndex(int steps)
 // 获取前steps首的音乐索引
 int MyMediaPlaylist::previousIndex(int steps)
 {
-    if (!m_recentIndex.isEmpty()) {
-        while (steps-- > 0) {
-            m_recentIndex.pop_back();
+    qDebug() << __FILE__ << __LINE__ << "previousIndex";
+    int previous = m_currentIndex;
+    // 根据播放模式，确定下一首播放的音乐
+    switch (playbackMode()) {
+    case QMediaPlaylist::Random:            // 随机播放
+        if (!m_recentIndex.isEmpty()) {
+            while (steps-- > 0) {
+                m_recentIndex.pop_back();
+            }
+            return m_recentIndex.takeLast();
+        } else {
+            return -1;
         }
-        qDebug() << __FILE__ << __LINE__ << "previousIndex";
-        return m_recentIndex.takeLast();
+        break;
+    case QMediaPlaylist::Sequential:        // 顺序播放
+        previous = m_currentIndex - steps;
+        if (previous >= m_idList.size())
+            return -1;
+        break;
+    case QMediaPlaylist::Loop:              // 列表循环
+        previous = m_currentIndex - steps;
+        if (previous < 0)
+            return m_idList.size() - 1;
+        break;
+    case QMediaPlaylist::CurrentItemInLoop: // 单曲循环
+        return m_currentIndex;
+        break;
+    default:
+        break;
     }
-    return -1;
+    return previous;
 }
 
 // 雪花算法，生成随机播放列表
@@ -138,23 +163,39 @@ bool MyMediaPlaylist::insertMedia(int index, const int id)
 {
     qDebug() << __FILE__ << __LINE__ << "insertMedia";
     // 索引合法性检验
-    if (index < 0 || index > m_idList.size())
+    if (index < 0 || index >= m_idList.size())
         return false;
     m_idList.insert(index, id);
-    Q_EMIT  mediaInserted(index, index);
+    // 刷新随机列表
+    if (playbackMode() == QMediaPlaylist::Random) {
+        shuffle();
+    }
+    // 更新当前音乐index
+    if (index <= m_currentIndex) {
+        m_currentIndex++;
+    }
+//    Q_EMIT  mediaInserted(index, index);
     return true;
 }
 
 // 删除音乐
 bool MyMediaPlaylist::removeMedia(int index)
 {
+    qDebug() << __FILE__ << __LINE__ << "removeMedia";
     // 索引合法性检验
     if (index < 0 || index >= m_idList.size())
         return false;
     // 移除指定音乐
     m_idList.removeAt(index);
-    shuffle();
-    Q_EMIT  mediaRemoved(index, index);
+    // 刷新随机列表
+    if (playbackMode() == QMediaPlaylist::Random) {
+        shuffle();
+    }
+    // 更新当前音乐index
+    if (index <= m_currentIndex) {
+        m_currentIndex--;
+    }
+//    Q_EMIT  mediaRemoved(index, index);
     return true;
 }
 
@@ -166,6 +207,10 @@ bool MyMediaPlaylist::clear()
         m_idList.clear();       // 清空id列表
     if (!m_shuffleList.isEmpty())
         m_shuffleList.clear();  // 清空随机播放列表
+    if (!m_recentIndex.isEmpty()) {
+        m_recentIndex.clear();
+    }
+    m_currentIndex = -1;
     return true;
 }
 

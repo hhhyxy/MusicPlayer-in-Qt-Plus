@@ -1,6 +1,7 @@
 ﻿#ifndef LRCWIDGET_H
 #define LRCWIDGET_H
 
+#include <mutex>
 #include <QWidget>
 #include <Qpainter>
 #include <QNetworkAccessManager>
@@ -29,6 +30,7 @@ private:
     GaussianBlur            *gauss;     // 图片高斯模糊类
     int radius; // 模糊半径
     QImage img; // 背景图片
+    std::mutex mutex;
 private:
     // 重绘背景图
     void repaintBackground();

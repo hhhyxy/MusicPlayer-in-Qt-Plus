@@ -1,9 +1,7 @@
 ﻿#include "haomusic.h"
 #include "ui_haomusic.h"
 
-#include "mybottombar.h"
-#include "mylineedit.h"
-
+#include <QByteArray>
 #include <QButtonGroup>
 #include <QFocusEvent>
 #include <QListWidgetItem>
@@ -15,11 +13,20 @@
 #include <QThreadPool>
 #include <QTimer>
 
+#include "mybottombar.h"
+#include "mylineedit.h"
+
 HaoMusic::HaoMusic(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::HaoMusic)
 {
     ui->setupUi(this);
+    // 加载样式表
+    QFile file(":/qss/style.css");
+    if (file.open(QIODevice::ReadOnly)) {
+        this->setStyleSheet(QString(file.readAll()));
+        file.close();
+    }
     // 设置托盘图标
     setTrayIcon();
     // 初始化播放器
@@ -33,7 +40,7 @@ HaoMusic::HaoMusic(QWidget *parent)
 HaoMusic::~HaoMusic()
 {
     delete ui;
-    m_db.close();
+    m_db->close();
 }
 
 // 初始化
@@ -67,10 +74,17 @@ void HaoMusic::initPlayer()
         ui->pushButton_search->setEnabled(true);
     });
     // 设置列表属性
-    ui->listWidget_favorite->setListType(MyListWidget::FAVORITE);
-    ui->listWidget_localMusic->setListType(MyListWidget::LOCAL);
-    ui->listWidget_searchResult->setListType(MyListWidget::SEARCHRESULT);
-    ui->listWidget_history->setListType(MyListWidget::HISTORY);
+    ui->listWidget_favorite->init(MyListWidget::FAVORITE, "我喜欢的音乐");
+    ui->listWidget_localMusic->init(MyListWidget::LOCAL, "本地音乐");
+    ui->listWidget_searchResult->init(MyListWidget::SEARCHRESULT, "搜索结果");
+    ui->listWidget_history->init(MyListWidget::HISTORY, "历史播放列表");
+    ui->listWidget_defaultList->init(MyListWidget::DEFALUT, "我创建的歌单");
+    // 初始化歌单列表
+    songLists.insert(MyListWidget::FAVORITE, ui->listWidget_favorite);
+    songLists.insert(MyListWidget::LOCAL, ui->listWidget_localMusic);
+    songLists.insert(MyListWidget::SEARCHRESULT, ui->listWidget_searchResult);
+    songLists.insert(MyListWidget::HISTORY, ui->listWidget_history);
+    songLists.insert(MyListWidget::DEFALUT, ui->listWidget_defaultList);
     // 加载动画
     loadingMovie = new QMovie(":/icon/loading.gif");
     ui->label_loading->setMovie(loadingMovie);
@@ -83,10 +97,10 @@ void HaoMusic::initPlayer()
 // 初始化音乐列表
 void HaoMusic::initMusicList()
 {
-    // 连接数据库
-    m_db.open();
-    historyMusicList = m_db.query(MyListWidget::HISTORY);
-    favoriteMusicList = m_db.query(MyListWidget::FAVORITE);
+    // 获取数据库实例
+    m_db = MusicDB::instance();
+    historyMusicList = m_db->query(MyListWidget::HISTORY);
+    favoriteMusicList = m_db->query(MyListWidget::FAVORITE);
 }
 
 // 设置托盘图标
@@ -163,7 +177,7 @@ void HaoMusic::connectSignalsAndSlots()
     // 播放歌曲改变
     connect(mediaPlayer, QMediaPlayer::currentMediaChanged, this, [=] {
         int index = mediaPlaylist->currentIndex();
-        qDebug()<<"index:"<<index;
+        qDebug() << __FILE__ << __LINE__ <<"index:"<<index;
         if(0 > index) {
             return;
         }
@@ -190,9 +204,7 @@ void HaoMusic::connectSignalsAndSlots()
        }
     });
     // 底部栏点击显示歌词
-    connect(ui->widget_bottombar, MyBottomBar::clicked, this, [=] {
-        showLrcPage();
-    });
+    connect(ui->widget_bottombar, MyBottomBar::clicked, this, &HaoMusic::showLrcPage);
     // 搜索框获得焦点
     connect(ui->lineEdit_search, MyLineEdit::focusIn, [=] {
         ui->pushButton_search->setStyleSheet("background-color:#edf2ff;");
@@ -208,11 +220,20 @@ void HaoMusic::connectSignalsAndSlots()
     foreach (MyListWidget *listwidget, listwidgets) {
         connect(listwidget, &MyListWidget::menuClicked, this, &HaoMusic::onMenuClicked);
         connect(listwidget, &MyListWidget::customItemDoubleClicked, this, &HaoMusic::onCustomItemDoubleClicked);
-
+        // 绑定列表加载事件
+        connect(listwidget, &MyListWidget::loaded, this, &HaoMusic::listLoaded);
+        // 音乐列表被清理
+        connect(listwidget, &MyListWidget::cleared, this, [=] (int id) {
+            if (currentPlayingItem && currentPlayingItem->getItemType() == id) {
+                currentPlayingItem = nullptr;
+            }
+        });
         // 设置列表滚动方式和单步步长
         listwidget->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         listwidget->verticalScrollBar()->setSingleStep(10);
     }
+
+
 }
 
 // 鼠标按下
@@ -222,9 +243,9 @@ void HaoMusic::mousePressEvent(QMouseEvent *event)
     if(event->button() == Qt::LeftButton && event->y() < (ui->widget_header->height() + ui->widget_header->y()))// 判断是否是鼠标左键按下
     {
         mousePress = true;
+        // 鼠标在窗口中的坐标
+        movePoint = event->globalPos() - pos();// 鼠标的全局坐标-窗口的坐标
     }
-    // 鼠标在窗口中的坐标
-    movePoint = event->globalPos() - pos();// 鼠标的全局坐标-窗口的坐标
     QWidget::mousePressEvent(event);
 }
 
@@ -246,6 +267,9 @@ void HaoMusic::mouseMoveEvent(QMouseEvent *event)
 void HaoMusic::mouseReleaseEvent(QMouseEvent *event)
 {
     mousePress = false;
+    // 关闭添加到歌单页面
+    if (addSongListPage && !addSongListPage->isHidden())
+        addSongListPage->close();
     QWidget::mouseReleaseEvent(event);
 }
 
@@ -436,6 +460,7 @@ void HaoMusic::changeCurrentPlayingItem(CustomItem *item)
     if (currentPlayingItem == nullptr) {
         currentPlayingItem = item;
     }
+
     // 原来的播放项的字体颜色为黑色
     currentPlayingItem->changeFontColor("black");
     // 设置当前播放项的颜色为蓝色
@@ -583,11 +608,6 @@ void HaoMusic::on_pushButton_search_clicked()
         currentPlayingItem = nullptr;
     // 进入加载动画页面
     showLoadingPage();
-    // 切换到搜索页面,暂停加载动画
-    QTimer::singleShot(loadingTimes, [=] {
-        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_searchResult);
-        loadingMovie->stop();
-    });
     // label_searchKeywords显示搜索关键词
     ui->label_searchKeywords->setText(QString("“%1”").arg(searchKeywords));
 
@@ -636,15 +656,14 @@ void HaoMusic::updateMediaPlaylist()
     case MyListWidget::FAVORITE:
         musicList = favoriteMusicList;
         break;
-    case MyListWidget::SONGLIST:
-
-        break;
     case MyListWidget::LOCAL:
         musicList = localMusicList;
         break;
     case MyListWidget::HISTORY:
         musicList = historyMusicList;
+        break;
     default:
+        musicList = m_db->query(listType);
         break;
     }
     // 清空音乐播放列表
@@ -665,20 +684,16 @@ void HaoMusic::updateBottomMusicInfo()
     ui->horizontalSlider_musicProgress->setEnabled(duration>0);
     ui->horizontalSlider_musicProgress->setSingleStep(10);
     ui->horizontalSlider_musicProgress->setPageStep(duration/20);//以及每一步的步数
-    // 设置歌曲信息
+    // 更新歌曲信息
     ui->label_author->setText(currentMusic.getAuthor());
     ui->label_songname->setText(currentMusic.getSongName());
     ui->label_lrc_author->setText(currentMusic.getAuthor());
     ui->label_lrc_songName->setText(currentMusic.getSongName());
-
-//    QPixmap img = currentPlayingItem->getAlbumPic();
+    // 更新专辑图片
     ui->label_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
-//        ui->label_albumPic->makeRadiusPixmap(img);
-
     ui->label_lrc_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
-//    ui->label_lrc_albumPic->setRadiusPixmap(currentMusic.albumPicUrl());
     ui->tab_lrc->setGaussblurBackground(currentMusic.albumPicUrl());
-//    ui->inner_widget->setGaussblurBackground(currentMusic.albumPicUrl());
+
 }
 
 // 打开播放历史页面
@@ -690,16 +705,12 @@ void HaoMusic::on_pushButton_recentlyplayed_clicked()
     }
     // 显示加载动画
     showLoadingPage();
-    QTimer::singleShot(loadingTimes, [=] {
-        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_recentlyPlayed);
-        loadingMovie->stop();
-    });
     // 我喜欢的音乐列表为空则返回
     if (historyMusicList.isEmpty()) {
         return;
     }
     isHistoryMusicListShow = true;
-    // 显示喜欢的音乐
+    // 显示历史播放音乐
     ui->listWidget_history->setMusicList(historyMusicList);
 }
 
@@ -711,7 +722,7 @@ void HaoMusic::addToHistoryList(Music &music)
     if (-1 == index) {  // 不存在则添加到顶部
         if (historyMusicList.size() > 50)  {  // 维持播放历史列表大小在50
             historyMusicList.pop_back();    // 删除历史播放列表最后一项
-            m_db.remove(music.getId(), MyListWidget::HISTORY);
+            m_db->remove(music.getId(), MyListWidget::HISTORY);
             if (isHistoryMusicListShow) {   // 如果列表已经加载，删除最后一个item
                 QListWidgetItem *item = ui->listWidget_history->item(index);
                 CustomItem *cItem = qobject_cast<CustomItem *>(ui->listWidget_history->itemWidget(item));
@@ -721,15 +732,15 @@ void HaoMusic::addToHistoryList(Music &music)
             }
         }
         historyMusicList.push_front(music); // 添加历史播放列表到顶部
-        m_db.insert(music, MyListWidget::HISTORY);
+        m_db->insert(music, MyListWidget::HISTORY);
         if (isHistoryMusicListShow) {   // 如果列表已经加载，顶部添加item
             ui->listWidget_history->insertCustomItem(music);
         }
     }
     else {  // 存在则移动到顶部
         historyMusicList.move(index, 0);
-        m_db.remove(music.getId(), MyListWidget::HISTORY);
-        m_db.insert(music, MyListWidget::HISTORY);
+        m_db->remove(music.getId(), MyListWidget::HISTORY);
+        m_db->insert(music, MyListWidget::HISTORY);
         if (isHistoryMusicListShow) {   // 如果列表已经加载，则移动item到顶部
             delete ui->listWidget_history->takeItem(index);
             ui->listWidget_history->insertCustomItem(music);
@@ -737,24 +748,31 @@ void HaoMusic::addToHistoryList(Music &music)
     }
 }
 
-// 打开默认歌单页面
+// 打开我创建的歌单
+void HaoMusic::openMyMusicList(int id, QString name)
+{
+    if (id == listType) {
+        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_default);
+        return;
+    }
+    showLoadingPage();
+    ui->label_listName->setText(name);
+    ui->listWidget_defaultList->init(id, name);
+    ui->listWidget_defaultList->setMusicList(m_db->query(id));
+}
+
+// 打开我的歌单页面
 void HaoMusic::on_pushButton_defaultSongList_clicked()
 {
     showLoadingPage();
-    QTimer::singleShot(loadingTimes, [=] {
-        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_defalutSongList);
-        loadingMovie->stop();
-    });
+    ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_defalutSongList);
+    ui->listWidget_songList->init();
 }
 
 // 打开本地音乐页面
 void HaoMusic::on_pushButton_localmusic_clicked()
 {
     showLoadingPage();
-    QTimer::singleShot(loadingTimes, [=] {
-        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_localmusic);
-        loadingMovie->stop();
-    });
 }
 
 // 打开我喜欢的音乐界面
@@ -765,33 +783,29 @@ void HaoMusic::on_pushButton_favorite_clicked()
         ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_favorite);
         return;
     }
-    isFavoriteMusicListShow = true;
     // 显示加载动画
     showLoadingPage();
-    QTimer::singleShot(loadingTimes, [=] {
-        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_favorite);
-        loadingMovie->stop();
-    });
     // 我喜欢的音乐列表为空则返回
     if (favoriteMusicList.isEmpty()) {
         return;
     }
+    isFavoriteMusicListShow = true;
     // 显示喜欢的音乐
     ui->listWidget_favorite->setMusicList(favoriteMusicList);
 }
 
 // 菜单点击处理事件
-void HaoMusic::onMenuClicked(CustomItem *item, int itemType)
+void HaoMusic::onMenuClicked(CustomItem *item, int type)
 {
-    switch (itemType) {
+    switch (type) {
     case CustomItem::PLAY:
         menuPlayMusicClicked(item);
         break;
     case CustomItem::ADDTOFAVORITE:
-        menuAddToMyFavoriteClicked(item);
+        menuAddToMyFavoriteClicked(item->getMusic());
         break;
     case CustomItem::ADDTOSONGLIST:
-        menuAddToSonglistClicked(item);
+        menuAddToSonglistClicked(item->getMusic());
         break;
     case CustomItem::REMOVEFROMFAVORITE:
         menuRemoveFromSongList(item);
@@ -804,6 +818,51 @@ void HaoMusic::onMenuClicked(CustomItem *item, int itemType)
     }
 }
 
+// 向歌单添加歌曲
+void HaoMusic::addMusicToSonglist(int id, Music music)
+{
+    if (MyListWidget::FAVORITE == id) {
+        menuAddToMyFavoriteClicked(music);
+        return;
+    }
+    if (m_db->queryOne(id)) {
+        qDebug() << __FILE__ << __LINE__ << "歌曲已存在";
+        return;
+    }
+    m_db->insert(music, id);
+    // 如果正在播放列表是需要插入的列表，需要更新播放列表
+    if (listType == id) {
+        musicList.push_front(music);
+        mediaPlaylist->insertMedia(0, music.getId());
+        ui->listWidget_defaultList->insertCustomItem(music, 0);
+    }
+}
+
+void HaoMusic::createSonglist(int id, QString name)
+{
+
+}
+
+// 音乐列表加载完成，跳转页面关闭加载动画
+void HaoMusic::listLoaded(int id)
+{
+    switch (id) {
+    case MyListWidget::SEARCHRESULT:
+        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_searchResult);
+        break;
+    case MyListWidget::FAVORITE:
+        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_favorite);
+        break;
+    case MyListWidget::HISTORY:
+        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_recentlyPlayed);
+        break;
+    default:
+        ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_default);
+        break;
+    }
+    loadingMovie->stop();
+}
+
 // 右键菜单点击播放音乐
 void HaoMusic::menuPlayMusicClicked(CustomItem *item)
 {
@@ -811,31 +870,34 @@ void HaoMusic::menuPlayMusicClicked(CustomItem *item)
 }
 
 // 添加到我喜欢的音乐
-void HaoMusic::menuAddToMyFavoriteClicked(CustomItem *item)
+void HaoMusic::menuAddToMyFavoriteClicked(Music music)
 {
-    Music music = item->getMusic();
     if (-1 != favoriteMusicList.indexOf(music)) {
-        qDebug()<<"歌曲已存在";
+        qDebug() << __FILE__ << __LINE__ << "歌曲已存在";
         return;
     }
     favoriteMusicList.push_front(music);
-    m_db.insert(music);
+    m_db->insert(music);
     // 如果我喜欢的音乐页面已经加载，直接插入item
     if (isFavoriteMusicListShow)
         ui->listWidget_favorite->insertCustomItem(music, 0);
     // 如果正在播放的是我喜欢的音乐，需要更新播放列表
     if (listType == MyListWidget::FAVORITE) {
         musicList.push_front(music);
-        int index = mediaPlaylist->currentIndex();
         mediaPlaylist->insertMedia(0, music.getId());
-        mediaPlaylist->setCurrentIndex(index+1);
     }
 }
 
 // 添加到我的歌单
-void HaoMusic::menuAddToSonglistClicked(CustomItem *item)
+void HaoMusic::menuAddToSonglistClicked(Music music)
 {
-
+    if (!addSongListPage) {
+        addSongListPage = new AddSongListPage(this);
+        // 添加歌曲到歌单，创建歌单
+        connect(addSongListPage, &AddSongListPage::create, this, &HaoMusic::createSonglist);
+        connect(addSongListPage, &AddSongListPage::add, this, &HaoMusic::addMusicToSonglist);
+    }
+    addSongListPage->init(music);
 }
 
 // 从歌单中移除
@@ -850,16 +912,35 @@ void HaoMusic::menuRemoveFromSongList(CustomItem *item)
     }
     // 从播放列表、音乐列表移除
     int index = musicList.indexOf(item->getMusic());
-    mediaPlaylist->removeMedia(index);
-    musicList.takeAt(index);
+    if (index >= 0) {
+        mediaPlaylist->removeMedia(index);
+        musicList.takeAt(index);
+    }
     // 从数据库移除
-    m_db.remove(item->getMusic().getId(), item->getItemType());
+    m_db->remove(item->getMusic().getId(), item->getItemType());
 }
 
 // 显示歌词界面
 void HaoMusic::showLrcPage()
 {
     ui->tabWidget->setCurrentWidget(ui->tab_lrc);
-    ui->listWidget_lrc->setCurrentItem(currentLrcItem);
-    ui->listWidget_lrc->scrollToItem(currentLrcItem, QAbstractItemView::PositionAtCenter);
+    if (currentLrcItem) {
+        ui->listWidget_lrc->setCurrentItem(currentLrcItem);
+        ui->listWidget_lrc->scrollToItem(currentLrcItem, QAbstractItemView::PositionAtCenter);
+    }
 }
+
+// 我的歌单列表点击事件,跳转歌单
+void HaoMusic::on_listWidget_songList_itemClicked(QListWidgetItem *item)
+{
+    int id = item->data(Qt::UserRole).toInt();
+    if (id == MyListWidget::FAVORITE) {
+        ui->pushButton_favorite->click();
+    } else {
+        QString name = item->data(Qt::UserRole + 1).toString();
+        ui->pushButton_defaultSongList->setEnabled(true);
+        openMyMusicList(id, name);
+    }
+}
+
+

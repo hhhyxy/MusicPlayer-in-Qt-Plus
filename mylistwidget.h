@@ -15,17 +15,18 @@ public:
     // 列表类型
     enum ListType {
         SEARCHRESULT,
-        FAVORITE,
-        SONGLIST,
         LOCAL,
         HISTORY,
+        FAVORITE,
+        DEFALUT
     };
+    Q_ENUM(ListType)
+    void init (int id, QString name);
     // 设置音乐列表
     void setMusicList(const QList<Music> &musicList);
     void insertCustomItem(Music music, int row = 0);
     void removeCustomItem(CustomItem *item);
-    // 设置列表类型
-    void setListType(int listType);
+    // 获取列表类型
     int getListType();
 
 signals:
@@ -33,6 +34,8 @@ signals:
     void customItemDoubleClicked(CustomItem *item);
     // 菜单点击信号
     void menuClicked(CustomItem *item, int itemType);
+    void loaded(int id);
+    void cleared(int id);
 private:
     // 添加item
     void addCustomItem(const Music music, int row = -1);
@@ -40,14 +43,19 @@ private:
     void addCustomItems(int begin, int end);
     // 加载更多
     void loadMore();
+    // 清空列表
+    void clearList();
+protected:
+    void mouseReleaseEvent(QMouseEvent *event);
 private slots:
     void onScrollBarValueChange(int value);
 private:
-    int listType;
+    int id;
+    QString name;
+    bool loadmore = true;
     int itemsNum;
     QList<Music> m_musicList;
     QList<CustomItem *> items;
-
 };
 
 #endif // MYLISTWIDGET_H

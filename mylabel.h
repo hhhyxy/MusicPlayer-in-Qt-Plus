@@ -2,6 +2,7 @@
 #define MYLABEL_H
 
 #include <QLabel>
+#include <mutex>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include "threaddownloader.h"
@@ -32,6 +33,7 @@ private:
     QPixmap img;                    // 专辑图片
     QString picUrl = "";            // 专辑图片链接
     bool imgLoaded = false;         // 图片是否加载完成
+    std::mutex mutex;
 private slots:
     // 请求完成处理函数
     void onReplyFinished(QNetworkReply *reply);
