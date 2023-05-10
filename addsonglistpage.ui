@@ -87,6 +87,9 @@
      <property name="toolTip">
       <string>新建歌单</string>
      </property>
+     <property name="text">
+      <string>新建歌单</string>
+     </property>
      <property name="icon">
       <iconset resource="res.qrc">
        <normaloff>:/icon/add.svg</normaloff>:/icon/add.svg</iconset>

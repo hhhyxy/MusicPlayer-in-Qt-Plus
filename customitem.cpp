@@ -22,12 +22,9 @@ CustomItem::CustomItem(Music music, QWidget *parent) :
     // 初始化音乐信息
     this->music = music;
     // 字体溢出显示省略号
-    QString songName = ui->label_songName->fontMetrics().elidedText(music.getSongName(), Qt::ElideRight, width()*0.4);
-    QString author    = ui->label_author->fontMetrics().elidedText(music.getAuthor(), Qt::ElideRight, width()*0.4);
-    QString albumName = ui->label_songName->fontMetrics().elidedText(music.getAlbumName(), Qt::ElideRight, width()*0.4);
-    ui->label_songName->setText(songName);
-    ui->label_author->setText(author);
-    ui->label_albumName->setText(albumName);
+    ui->label_songName->setEllipsisText(music.getSongName());
+    ui->label_author->setEllipsisText(music.getAuthor());
+    ui->label_albumName->setEllipsisText(music.getAlbumName());
     ui->label_duration->setText(music.getSongDuration());
     // 显示专辑图片
     ui->label_albumPic->setRadiusPixmap(music.albumPicUrl());
@@ -77,7 +74,13 @@ Music CustomItem::getMusic() const
 // 改变字体颜色
 void CustomItem::changeFontColor(QString color)
 {
-    QString qss = QString("color:%1;").arg(color);
+    QString qss;
+    if (color == "black") {
+        qss = "QLabel{color: black;};QLabel#label_author{color:#727272;};";
+    }
+    else {
+        qss = "color: blue;";
+    }
     this->setStyleSheet(qss);
 }
 
@@ -90,18 +93,27 @@ void CustomItem::initMenu()
     menu->addAction("播放音乐", [=] {
         emit menuClicked(this, CustomItem::PLAY);
     });
-    if (itemType == MyListWidget::FAVORITE) {
-        menu->addAction("从我喜欢的音乐中删除", [=] {
-            emit menuClicked(this, CustomItem::REMOVEFROMFAVORITE);
-        });
-    } else {
+
+    if (itemType != MyListWidget::FAVORITE) {
         menu->addAction("添加到我喜欢的音乐", [=] {
             emit menuClicked(this, CustomItem::ADDTOFAVORITE);
         });
     }
+
     menu->addAction("添加到歌单", [=] {
         emit menuClicked(this, CustomItem::ADDTOSONGLIST);
     });
+
+    if (itemType == MyListWidget::FAVORITE) {
+        menu->addAction("从我喜欢的音乐中删除", [=] {
+            emit menuClicked(this, CustomItem::REMOVEFROMFAVORITE);
+        });
+    } else if (itemType > MyListWidget::FAVORITE) {
+        menu->addAction("从歌单中删除", [=] {
+            emit menuClicked(this, CustomItem::REMOVEFROMSONGLIST);
+        });
+    }
+
     // 菜单属性设置为无边框无阴影透明背景
     menu->setWindowFlags(menu->windowFlags()  | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     menu->setAttribute(Qt::WA_TranslucentBackground);

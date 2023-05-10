@@ -1,6 +1,6 @@
 ﻿#ifndef MUSIC_H
 #define MUSIC_H
-#include <QString>
+
 #include <QPixmap>
 
 /*
@@ -13,6 +13,8 @@ public:
     explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration);
     // 重写==操作符
     bool operator ==(const Music &music);
+    // 判空
+    bool empty();
     // geter
     int getId() const;
     QString getSongName() const;
@@ -23,7 +25,7 @@ public:
     int songDuration() const;
 
 private:
-    int         m_id;              // 歌曲Id
+    int         m_id = 0;          // 歌曲Id
     QString     m_songName;        // 歌曲名称
     QString     m_author;          // 歌手名称
     QString     m_albumName;       // 专辑名称

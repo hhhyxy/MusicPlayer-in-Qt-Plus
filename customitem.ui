@@ -134,7 +134,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="label_songName">
+         <widget class="EllipsisLabel" name="label_songName">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -171,7 +171,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_author">
+         <widget class="EllipsisLabel" name="label_author">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -210,7 +210,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_albumName">
+    <widget class="EllipsisLabel" name="label_albumName">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -257,6 +257,11 @@
    <class>MyLabel</class>
    <extends>QLabel</extends>
    <header location="global">mylabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EllipsisLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">ellipsislabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

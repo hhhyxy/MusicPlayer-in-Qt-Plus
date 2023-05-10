@@ -4,22 +4,15 @@
 #include <QLabel>
 #include <QParallelAnimationGroup>
 
-class TipLabel : public QLabel
-{
-    Q_OBJECT
-public:
-    explicit TipLabel(QWidget *parent = nullptr);
-    void showTip(QString tip);
-
-};
-
 class ShadowWidget : public QWidget
 {
     Q_OBJECT
 public:
     enum AnimDirection {
         Forward,
-        Backward
+        Backward,
+        Up,
+        Down
     };
     explicit ShadowWidget(QWidget *parent = nullptr);
 protected:
@@ -31,15 +24,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 
     /*
-     * @function: 显示提示信息
-     * @param: tip 提示文本
-     * @param: parent label的父窗口，若不传或传空值，则会将当前类对象作为父窗口
-     * @param: x 与父窗口的横向偏移量
-     * @param: y 与父窗口的纵向偏移量
-     */
-    void showTip(QString tip, int x = 0, int y = 0, QWidget *parent = nullptr);
-
-    /*
      * @function: 实现两个窗口的平移切换动画
      * @param: parent 两个窗口的父窗口，一般是QStackWidget
      * @param: leftWidget 左窗口
@@ -47,6 +31,7 @@ protected:
      * @param: direction 平移的方向
      */
     void siwtchingAnimation(QWidget *parent, QWidget * leftWidget, QWidget *rightWidget, int direction = AnimDirection::Forward);
+
 protected:
     int animTime = 600;
 private:
@@ -63,9 +48,6 @@ private:
     //能够移动窗口的属性
     bool m_lefted = false;
     QPoint m_leftPoint;
-
-    // 提示信息框
-    TipLabel *m_tipLabel = nullptr;
 
     // 界面平移切换动画
     QLabel *m_leftLabel = nullptr;

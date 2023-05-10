@@ -22,10 +22,16 @@ public:
     };
     Q_ENUM(ListType)
     void init (int id, QString name);
+    void push_back(Music music);
+    void push_front(Music music);
+    void pop_front();
+    void pop_back();
+    void takeAt(int index);
     // 设置音乐列表
     void setMusicList(const QList<Music> &musicList);
     void insertCustomItem(Music music, int row = 0);
     void removeCustomItem(CustomItem *item);
+    void removeCustomItem(int index);
     // 获取列表类型
     int getListType();
 
@@ -49,13 +55,23 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 private slots:
     void onScrollBarValueChange(int value);
+    void onCustomItemDoubleClicked(CustomItem *item);
+    void onSliderPressed();
+    void onSliderReleased();
 private:
-    int id;
-    QString name;
-    bool loadmore = true;
-    int itemsNum;
-    QList<Music> m_musicList;
-    QList<CustomItem *> items;
+    int id; // 列表id
+    QString name;   // 歌单名
+
+    int verticalBarValue = 0;   // 垂直滚动条数值
+    bool scrollBarOn = false;   // 垂直滚动条是否可见
+    bool sliderPressed = false; // 垂直滚动条是否按下
+
+    int itemsNum;           // 歌曲数
+    bool loadmore = true;   // 是否可以加载更多
+
+    QList<Music> m_musicList;   // 音乐列表
+    QList<CustomItem *> items;  // 自定义的items
+    CustomItem *doubleClickedItem = nullptr;    // 被双击的item
 };
 
 #endif // MYLISTWIDGET_H

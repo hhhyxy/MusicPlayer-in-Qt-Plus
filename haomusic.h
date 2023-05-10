@@ -16,7 +16,8 @@
 #include "musicdb.h"
 #include "myhttp.h"
 #include "mymediaplaylist.h"
-
+#include "switchanimation.h"
+#include "searchtipslist.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class HaoMusic; }
 QT_END_NAMESPACE
@@ -24,7 +25,7 @@ QT_END_NAMESPACE
 /*
  * 主界面
  */
-class HaoMusic : public QWidget
+class HaoMusic : public SwitchAnimation
 {
     Q_OBJECT
 
@@ -46,6 +47,7 @@ private:
     Ui::HaoMusic    *ui;
     AddSongListPage *addSongListPage = nullptr;
     QMap<int, MyListWidget*> songLists;
+    SearchTipsList *searchTips = nullptr;  // 搜索提示框
 
     MyMediaPlaylist *mediaPlaylist      = nullptr;  // 媒体播放列表
     QMediaPlayer    *mediaPlayer        = nullptr;  // 媒体播放器
@@ -118,6 +120,8 @@ private:
     void addToHistoryList(Music &music);
     // 打开我创建的音乐列表
     void openMyMusicList(int id, QString name);
+    // 打开搜索提示框
+    void showSearchTips(bool show = true);
 private slots:
     // 双击托盘图标显示界面
     void iconActived(QSystemTrayIcon::ActivationReason);
@@ -171,6 +175,8 @@ private slots:
     // 歌曲列表加载完成
     void listLoaded(int id);
     void on_listWidget_songList_itemClicked(QListWidgetItem *item);
+    void on_lineEdit_listName_returnPressed();
+    void on_pushButton_newSongList_clicked();
 };
 
 #endif // HAOMUSIC_H

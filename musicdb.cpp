@@ -222,11 +222,15 @@ void MusicDB::removeList(int l_id)
 {
     QSqlQuery song_query(m_db);
     QString querySql = "DELETE FROM list WHERE l_id = :l_id";
+
     song_query.prepare(querySql);
-    song_query.bindValue("l_id", QString::number(l_id));
+    song_query.bindValue(":l_id", QString::number(l_id));
     if (!song_query.exec()) {
         qDebug() << __FILE__ << __LINE__ << "delete error: "<<song_query.lastError();
+    } else {
+        qDebug() << __FILE__ << __LINE__ << "delete suscceed: ";
     }
+
 }
 
 // 关闭数据库连接

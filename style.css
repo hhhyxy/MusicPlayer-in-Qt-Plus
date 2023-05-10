@@ -1,49 +1,56 @@
 ﻿* {
-    border:1px solid transparent;
+border: none;
     font-family:"华文楷体" ;
     font: 20pt ;
     font-size: 20px;
     text-align: center;
-    background-color:transparent;
+/*    background-color:transparent;*/
 }
 QTabBar::tab {
-      	width: 0;
-		height:0;
+    width: 0;
+    height:0;
 }
 QMenu {
-	margin:8px;
-	padding:10px;
-	border:none;
-	border-radius:10px;
-	background-color:white;
+    margin:8px;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background-color:white;
 }
 QMenu::item {
-	padding:10px;
-	border:none;
-	border-radius:6px;
-	background-color: white;
-	color: black;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background-color: white;
+    color: black;
 }
 QMenu::item:selected {
-	background-color:#eaeffd;
-	color:blue;
+    background-color:#eaeffd;
+    color:blue;
 }
 
-#widget_sidebar QPushButton:checked {
-	background-color:#f3f6fe;
+QWidget#widget_sidebar {
+    border-right: 2px solid #f3f6fe;
+}
 
+QWidget#widget_sidebar QPushButton:checked {
+    background-color:#f3f6fe;
 }
 
 QWidget#inner_widget{
-	margin:0px;
-	border:1px solid #FFFFFF;
-	border-radius:6px;
-	background-color:white;
+    border-radius:6px;
+    background-color:white;
+}
+QWidget#inner_widget QLabel{
+    border-radius:6px;
+}
+
+QWidget#widget_lrc {
+    border-radius:6px;
 }
 
 QTabWidget#tab_lrc{
-	border:1px solid #FFFFFF;
-	border-radius:20px;
+    border-radius:6px;
 }
 
 QTabWidget::pane {
@@ -54,13 +61,17 @@ QTabWidget::pane {
 }
 
 QLineEdit {
-	background-color:#f2f2f4;
-	font-size:20px;
-	color: #335eea;
-	padding: 10px;
-	border: none;
-	border-top-left-radius: 8px;
-	border-bottom-left-radius: 8px;
+    background-color:#f2f2f4;
+    font-size:20px;
+    color: #335eea;
+    padding: 10px;
+    border: none;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+QLineEdit#lineEdit_listName{
+    border-radius: 8px;
 }
 
 QPushButton {
@@ -108,8 +119,10 @@ QPushButton#pushButton_close:hover {
 }
 
 QPushButton#pushButton_newSongList {
-    icon-size: 40px;
-    padding: 15px;
+    background-color: #f2f2f4;
+    font-size: 23px;
+    icon-size: 20px;
+    padding: 10px;
 }
 
 QLabel#label_title {
@@ -164,50 +177,88 @@ QLabel#label_duration {
 	border-radius: 35px;
 }*/
 QToolTip {
-	color:black;
-	background-color:white;
-	border: 1px solid white;
+    color:black;
+    background-color:white;
+    border: 1px solid white;
     border-radius: 2px;
 }
 
 QTabWidget::pane{
 	border:none;
 }
+
 QListWidget {
 	outline:0px;
 }
+
 QListWidget::item {
-	border: none;
-	border-radius:10px;
- 	background-color: transparent;
+    border: none;
+    border-radius:10px;
 }
-QListWidget#listWidget_lrc::item {
-	color:rgba(255, 255, 255, 150);
-	padding-top: 15px;
-	padding-bottom:15px;
-}
-QListWidget#listWidget_searchResult::item:!pressed {
-	color:black;
-}
+
 QListWidget::item:hover {
-    background-color:rgba(245, 245, 247, 150);
+    background-color: #ececf4;
 }
+
 QListWidget::item:selected {
-	color:blue;
+    color:blue;
     background-color:rgba(234, 239, 253, 150);
 }
+
+QListWidget#listWidget_lrc::item {
+    color:rgba(255, 255, 255, 150);
+    padding-top: 15px;
+    padding-bottom:15px;
+    background-color: transparent;
+}
+
+QListWidget#listWidget_searchResult::item:!pressed {
+    color:black;
+}
+
 QListWidget#listWidget_lrc {
-	font-size:40px;
+    font-size:40px;
+    background-color: transparent;
 }
+
+QListWidget#listWidget_songlistWidget {
+    margin-top: 10px;
+}
+
 QListWidget#listWidget_songlistWidget::item {
-	font-size:25px;
-        padding: 10px;
+    font-size:25px;
+    padding: 10px;
 }
+
+QListWidget#listWidget_songlistWidget::item:hover {
+    background-color: #f2f2f4;
+}
+
 QListWidget#listWidget_lrc::item:selected {
-	color:rgba(0, 0, 255, 100);
+    color:rgba(0, 0, 255, 100);
+    background-color:rgba(234, 239, 253, 150);
 }
+
 QListWidget#listWidget_lrc::item:hover {
-	color:rgba(255, 255, 255, 100);
+    color:rgba(255, 255, 255, 100);
+    background-color:rgba(245, 245, 247, 150);
+}
+
+QListWidget#searchTips {
+    border: none;
+    background-color: white;
+    font-size:25px;
+    border-radius: 5px;
+}
+
+QListWidget#searchTips::item {
+    margin: 5px;
+    padding: 5px;
+}
+
+
+QListWidget#listWidget_songList::item:selected {
+    background-color: transparent;
 }
 
 QScrollBar:vertical {

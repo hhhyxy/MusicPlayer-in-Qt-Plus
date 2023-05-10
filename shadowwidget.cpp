@@ -6,27 +6,6 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 
-TipLabel::TipLabel(QWidget *parent)
-    : QLabel{parent}
-{
-    // 设置样式
-    this->setStyleSheet("QLabel{color:blue;background:transparent;}");
-    // 垂直、水平中心对齐
-    this->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    // 与父窗口宽度相同
-    this->setFixedWidth(parent->width());
-    // 设置文字可换行
-    this->setWordWrap(true);
-}
-
-void TipLabel::showTip(QString tip)
-{
-    // 显示提示，两秒后消失
-    this->setText(tip);
-    this->show();
-    QTimer::singleShot(2000, this, &TipLabel::hide);
-}
-
 ShadowWidget::ShadowWidget(QWidget *parent)
     : QWidget{parent}
 {
@@ -49,22 +28,6 @@ void ShadowWidget::initWidget()
     }
 }
 
-// 显示提示信息
-void ShadowWidget::showTip(QString tip, int x, int y, QWidget *parent)
-{
-    // 初始化tiplabel
-    if (nullptr == m_tipLabel) {
-        // 如果没有传递父窗口，则父窗口为当前类对象
-        if (!parent)
-            parent = this;
-        m_tipLabel = new TipLabel(parent);
-    }
-    // 以父窗口为基准QPoint(0, 0)，移动到QPoint(x, y)
-    m_tipLabel->move(x, y);
-    // 显示提示信息
-    m_tipLabel->showTip(tip);
-}
-
 // 界面平移切换动画
 void ShadowWidget::siwtchingAnimation(QWidget *parent ,QWidget *leftWidget, QWidget *rightWidget, int direction)
 {
@@ -82,14 +45,28 @@ void ShadowWidget::siwtchingAnimation(QWidget *parent ,QWidget *leftWidget, QWid
         QPropertyAnimation *animLeft = new QPropertyAnimation(m_leftLabel, "geometry");
         animLeft->setDuration(animTime);
         animLeft->setStartValue(leftWidget->geometry());
-        animLeft->setEndValue(QRect(-(leftWidget->width()), 0, leftWidget->width(), leftWidget->height()));
+
+
         animLeft->setEasingCurve(QEasingCurve::OutCubic);
         // 设置右界面动画
         QPropertyAnimation *animRight = new QPropertyAnimation(m_rightLabel, "geometry");
         animRight->setDuration(animTime);
-        animRight->setStartValue(QRect(rightWidget->width(), 0, 0, rightWidget->height()));
+
         animRight->setEndValue(rightWidget->geometry());
         animRight->setEasingCurve(QEasingCurve::OutCubic);
+
+        switch (direction) {
+        case AnimDirection::Forward:
+        case AnimDirection::Backward:
+            animLeft->setEndValue(QRect(-(leftWidget->width()), 0, leftWidget->width(), leftWidget->height()));
+            animRight->setStartValue(QRect(rightWidget->width(), 0, 0, rightWidget->height()));
+            break;
+        case AnimDirection::Up:
+        case AnimDirection::Down:
+            animLeft->setEndValue(QRect(0, -(leftWidget->height()), leftWidget->width(), leftWidget->height()));
+            animRight->setStartValue(QRect(0, rightWidget->height(), rightWidget->width(), rightWidget->height()));
+            break;
+        }
         // 将两个界面动画添加到并行动画组
         m_animGroup = new QParallelAnimationGroup(this);
         m_animGroup->addAnimation(animLeft);
@@ -112,6 +89,16 @@ void ShadowWidget::siwtchingAnimation(QWidget *parent ,QWidget *leftWidget, QWid
     }
     if (AnimDirection::Backward == direction) {
         m_animGroup->setDirection(QAbstractAnimation::Backward);
+    }
+    switch (direction) {
+    case AnimDirection::Forward:
+    case AnimDirection::Up:
+        m_animGroup->setDirection(QAbstractAnimation::Forward);
+        break;
+    case AnimDirection::Down:
+    case AnimDirection::Backward:
+        m_animGroup->setDirection(QAbstractAnimation::Backward);
+        break;
     }
 
     // 播放动画，动画结束隐藏label

@@ -21,6 +21,13 @@ bool Music::operator ==(const Music &music)
     return this->getId() == music.getId();
 }
 
+bool Music::empty()
+{
+    if (m_id)
+        return false;
+    return true;
+}
+
 QString Music::albumPicUrl() const
 {
     return m_albumPicUrl;

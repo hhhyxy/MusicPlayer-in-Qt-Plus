@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>896</width>
-    <height>711</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -214,6 +214,9 @@
                     <width>150</width>
                     <height>40</height>
                    </size>
+                  </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
                   </property>
                   <property name="contextMenuPolicy">
                    <enum>Qt::NoContextMenu</enum>
@@ -419,7 +422,7 @@
            <widget class="QWidget" name="widget_content" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="3,8">
              <property name="spacing">
-              <number>0</number>
+              <number>10</number>
              </property>
              <property name="leftMargin">
               <number>0</number>
@@ -502,7 +505,7 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>本地音乐</string>
+                   <string>发现音乐</string>
                   </property>
                   <property name="checkable">
                    <bool>true</bool>
@@ -654,7 +657,7 @@
                 <enum>QTabWidget::Rounded</enum>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>4</number>
                </property>
                <property name="elideMode">
                 <enum>Qt::ElideMiddle</enum>
@@ -671,7 +674,7 @@
                 </attribute>
                 <layout class="QVBoxLayout" name="verticalLayout_14">
                  <item>
-                  <widget class="QLabel" name="label_listName">
+                  <widget class="EllipsisLabel" name="label_listName">
                    <property name="text">
                     <string>歌单名</string>
                    </property>
@@ -704,7 +707,7 @@
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="label_searchKeywords">
+                  <widget class="EllipsisLabel" name="label_searchKeywords">
                    <property name="text">
                     <string>关键词</string>
                    </property>
@@ -745,7 +748,7 @@
                  <item>
                   <widget class="QLabel" name="label_local">
                    <property name="text">
-                    <string>本地音乐</string>
+                    <string>网易云热歌榜</string>
                    </property>
                    <property name="margin">
                     <number>2</number>
@@ -825,7 +828,65 @@
                      </widget>
                     </item>
                     <item>
+                     <widget class="QWidget" name="widget_2" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="5,2,2">
+                       <item>
+                        <spacer name="horizontalSpacer_3">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="MyLineEdit" name="lineEdit_listName">
+                         <property name="enabled">
+                          <bool>true</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="clearButtonEnabled">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="pushButton_newSongList">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>新建歌单</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="res.qrc">
+                           <normaloff>:/icon/add.svg</normaloff>:/icon/add.svg</iconset>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
                      <widget class="IconList" name="listWidget_songList">
+                      <property name="focusPolicy">
+                       <enum>Qt::NoFocus</enum>
+                      </property>
+                      <property name="selectionMode">
+                       <enum>QAbstractItemView::NoSelection</enum>
+                      </property>
                       <property name="resizeMode">
                        <enum>QListView::Fixed</enum>
                       </property>
@@ -834,6 +895,9 @@
                       </property>
                       <property name="modelColumn">
                        <number>0</number>
+                      </property>
+                      <property name="selectionRectVisible">
+                       <bool>false</bool>
                       </property>
                      </widget>
                     </item>
@@ -1031,7 +1095,7 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="label_songname">
+                   <widget class="EllipsisLabel" name="label_songname">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>1</horstretch>
@@ -1070,7 +1134,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="label_author">
+                   <widget class="EllipsisLabel" name="label_author">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>1</horstretch>
@@ -1431,7 +1495,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="LrcWidget" name="tab_lrc">
+        <widget class="QWidget" name="tab_lrc">
          <attribute name="title">
           <string>歌词</string>
          </attribute>
@@ -1440,19 +1504,25 @@
            <number>0</number>
           </property>
           <property name="leftMargin">
-           <number>0</number>
+           <number>11</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>11</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>11</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>11</number>
           </property>
           <item>
-           <widget class="QWidget" name="widget_lrc" native="true">
+           <widget class="LrcWidget" name="widget_lrc" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="4,6">
              <property name="spacing">
               <number>0</number>
@@ -1591,7 +1661,7 @@
                    <item>
                     <layout class="QVBoxLayout" name="verticalLayout_4">
                      <item>
-                      <widget class="QLabel" name="label_lrc_songName">
+                      <widget class="EllipsisLabel" name="label_lrc_songName">
                        <property name="maximumSize">
                         <size>
                          <width>16777215</width>
@@ -1615,7 +1685,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLabel" name="label_lrc_author">
+                      <widget class="EllipsisLabel" name="label_lrc_author">
                        <property name="text">
                         <string/>
                        </property>
@@ -1671,7 +1741,7 @@
                 <bool>false</bool>
                </property>
                <property name="dragDropMode">
-                <enum>QAbstractItemView::DragOnly</enum>
+                <enum>QAbstractItemView::NoDragDrop</enum>
                </property>
                <property name="defaultDropAction">
                 <enum>Qt::IgnoreAction</enum>
@@ -1686,7 +1756,7 @@
                 <enum>QAbstractItemView::ScrollPerPixel</enum>
                </property>
                <property name="movement">
-                <enum>QListView::Free</enum>
+                <enum>QListView::Static</enum>
                </property>
                <property name="isWrapping" stdset="0">
                 <bool>false</bool>
@@ -1752,9 +1822,47 @@
    <extends>QListWidget</extends>
    <header location="global">iconlist.h</header>
   </customwidget>
+  <customwidget>
+   <class>EllipsisLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">ellipsislabel.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="res.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_newSongList</sender>
+   <signal>clicked()</signal>
+   <receiver>lineEdit_listName</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>786</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>660</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_newSongList</sender>
+   <signal>clicked()</signal>
+   <receiver>pushButton_newSongList</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>786</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>766</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

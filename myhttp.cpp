@@ -44,20 +44,47 @@ QList<Music> MyHttp::search(QString keywords, int offset/* = 0*/, int limit/* = 
     url.setQuery(query);
     // 搜索关键词并解析返回的Json数据，获取歌曲id列表
     searchByUrl(url);
-    parseForMusicId();
+//    parseForMusicId();
 
-    // 通过歌曲id列表拼接链接
-    QString urlStr = QString(netease_songsInfo_Ids);
-    for (int i = 0; i < musicIdList.size(); i++) {
-        urlStr.append(QString::number(musicIdList.at(i)));
-        if (i != musicIdList.size() - 1)
-            urlStr.append(",");
-    }
-    // 搜索并解析返回的Json数据，获取歌曲信息列表
-    searchByUrl(QUrl(urlStr));
+//    // 通过歌曲id列表拼接链接
+//    QString urlStr = QString(netease_songsInfo_Ids);
+//    for (int i = 0; i < musicIdList.size(); i++) {
+//        urlStr.append(QString::number(musicIdList.at(i)));
+//        if (i != musicIdList.size() - 1)
+//            urlStr.append(",");
+//    }
+//    // 搜索并解析返回的Json数据，获取歌曲信息列表
+//    searchByUrl(QUrl(urlStr));
     parseForMusicInfo();
     // 获取歌曲播放链接
-    searchForSongUrls(musicIdList);
+//    searchForSongUrls(musicIdList);
+    return musicList;
+}
+
+// 获取搜索建议
+QStringList MyHttp::searchSuggest(QString keywords)
+{
+    QString url = netease_searchSuggest.arg(keywords);
+    suggest.clear();
+    searchByUrl(QUrl(url));
+    parseForSuggest();
+    return suggest;
+}
+
+// 热搜列表
+QStringList MyHttp::hotSearch()
+{
+    hotWords.clear();
+    searchByUrl(QUrl(netease_hotSearch));
+    parseForHotSearch();
+    return hotWords;
+}
+
+QList<Music> MyHttp::neteaseHotList()
+{
+    musicList.clear();
+    searchByUrl(QUrl(netease_hotSonglist));
+    parseForNeteaseHotList();
     return musicList;
 }
 
@@ -72,7 +99,7 @@ QString MyHttp::searchForSongUrl(int id, QString level)
     query.addQueryItem("id", QString::number(id));
     query.addQueryItem("level", level);
     url.setQuery(query);
-//    QString url = QString(netease_songUrl_Id).append(QString::number(id));
+
     searchByUrl(url);
     parseForSongUrl();
     return songUrl;
@@ -186,61 +213,63 @@ void MyHttp::parseForMusicInfo()
         return;
     }
 
-    // 将songs数组提取出来
-    QJsonArray songsArray = parse_doucment.object().value("songs").toArray();
+    // 将 result 下的 songs 数组提取出来
+    QJsonArray songsArray = parse_doucment.object().value("result").toObject().value("songs").toArray();
     if (songsArray.isEmpty()) {
         qDebug()<< __FILE__<<__LINE__ << "songs数组解析错误";
         return;
     }
-
-    QString songName;       // 歌名
-    QString author;         // 歌手
-    QString albumName;      // 专辑名称
-    QString albumPicUrl;    // 专辑图片链接
-    int     songDuration;   // 时长
+    int             id;             // 歌曲id
+    QString         songName;       // 歌名
+    QSet<QString>   authors;        // 歌手
+    QString         albumName;      // 专辑名称
+    QString         albumPicUrl;    // 专辑图片链接
+    int             songDuration;   // 时长
 
     // 获取所有歌曲的信息
     for (int i = 0; i < songsArray.size(); i++) {
         // 通过 QJsonArray.at(i)函数获取数组下的第i个元素
         QJsonObject song = songsArray.at(i).toObject();
 
+        // 获取歌曲id
+        id = song.value("id").toInt(0);
+        if(!id) {
+            qDebug()<< __FILE__<<__LINE__ << "歌曲id为空";
+        }
         // 获取歌曲名称
         songName = song.value("name").toString();
         if (songName.isEmpty()) {
-            qDebug()<< __FILE__<<__LINE__ << "歌曲名称解析错误";
-            return;
+            qDebug()<< __FILE__<<__LINE__ << "歌曲名称为空";
         }
 
         // 获取歌手名称
-        author = song.value("ar").toArray().at(0).toObject().value("name").toString();
-        if (author.isEmpty()) {
-            qDebug()<< __FILE__<<__LINE__ << "歌手名称解析错误";
-            return;
+        authors.clear();
+        QJsonArray authorArr = song.value("ar").toArray();
+        for (int i = 0; i < authorArr.size(); i++) {
+            authors.insert(authorArr.at(i).toObject().value("name").toString());
         }
 
         // 获取专辑名称
         albumName = song.value("al").toObject().value("name").toString();
         if (albumName.isEmpty()) {
-            qDebug()<< __FILE__<<__LINE__ << "专辑名称解析错误";
-            return;
+            albumName = "未知";
+            qDebug()<< __FILE__<<__LINE__ << "专辑名称为空";
         }
 
         // 获取专辑图片链接
         albumPicUrl = song.value("al").toObject().value("picUrl").toString();
         if (albumPicUrl.isEmpty()) {
-            qDebug()<< __FILE__<<__LINE__ << "专辑图片链接解析错误";
-            return;
+            qDebug()<< __FILE__<<__LINE__ << "专辑图片链接为空";
         }
 
         // 获取歌曲时长
-        songDuration = song.value("dt").toInt();
+        songDuration = song.value("dt").toInt(0);
         if (0 == songDuration) {
-            qDebug()<< __FILE__<<__LINE__ << "歌曲时长解析错误";
-            return;
+            qDebug()<< __FILE__<<__LINE__ << "歌曲时长为空";
         }
 
         // 存储搜索信息
-        Music music(musicIdList.at(i), songName, author, albumName, albumPicUrl, songDuration);
+        Music music(id, songName, QStringList(authors.begin(), authors.end()).join("、"), albumName, albumPicUrl, songDuration);
         musicList.push_back(music);
     }
 }
@@ -294,7 +323,7 @@ void MyHttp::parseForSongLrc()
         qDebug()<< __FILE__<<__LINE__ << "歌词解析错误";
         return;
     }
-//    qDebug()<< __FILE__ << __LINE__ << "lrc:" << lrcs;
+
     QStringList lrcList = lrcs.split("\n");
 
     lrcMap.clear();// 清理原来的歌词
@@ -316,6 +345,75 @@ void MyHttp::parseForSongLrc()
         lrcMap.insert(lrcTime, lrcStr);
     }
 
+}
+
+// 解析QByteArray，得到搜索建议
+void MyHttp::parseForSuggest()
+{
+    // 将json解析未编码未UTF-8的json文档
+    QJsonParseError json_error; // 错误信息
+    QJsonDocument parse_doucment = QJsonDocument::fromJson(bytes, &json_error);
+    if (json_error.error != QJsonParseError::NoError) {// 错误处理
+        qDebug() << __FILE__ << __LINE__ << json_error.errorString();
+        return;
+    }
+
+    QJsonArray array = parse_doucment.object().value("result").toObject().value("allMatch").toArray();
+
+    // 将result/allMatch下的keyword提取出来
+    for (int i = 0; i < array.size(); i++) {
+//        int id = array[i].toObject().value("id").toInt();
+//        songUrl = array[i].toObject().value("url").toString();
+        QString word = array[i].toObject().value("keyword").toString();
+        suggest.append(word);
+    }
+}
+
+void MyHttp::parseForHotSearch()
+{
+    // 将json解析未编码未UTF-8的json文档
+    QJsonParseError json_error; // 错误信息
+    QJsonDocument parse_doucment = QJsonDocument::fromJson(bytes, &json_error);
+    if (json_error.error != QJsonParseError::NoError) {// 错误处理
+        qDebug() << __FILE__ << __LINE__ << json_error.errorString();
+        return;
+    }
+
+    QJsonArray array = parse_doucment.object().value("data").toArray();
+
+    // 将data下的searchWord提取出来
+    for (int i = 0; i < array.size(); i++) {
+        QString word = array[i].toObject().value("searchWord").toString();
+        hotWords.append(word);
+    }
+}
+
+void MyHttp::parseForNeteaseHotList()
+{
+    // 将json解析未编码未UTF-8的json文档
+    QJsonParseError json_error; // 错误信息
+    QJsonDocument parse_doucment = QJsonDocument::fromJson(bytes, &json_error);
+    if (json_error.error != QJsonParseError::NoError) {// 错误处理
+        qDebug() << __FILE__ << __LINE__ << json_error.errorString();
+        return;
+    }
+
+    QJsonArray array = parse_doucment.object().value("songs").toArray();
+    // 将songs下的音乐提取出来
+    for (int i = 0; i < array.size(); i++) {
+        QJsonObject obj = array.at(i).toObject();
+        int id = obj.value("id").toInt();
+        QString name = obj.value("name").toString();
+        QSet<QString> authors;
+        QJsonArray authorArr = obj.value("ar").toArray();
+        for (int i = 0; i < authorArr.size(); i++) {
+            authors.insert(authorArr.at(i).toObject().value("name").toString());
+        }
+        QString alName = obj.value("al").toObject().value("name").toString();
+        QString picUrl = obj.value("al").toObject().value("picUrl").toString();
+        int dt = obj.value("dt").toInt();
+        musicList.push_back(Music(id, name, QStringList(authors.begin(), authors.end()).join("、"), alName, picUrl, dt));
+    }
 }
 
 

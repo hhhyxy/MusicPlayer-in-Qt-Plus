@@ -38,6 +38,7 @@ SOURCES += \
     addsonglistpage.cpp \
     customitem.cpp \
     customslider.cpp \
+    ellipsislabel.cpp \
     gaussianblur.cpp \
     iconlist.cpp \
     lrcwidget.cpp \
@@ -51,13 +52,16 @@ SOURCES += \
     mylineedit.cpp \
     mylistwidget.cpp \
     mymediaplaylist.cpp \
+    searchtipslist.cpp \
     shadowwidget.cpp \
+    switchanimation.cpp \
     threaddownloader.cpp
 
 HEADERS += \
     addsonglistpage.h \
     customslider.h \
     customitem.h \
+    ellipsislabel.h \
     gaussianblur.h \
     haomusic.h \
     iconlist.h \
@@ -70,7 +74,9 @@ HEADERS += \
     mylineedit.h \
     mylistwidget.h \
     mymediaplaylist.h \
+    searchtipslist.h \
     shadowwidget.h \
+    switchanimation.h \
     threaddownloader.h
 
 FORMS += \

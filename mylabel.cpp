@@ -6,7 +6,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QNetworkReply>
 #include <QtConcurrent>
-
+#include "gaussianblur.h"
 
 MyLabel::MyLabel(QWidget *parent)
     : QLabel{parent}
@@ -26,7 +26,7 @@ MyLabel::~MyLabel()
 QPixmap MyLabel::getImg() const
 {
     if (imgLoaded)
-        return img;
+        return this->pixmap(Qt::ReturnByValue);
     return QPixmap();
 }
 
@@ -43,6 +43,11 @@ void MyLabel::setShadow()
     shadow->setBlurRadius(5);
     //给窗体设置阴影
     this->setGraphicsEffect(shadow);
+}
+
+void MyLabel::setBackRole(int show)
+{
+    backRole = show;
 }
 
 void MyLabel::setRadiusPixmap(QString url)
@@ -72,7 +77,10 @@ void MyLabel::onReplyFinished(QNetworkReply *reply)
 
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray bytes = reply->readAll();  //获取字节
-        QtConcurrent::run(this, QOverload<QByteArray>::of(&MyLabel::makeRadiusPixmap), bytes);
+        if (!backRole)
+            QtConcurrent::run(this, QOverload<QByteArray>::of(&MyLabel::makeRadiusPixmap), bytes);
+        else
+            QtConcurrent::run(this, &MyLabel::makeRadiusBlurPixmap, bytes);
     }else {
         qDebug() << __FILE__ << __LINE__ << "获取专辑图片失败";
     }
@@ -91,6 +99,15 @@ void MyLabel::makeRadiusPixmap(QByteArray bytes)
     makeRadiusPixmap(pixmap);
 }
 
+void MyLabel::makeRadiusBlurPixmap(QByteArray bytes)
+{
+    QImage img;
+    img.loadFromData(bytes);
+    GaussianBlur blur;
+    blur.gaussBlur(img, 300);
+    makeRadiusPixmap(QPixmap::fromImage(img).scaled(this->size()));
+}
+
 void MyLabel::makeRadiusPixmap(QPixmap pixmap)
 {
     QSize size = pixmap.size();
@@ -100,14 +117,16 @@ void MyLabel::makeRadiusPixmap(QPixmap pixmap)
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.fillRect(0, 0, size.width(), size.height(), Qt::white);
     painter.setBrush(QColor(0, 0, 0));
-    int radius = size.width() * 0.07;
+    radius = size.width() * 0.07;
+    if (backRole)
+        radius = 6;
     painter.drawRoundedRect(0, 0, size.width(), size.height(), radius, radius);//修改这个值，可以改弧度，和直径相等就是圆形
     pixmap.setMask(mask);
-    img = pixmap;
+
     imgLoaded = true;
     // 显示图片
     std::lock_guard<std::mutex> lck(mutex);
-    QMetaObject::invokeMethod(this, "setPixmap", Q_ARG(QPixmap, pixmap));
+    QMetaObject::invokeMethod(this, "setPixmap", Q_ARG(QPixmap, pixmap.scaled(this->size())));
 }
 
 

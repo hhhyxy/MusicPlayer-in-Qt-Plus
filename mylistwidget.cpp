@@ -1,11 +1,18 @@
 ﻿#include "mylistwidget.h"
+#include <QDebug>
 #include <QScrollBar>
 #include <QThreadPool>
-#include <QDebug>
+#include <QTimer>
+
 MyListWidget::MyListWidget(QWidget *parent)
     : QListWidget{parent}
 {
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    connect(this, &MyListWidget::customItemDoubleClicked, this, &MyListWidget::onCustomItemDoubleClicked);
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &MyListWidget::onScrollBarValueChange);
+    connect(this->verticalScrollBar(), &QScrollBar::sliderPressed, this, &MyListWidget::onSliderPressed);
+    connect(this->verticalScrollBar(), &QScrollBar::sliderReleased, this, &MyListWidget::onSliderReleased);
 }
 
 void MyListWidget::init(int id, QString name)
@@ -14,13 +21,50 @@ void MyListWidget::init(int id, QString name)
     this->name = name;
 }
 
+void MyListWidget::push_back(Music music)
+{
+    m_musicList.push_back(music);
+//    insertCustomItem(music, m_musicList.size() - 1);
+}
+
+void MyListWidget::push_front(Music music)
+{
+    insertCustomItem(music, 0);
+    if (itemsNum > 0)
+        itemsNum++;
+//    m_musicList.push_front(music);
+
+}
+
+void MyListWidget::pop_front()
+{
+    if (!m_musicList.empty()) {
+        removeCustomItem(0);
+//        m_musicList.pop_front();
+    }
+}
+
+void MyListWidget::pop_back()
+{
+    if (itemsNum == m_musicList.size()) {
+        removeCustomItem(m_musicList.size() - 1);
+    }
+//    m_musicList.pop_back();
+}
+
+void MyListWidget::takeAt(int index)
+{
+    if (index < itemsNum)
+        removeCustomItem(index);
+//    m_musicList.takeAt(index);
+}
+
 // 设置音乐列表，并加载前10项
 void MyListWidget::setMusicList(const QList<Music> &musicList)
 {
     // 清空列表并滚动到顶部
     items.clear();
     this->clearList();
-    loadmore = true;
     this->scrollToTop();
     // 更新音乐列表，加载前10项
     m_musicList.clear();
@@ -29,6 +73,7 @@ void MyListWidget::setMusicList(const QList<Music> &musicList)
     if (itemsNum > musicList.size())
         itemsNum = musicList.size();
     addCustomItems(0, itemsNum);
+    loadmore = true;
     emit loaded(id);
 }
 
@@ -36,17 +81,34 @@ void MyListWidget::setMusicList(const QList<Music> &musicList)
 void MyListWidget::insertCustomItem(Music music, int row)
 {
     // 如果插入位置正常
-    if (row >= 0 && row < itemsNum)
+    if (row >= 0 && row < itemsNum) {
         addCustomItem(music, row);
+        m_musicList.insert(row, music);
+    }
 }
 
 void MyListWidget::removeCustomItem(CustomItem *item)
 {
+    if (!doubleClickedItem && item == doubleClickedItem) {
+        emit clear();
+    }
     int index = items.indexOf(item);
+    removeCustomItem(index);
+}
+
+void MyListWidget::removeCustomItem(int index)
+{
+    m_musicList.takeAt(index);
+    if (index + 1 <= itemsNum) {
+        itemsNum--;
+    }
     items.removeAt(index);
     QListWidgetItem *lItem =  this->takeItem(index);
     delete lItem;
-    item = nullptr;
+    if (itemsNum < 10) {
+        loadMore();
+    }
+
 }
 
 int MyListWidget::getListType()
@@ -57,9 +119,41 @@ int MyListWidget::getListType()
 // 当滚动到底部，加载更多项
 void MyListWidget::onScrollBarValueChange(int value)
 {
-    if (loadmore && value == this->verticalScrollBar()->maximum()) {
+    if (loadmore && value >= this->verticalScrollBar()->maximum() - 20) {
         loadMore();
     }
+    // 如果鼠标滚轮滚动切滚动条处于隐藏状态，打开滚动条，几秒后关闭
+    if (!scrollBarOn && value != verticalBarValue) {
+        this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        scrollBarOn = true;
+        QTimer::singleShot(4000, [=]{
+            if (sliderPressed)
+                return;
+            scrollBarOn = false;
+            this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        });
+    }
+}
+
+void MyListWidget::onCustomItemDoubleClicked(CustomItem *item)
+{
+    doubleClickedItem = item;
+}
+
+void MyListWidget::onSliderPressed()
+{
+    sliderPressed = true;
+}
+
+void MyListWidget::onSliderReleased()
+{
+    sliderPressed = false;
+    QTimer::singleShot(4000, [=]{
+        if (sliderPressed)
+            return;
+        scrollBarOn = false;
+        this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    });
 }
 
 // 加载更多
@@ -95,9 +189,7 @@ void MyListWidget::mouseReleaseEvent(QMouseEvent *event)
     QWidget::mouseReleaseEvent(event);
 }
 
-
-
-// 加载items
+// 加载自定义items
 void MyListWidget::addCustomItems(int begin, int end)
 {
     for (int i = begin; i < end; i++) {
