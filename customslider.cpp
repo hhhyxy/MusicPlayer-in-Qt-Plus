@@ -19,5 +19,6 @@ void CustomSlider::mousePressEvent(QMouseEvent *ev)
         //发送自定义的鼠标单击信号
         emit customSliderClicked();
     }
+
 }
 

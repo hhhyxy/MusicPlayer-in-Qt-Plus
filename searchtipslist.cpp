@@ -11,7 +11,7 @@ SearchTipsList::SearchTipsList(QWidget *parent)
     this->setObjectName("searchTips");
     this->setMaximumHeight(600);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
+    aniDuration = 400;
     // 阴影
     this->setContentsMargins(11, 11, 11, 11);
     QGraphicsDropShadowEffect *shadow_effect = new QGraphicsDropShadowEffect(this);
@@ -40,31 +40,25 @@ void SearchTipsList::hideTips()
     animation(false);
 }
 
-void SearchTipsList::paintEvent(QPaintEvent *e)
-{
-//    qDebug() << __FILE__ << __LINE__ << this->height();
-    QListWidget::paintEvent(e);
-}
-
 QSize SearchTipsList::sizeHint()
 {
-    return QSize(this->sizeHintForColumn(0) + 2 * this->frameWidth(), this->sizeHintForRow(0) * this->count() + 2 * this->frameWidth());
+    return QSize(this->sizeHintForColumn(0) + 2 * this->frameWidth(), this->sizeHintForRow(0) * this->count()/* + 2 * this->frameWidth()*/);
 }
 
 void SearchTipsList::animation(bool show)
 {
-    qDebug() << __FILE__ << __LINE__ << show;
     QPropertyAnimation* ani = new QPropertyAnimation(this, "size");
     ani->setStartValue(QSize(this->width(), 0));    // 高度为0
     ani->setEndValue(sizeHint());                   // 高度正常
     ani->setEasingCurve(QEasingCurve::OutQuad);     // 变化曲线
-    ani->setDuration(300);                          // 动画时长
+    ani->setDuration(aniDuration);                  // 动画时长
     if (show) { // 展开动画
         ani->setDirection(QAbstractAnimation::Forward);
     } else {    // 隐藏动画
         ani->setDirection(QAbstractAnimation::Backward);
         connect(ani, &QPropertyAnimation::finished, this, &SearchTipsList::hide);
     }
+    // 开始动画
     ani->start(QAbstractAnimation::DeleteWhenStopped);
 }
 

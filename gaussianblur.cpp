@@ -12,7 +12,7 @@ GaussianBlur::GaussianBlur(QObject *parent)
 void GaussianBlur::gaussBlur(QImage &img, int radius)
 {
     // 图片缩小
-    img.scaled(50, 50);
+//    img.scaled(50, 50);
     // 图片高斯模糊处理
     gaussBlur2((int*)img.bits(), img.width(), img.height(), radius);
     // 发射图片处理完成信号

@@ -1,15 +1,16 @@
 ﻿* {
-border: none;
+    border: none;
     font-family:"华文楷体" ;
     font: 20pt ;
     font-size: 20px;
     text-align: center;
-/*    background-color:transparent;*/
 }
+
 QTabBar::tab {
     width: 0;
     height:0;
 }
+
 QMenu {
     margin:8px;
     padding:10px;
@@ -17,6 +18,7 @@ QMenu {
     border-radius:10px;
     background-color:white;
 }
+
 QMenu::item {
     padding:10px;
     border:none;
@@ -24,12 +26,14 @@ QMenu::item {
     background-color: white;
     color: black;
 }
+
 QMenu::item:selected {
     background-color:#eaeffd;
     color:blue;
 }
 
 QWidget#widget_sidebar {
+
     border-right: 2px solid #f3f6fe;
 }
 
@@ -54,16 +58,17 @@ QTabWidget#tab_lrc{
 }
 
 QTabWidget::pane {
-	bottom:-11px;
-	top:-11px;
-	left:-11px;
-	right:-11px;
+    bottom:-11px;
+    top:-11px;
+    left:-11px;
+    right:-11px;
 }
 
 QLineEdit {
     background-color:#f2f2f4;
     font-size:20px;
     color: #335eea;
+    margin-left: 5px;
     padding: 10px;
     border: none;
     border-top-left-radius: 8px;
@@ -137,45 +142,47 @@ QLabel#label_searchKeywords,
 #label_listName {
 	font: 26pt "华文楷体";
 }
+
 QLabel#label_songname,
-QLabel#label_lrc_songName
- {
-	font: 16pt "华文楷体";
+QLabel#label_lrc_songName{
+    font: 16pt "华文楷体";
 }
+
 QLabel#label_lrc_songName {
-	color:white;
+    color:white;
 }
+
 QLabel#label_songName {
-	font: 14pt "华文楷体";
+    font: 14pt "华文楷体";
 }
+
 QLabel#label_author,
-QLabel#label_lrc_author
-{
-	color:#727272;
-	margin:0;
-	font: 10pt "华文楷体";
+QLabel#label_lrc_author{
+    color:#727272;
+    margin:0;
+    font: 10pt "华文楷体";
 }
+
 QLabel#label_lrc_songName,
 QLabel#label_lrc_author
  {
-	color: white;
-	margin-top:2px;
-	padding-left:0px;
+    color: white;
+    margin-top:2px;
+    padding-left:0px;
 }
-QLabel#label_lrc_songName {
-	margin-top:10px;
 
+QLabel#label_lrc_songName {
+    margin-top:10px;
 }
+
 QLabel#label_albumName {
-	font: 12pt "华文楷体";
-}	
+    font: 12pt "华文楷体";
+}
+
 QLabel#label_duration {
-	font: 12pt "华文楷体";
+    font: 12pt "华文楷体";
 }	
-/*QLabel#label_lrc_albumPic {
-	border: 1px solid rgba(255,255, 255, 200);
-	border-radius: 35px;
-}*/
+
 QToolTip {
     color:black;
     background-color:white;
@@ -184,11 +191,11 @@ QToolTip {
 }
 
 QTabWidget::pane{
-	border:none;
+    border:none;
 }
 
 QListWidget {
-	outline:0px;
+    outline:0px;
 }
 
 QListWidget::item {
@@ -307,29 +314,29 @@ QScrollBar::add-page:vertical {
 }
 
 QSlider {
-	background-color:transparent;
+    background-color:transparent;
 }
 QSlider::groove:horizontal {
-	margin-top:0px;
-	margin-left:-7px;
-	margin-right:-7px;
+    margin-top:0px;
+    margin-left:-7px;
+    margin-right:-7px;
     border: 1px solid #bbb;
     background: transparent;
     height: 3px;
-	border-radius:1px;
+    border-radius:1px;
 }
 
 QSlider::sub-page:horizontal {
     background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1, stop: 0 #bbf, stop: 1 #55f);
     border: 1px solid #777;
     height: 2px;
-	border-radius:1px;
+    border-radius:1px;
 }
 QSlider::add-page:horizontal {
     background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1, stop: 0 #bbf, stop: 1 #55f);
     border: 1px solid #777;
-	height: 2px;
-	border-radius:1px;
+    height: 2px;
+    border-radius:1px;
 }
 
 QSlider::handle:horizontal {
@@ -341,7 +348,8 @@ QSlider::handle:horizontal {
     margin-bottom: -4px;
     border-radius: 4px;
 }
-#horizontalSlider_volume::groove:horizontal {
-	margin-left:2px;
-	padding-left:-4px;
+
+QSlider#horizontalSlider_volume::groove:horizontal {
+    margin-left:2px;
+    padding-left:-2px;
 }

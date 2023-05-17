@@ -45,6 +45,8 @@ void MyMediaPlaylist::setCurrentIndex(int index)
     // 判断索引是否合法
     if (index < 0 || index >= m_idList.size())
         return;
+    if (index == m_currentIndex)
+        return;
     // 更新当前索引
     m_currentIndex = index;
     // 加入历史播放列表
@@ -57,11 +59,9 @@ void MyMediaPlaylist::setCurrentIndex(int index)
     // 若播放链接为空，播放下一首
     if (url.isEmpty()) {
         qDebug() << __FILE__ << __LINE__ << "song url is null";
-        m_currentIndex++;
-        setCurrentIndex(m_currentIndex);
+        setCurrentIndex(m_currentIndex + 1);
         return;
     }
-//    Q_EMIT  currentIndexChanged(m_currentIndex);
     Q_EMIT  currentMediaChanged(QMediaContent(url));
 }
 

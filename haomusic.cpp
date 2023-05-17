@@ -307,6 +307,16 @@ void HaoMusic::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
+void HaoMusic::readSettings()
+{
+    QSettings config("./Config/config.ini", QSettings::IniFormat);
+    int vol = config.value("volumn", -1).toInt();
+    int list = config.value("listType", -1).toInt();
+    int id = config.value("music", -1).toInt();
+
+
+}
+
 // 绘制圆角阴影窗体边框
 void HaoMusic::paintShadowRadiusWidget()
 {
@@ -501,7 +511,7 @@ void HaoMusic::on_pushButton_lastsong_clicked()
     mediaPlaylist->setCurrentIndex(mediaPlaylist->previousIndex());
     mediaPlayer->play();
     // 按钮防抖动
-    QTimer::singleShot(800, [=]{
+    QTimer::singleShot(500, [=]{
         ui->pushButton_lastsong->blockSignals(false);
     });
 }
@@ -844,7 +854,7 @@ void HaoMusic::showSearchTips(bool show)
 void HaoMusic::on_pushButton_defaultSongList_clicked()
 {
     showLoadingPage();
-    QTimer::singleShot(1500, [=] {
+    QTimer::singleShot(loadingTimes, [=] {
         ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_defalutSongList);
     });
     ui->listWidget_songList->init();
@@ -943,7 +953,7 @@ void HaoMusic::createSonglist(int id, QString name)
 // 音乐列表加载完成，跳转页面关闭加载动画
 void HaoMusic::listLoaded(int id)
 {
-    QTimer::singleShot(1500, [=] {
+    QTimer::singleShot(loadingTimes, [=] {
         switch (id) {
         case MyListWidget::SEARCHRESULT:
             ui->tabWidget_switchcontent->setCurrentWidget(ui->tab_searchResult);

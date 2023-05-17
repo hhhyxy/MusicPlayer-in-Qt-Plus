@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>896</width>
-    <height>720</height>
+    <width>1037</width>
+    <height>742</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -657,7 +657,7 @@
                 <enum>QTabWidget::Rounded</enum>
                </property>
                <property name="currentIndex">
-                <number>4</number>
+                <number>2</number>
                </property>
                <property name="elideMode">
                 <enum>Qt::ElideMiddle</enum>
@@ -742,13 +742,13 @@
                </widget>
                <widget class="QWidget" name="tab_localmusic">
                 <attribute name="title">
-                 <string>本地音乐</string>
+                 <string>发现音乐</string>
                 </attribute>
                 <layout class="QVBoxLayout" name="verticalLayout_11">
                  <item>
                   <widget class="QLabel" name="label_local">
                    <property name="text">
-                    <string>网易云热歌榜</string>
+                    <string>音乐推荐</string>
                    </property>
                    <property name="margin">
                     <number>2</number>
@@ -1459,7 +1459,7 @@
                 <item alignment="Qt::AlignVCenter">
                  <widget class="CustomSlider" name="horizontalSlider_volume">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -1467,7 +1467,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>100</width>
-                    <height>50</height>
+                    <height>60</height>
                    </size>
                   </property>
                   <property name="maximumSize">

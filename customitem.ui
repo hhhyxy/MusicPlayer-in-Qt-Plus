@@ -47,7 +47,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,0">
    <property name="spacing">
-    <number>0</number>
+    <number>20</number>
    </property>
    <property name="leftMargin">
     <number>10</number>

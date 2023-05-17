@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <QMediaPlayer>
 #include <QPixmap>
+#include <QSettings>
 #include <QSize>
 #include <QSystemTrayIcon>
 #include <QUrl>
@@ -67,7 +68,8 @@ private:
     bool    isSonglistShow          = false;    // 我的歌单是否显示
     bool    isHistoryMusicListShow  = false;    // 历史音乐列表是否显示
 
-    int     loadingTimes    = 1000; // 加载所需时间（ms）
+    int     pressInterval   = 500;  // 按钮防抖时间
+    int     loadingTimes    = 1000;  // 加载所需时间（ms）
     QString searchKeywords  = "";   // 搜索关键词
     QMovie *loadingMovie;           // 加载动画
 
@@ -84,6 +86,8 @@ private:
     QList<Music>         historyMusicList;      // 播放历史列表
 
     MusicDB *m_db;   // 音乐数据库
+    void readSettings();    // 读取配置
+    void writeSettings();   // 写入配置
     // 绘制圆角阴影窗口
     void paintShadowRadiusWidget();
     // 设置托盘图标

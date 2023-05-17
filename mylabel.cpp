@@ -55,6 +55,8 @@ void MyLabel::setRadiusPixmap(QString url)
     if (picUrl == url)
         return;
     picUrl = url;
+    int width = this->width();
+    url += QString("?param=%1y%2").arg(width).arg(width);
     request->setUrl(QUrl(url));
     networkManager->get(*request);
     connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished, Qt::UniqueConnection);
@@ -117,7 +119,7 @@ void MyLabel::makeRadiusPixmap(QPixmap pixmap)
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.fillRect(0, 0, size.width(), size.height(), Qt::white);
     painter.setBrush(QColor(0, 0, 0));
-    radius = size.width() * 0.07;
+    radius = size.width() * 0.1;
     if (backRole)
         radius = 6;
     painter.drawRoundedRect(0, 0, size.width(), size.height(), radius, radius);//修改这个值，可以改弧度，和直径相等就是圆形

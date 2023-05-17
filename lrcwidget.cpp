@@ -48,10 +48,9 @@ void LrcWidget::resizeEvent(QResizeEvent *event)
 void LrcWidget::setGaussblurBackground(const QString &url)
 {
     update();
-//    label->setFixedSize(this->size());
-//    label->setRadiusPixmap(url);
     QNetworkRequest request;
-    request.setUrl(QUrl(url));
+    QString minUrl = url + "?param=1000y1000";
+    request.setUrl(QUrl(minUrl));
     manager->get(request);
 }
 
