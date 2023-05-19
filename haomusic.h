@@ -15,10 +15,12 @@
 #include "customitem.h"
 #include "music.h"
 #include "musicdb.h"
+#include "musiclist.h"
 #include "myhttp.h"
 #include "mymediaplaylist.h"
 #include "switchanimation.h"
 #include "searchtipslist.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class HaoMusic; }
 QT_END_NAMESPACE
@@ -47,7 +49,7 @@ protected:
 private:
     Ui::HaoMusic    *ui;
     AddSongListPage *addSongListPage = nullptr;
-    QMap<int, MyListWidget*> songLists;
+//    QMap<int, MyListWidget*> songLists;
     SearchTipsList *searchTips = nullptr;  // 搜索提示框
 
     MyMediaPlaylist *mediaPlaylist      = nullptr;  // 媒体播放列表
@@ -69,7 +71,7 @@ private:
     bool    isHistoryMusicListShow  = false;    // 历史音乐列表是否显示
 
     int     pressInterval   = 500;  // 按钮防抖时间
-    int     loadingTimes    = 1000;  // 加载所需时间（ms）
+    int     loadingTimes    = 1000; // 加载所需时间（ms）
     QString searchKeywords  = "";   // 搜索关键词
     QMovie *loadingMovie;           // 加载动画
 
@@ -86,8 +88,10 @@ private:
     QList<Music>         historyMusicList;      // 播放历史列表
 
     MusicDB *m_db;   // 音乐数据库
-    void readSettings();    // 读取配置
-    void writeSettings();   // 写入配置
+    // 读取配置
+    void readSettings();
+    // 写入配置
+    void writeSettings();
     // 绘制圆角阴影窗口
     void paintShadowRadiusWidget();
     // 设置托盘图标

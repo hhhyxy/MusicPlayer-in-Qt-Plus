@@ -36,6 +36,7 @@ QMAKE_TARGET_DESCRIPTION = HaoMusic
 
 SOURCES += \
     addsonglistpage.cpp \
+    coveritem.cpp \
     customitem.cpp \
     customslider.cpp \
     ellipsislabel.cpp \
@@ -46,6 +47,7 @@ SOURCES += \
     haomusic.cpp \
     music.cpp \
     musicdb.cpp \
+    musiclist.cpp \
     mybottombar.cpp \
     myhttp.cpp \
     mylabel.cpp \
@@ -59,6 +61,7 @@ SOURCES += \
 
 HEADERS += \
     addsonglistpage.h \
+    coveritem.h \
     customslider.h \
     customitem.h \
     ellipsislabel.h \
@@ -68,6 +71,7 @@ HEADERS += \
     lrcwidget.h \
     music.h \
     musicdb.h \
+    musiclist.h \
     mybottombar.h \
     myhttp.h \
     mylabel.h \
@@ -81,6 +85,7 @@ HEADERS += \
 
 FORMS += \
     addsonglistpage.ui \
+    coveritem.ui \
     customitem.ui \
     haomusic.ui
 

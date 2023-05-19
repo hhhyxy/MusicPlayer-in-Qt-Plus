@@ -32,6 +32,11 @@ QMediaContent MyMediaPlaylist::currentMedia() const
     return media(m_currentIndex);
 }
 
+int MyMediaPlaylist::musicIndex(int id)
+{
+    return m_idList.indexOf(id);
+}
+
 // 当前音乐在播放列表中的序号
 int MyMediaPlaylist::currentIndex() const
 {

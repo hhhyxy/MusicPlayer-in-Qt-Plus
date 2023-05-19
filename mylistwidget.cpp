@@ -81,7 +81,7 @@ void MyListWidget::setMusicList(const QList<Music> &musicList)
 void MyListWidget::insertCustomItem(Music music, int row)
 {
     // 如果插入位置正常
-    if (row >= 0 && row < itemsNum) {
+    if (row >= 0 && (row <= itemsNum)) {
         addCustomItem(music, row);
         m_musicList.insert(row, music);
     }

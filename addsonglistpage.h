@@ -39,9 +39,9 @@ private:
     Music music;
 
 private:
-    void addItems(QMap<int, QString> &lists);
+    void addItems(QList<MusicList>& lists);
 
-    void addItem(int id, QString name);
+    void addItem(MusicList& list);
 };
 
 #endif // ADDSONGLISTPAGE_H

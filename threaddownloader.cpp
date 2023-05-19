@@ -17,7 +17,7 @@ void ThreadDownLoader::downLoad(QString &url)
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     headerReply = manager->head(request);
-    connect(headerReply, QNetworkReply::finished, this, ThreadDownLoader::onHeaderReplyFinished, Qt::UniqueConnection);
+    connect(headerReply, &QNetworkReply::finished, this, ThreadDownLoader::onHeaderReplyFinished, Qt::UniqueConnection);
 }
 
 void ThreadDownLoader::onHeaderReplyFinished()

@@ -1,6 +1,8 @@
 ﻿#ifndef ICONLIST_H
 #define ICONLIST_H
 
+#include "coveritem.h"
+#include <musiclist.h>
 #include <QListWidget>
 
 class IconList : public QListWidget
@@ -9,15 +11,17 @@ class IconList : public QListWidget
 public:
     explicit IconList(QWidget *parent = nullptr);
     void init();
-    void addIcons(QMap<int, QString> map);
-    void addIcon(int id, QString name);
+    void addIcons(QList<MusicList> lists);
+    void addIcon(MusicList& list);
 signals:
     void create();
 protected:
-    void paintEvent(QPaintEvent *e);
+
+    void resizeEvent(QResizeEvent *e);
 private:
     int iconSize;
     int wordHight;
+    int margin;
 private slots:
     void dropSongsList(QListWidgetItem *item);
     void renameSongsList(QListWidgetItem *item);

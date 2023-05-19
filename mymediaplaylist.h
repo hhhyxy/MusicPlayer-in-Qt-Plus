@@ -12,6 +12,7 @@ public:
     int mediaCount() const;
     QMediaContent media(int index) const;
     QMediaContent currentMedia() const;
+    int musicIndex(int id);
     int currentIndex() const;
     void setCurrentIndex(int index);
     int nextIndex(int steps = 1);

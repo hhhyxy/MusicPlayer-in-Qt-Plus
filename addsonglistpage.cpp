@@ -1,5 +1,6 @@
 ﻿#include "addsonglistpage.h"
 #include "ui_addsonglistpage.h"
+#include "musiclist.h"
 #include <QDebug>
 #include <QMouseEvent>
 AddSongListPage::AddSongListPage(QWidget *parent) :
@@ -30,7 +31,7 @@ void AddSongListPage::init(Music& music)
     // 移动到正中央
     this->move((parentWidget()->width() - this->width()) / 2, (parentWidget()->height() - this->height()) / 2);
     // 从数据库获取所有歌单
-    QMap<int, QString> songlists = m_db->queryList();
+    QList<MusicList> songlists = m_db->queryList();
     // 初始化歌单列表
     ui->listWidget_songlistWidget->clear();
     this->addItems(songlists);
@@ -45,21 +46,19 @@ void AddSongListPage::on_pushButton_close_clicked()
 }
 
 // 往列表添加歌单
-void AddSongListPage::addItems(QMap<int, QString>& lists)
+void AddSongListPage::addItems(QList<MusicList>& lists)
 {
-    QMapIterator<int, QString> iter(lists);
-    while (iter.hasNext()) {
-        iter.next();
-        addItem(iter.key(), iter.value());
+    foreach (MusicList list, lists) {
+        addItem(list);
     }
 }
 
 // 向listwidget添加歌单信息
-void AddSongListPage::addItem(int id, QString name)
+void AddSongListPage::addItem(MusicList& list)
 {
-    QListWidgetItem *item = new QListWidgetItem(name);
+    QListWidgetItem *item = new QListWidgetItem(list.name());
     item->setTextAlignment(Qt::AlignCenter);
-    item->setData(Qt::UserRole, id);
+    item->setData(Qt::UserRole, list.id());
     ui->listWidget_songlistWidget->addItem(item);
 }
 
@@ -97,8 +96,9 @@ void AddSongListPage::createSonglist()
     ui->lineEdit_listName->hide();
     ui->pushButton_newSongList->show();
     // 创建歌单
-    int id = m_db->insertList(name);
-    addItem(id, name);
+    int id = m_db->insertList(MusicList(name));
+    MusicList list(id, name);
+    addItem(list);
     emit create(id, name);
 }
 

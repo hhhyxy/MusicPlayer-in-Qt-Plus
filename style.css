@@ -263,10 +263,14 @@ QListWidget#searchTips::item {
     padding: 5px;
 }
 
+QListWidget#listWidget_songList::item:hover {
+    background-color: transparent;
+}
 
 QListWidget#listWidget_songList::item:selected {
     background-color: transparent;
 }
+
 
 QScrollBar:vertical {
     margin: 5px 0px 5px 0px;

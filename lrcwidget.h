@@ -3,7 +3,7 @@
 
 #include <mutex>
 #include <QWidget>
-#include <Qpainter>
+#include <QPainter>
 #include <QNetworkAccessManager>
 #include "gaussianblur.h"
 #include "mylabel.h"

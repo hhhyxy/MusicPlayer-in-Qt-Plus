@@ -657,7 +657,7 @@
                 <enum>QTabWidget::Rounded</enum>
                </property>
                <property name="currentIndex">
-                <number>2</number>
+                <number>4</number>
                </property>
                <property name="elideMode">
                 <enum>Qt::ElideMiddle</enum>
@@ -1791,6 +1791,11 @@
    <header location="global">mylabel.h</header>
   </customwidget>
   <customwidget>
+   <class>EllipsisLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">ellipsislabel.h</header>
+  </customwidget>
+  <customwidget>
    <class>CustomSlider</class>
    <extends>QSlider</extends>
    <header location="global">customslider.h</header>
@@ -1821,11 +1826,6 @@
    <class>IconList</class>
    <extends>QListWidget</extends>
    <header location="global">iconlist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EllipsisLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">ellipsislabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

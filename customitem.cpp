@@ -29,7 +29,7 @@ CustomItem::CustomItem(Music music, QWidget *parent) :
     // 显示专辑图片
     ui->label_albumPic->setRadiusPixmap(music.albumPicUrl());
     // 自定义菜单
-    connect(this, CustomItem::customContextMenuRequested, this, CustomItem::showMenu);
+    connect(this, &CustomItem::customContextMenuRequested, this, &CustomItem::showMenu);
 }
 
 CustomItem::~CustomItem()

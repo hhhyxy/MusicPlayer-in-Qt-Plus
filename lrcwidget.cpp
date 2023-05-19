@@ -24,9 +24,9 @@ LrcWidget::LrcWidget(QWidget *parent)
 //    label->lower();
 //    this->update();
     // 网络请求完成
-    connect(manager, QNetworkAccessManager::finished, this, LrcWidget::onRequestFinished);
+    connect(manager, &QNetworkAccessManager::finished, this, &LrcWidget::onRequestFinished);
     // 图片模糊处理完成
-    connect(gauss, GaussianBlur::finished, this, LrcWidget::onGaussianFinished);
+    connect(gauss, &GaussianBlur::finished, this, &LrcWidget::onGaussianFinished);
 }
 
 //// 绘图事件

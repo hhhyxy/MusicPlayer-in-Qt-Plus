@@ -1,20 +1,23 @@
 ﻿#include "iconlist.h"
 #include "musicdb.h"
+#include "coveritem.h"
 
 #include <QContextMenuEvent>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+#include <QListWidgetItem>
 #include <QPixmap>
 #include <QPainter>
 
 IconList::IconList(QWidget *parent)
     : QListWidget{parent}
 {
-    iconSize = 250;
+    iconSize = 210;
     wordHight = 30;
+    margin = 20;
     this->setViewMode(QListWidget::IconMode);       // 显示模式
     this->setSpacing(30);                           // 间距
-    this->setIconSize(QSize(iconSize, iconSize));   // 设置图片大小
+    this->setIconSize(QSize(iconSize + 2 *margin, iconSize + 2 * margin));   // 设置图片大小
     this->setMovement(QListView::Static);           // 不能移动
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //listWidget属性设置为自定义菜单
@@ -28,40 +31,34 @@ void IconList::init()
     addIcons(MusicDB::instance()->queryList());
 }
 
-void IconList::addIcons(QMap<int, QString> map)
+void IconList::addIcons(QList<MusicList> lists)
 {
-    QMapIterator<int, QString> iter(map);
-    while (iter.hasNext()) {
-        iter.next();
-        addIcon(iter.key(), iter.value());
+    foreach (MusicList list, lists) {
+        addIcon(list);
     }
 }
 
-void IconList::addIcon(int id, QString name)
+void IconList::addIcon(MusicList& list)
 {
-    // 绘制背景文字图
-    QPixmap img(":/icon/rounded .svg");
-//    img.scaledToWidth(iconSize);
-    QPainter painter(&img);
-    painter.setPen(Qt::white);
-    QFont font = painter.font();
-    font.setPixelSize(20);
-    font.setBold(true);
-//    font.setLetterSpacing(QFont::PercentageSpacing, 120);
-    font.setFamily("Microsoft YaHei");
-    painter.setFont(font);
-    painter.drawText(img.rect(), Qt::AlignCenter, name);
-
     QListWidgetItem *imageItem = new QListWidgetItem();
-    imageItem->setSizeHint(QSize(iconSize, iconSize));
+    imageItem->setSizeHint(QSize(iconSize + 2 *margin, iconSize + 2* margin + wordHight));
     imageItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-    imageItem->setIcon(QIcon(img.scaled(imageItem->sizeHint())));
-    imageItem->setData(Qt::UserRole, id);
-    imageItem->setData(Qt::UserRole + 1, name);
+    imageItem->setData(Qt::UserRole, list.id());
+    imageItem->setData(Qt::UserRole + 1, list.name());
+
+
+    CoverItem* item = new CoverItem();
+    item->setMargin(margin);
+    item->resize(imageItem->sizeHint());
+    item->setCoverSize(QSize(iconSize, iconSize));
+    item->setCover(list.cover());
+    item->setName(list.name());
+
     this->addItem(imageItem);
+    this->setItemWidget(imageItem, item);
 }
 
-void IconList::paintEvent(QPaintEvent *e)
+void IconList::resizeEvent(QResizeEvent *e)
 {
     int width = this->width();  // listwidget的宽度
     int num;
@@ -69,16 +66,17 @@ void IconList::paintEvent(QPaintEvent *e)
         num = 4;
     else
         num = 5;
-    int spacing = (width - (num * iconSize)) / num - num * num;
+    int spacing = (width - (num * (iconSize + 2 *margin))) / num - num * num;
     this->setSpacing(spacing);
-    QListWidget::paintEvent(e);
+    QListWidget::resizeEvent(e);
 }
 
 void IconList::dropSongsList(QListWidgetItem *item)
 {
-    delete this->takeItem(this->row(item));
     int id = item->data(Qt::UserRole).toInt();
-    qDebug() << id;
+    if (id <= MyListWidget::DEFALUT)
+        return;
+    delete this->takeItem(this->row(item));
     MusicDB::instance()->removeList(id);
     init();
 }

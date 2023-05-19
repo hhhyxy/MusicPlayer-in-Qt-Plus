@@ -48,47 +48,37 @@ void MusicDB::open()
     }
     query.clear();
 
-    QString isTableExist = "select count(*) from sqlite_master where type = 'table' and name = 'list';";
+    QString isTableExist = "select count(*) from sqlite_master where type = 'table' and name = 'musiclist';";
     if(!query.exec(isTableExist)) {
         qDebug() << __FILE__ << __LINE__ << "Error: Fail to query." << query.lastError();
     }
     query.next();
     // 表不存在，创建list表
     if(query.value(0).toInt() == 0) {
-        create_sql = "CREATE TABLE list ( "
+        create_sql = "CREATE TABLE musiclist ( "
                      "l_id integer NOT NULL PRIMARY KEY AUTOINCREMENT, "
-                     "l_name TEXT NOT NULL"
+                     "l_name TEXT NOT NULL, "
+                     "l_cover TEXT, "
+                     "l_intro TEXT"
                      ");";
         query.prepare(create_sql);
         if(!query.exec()) {
-            qDebug() << __FILE__ << __LINE__ << "Error: Fail to insert." << query.lastError();
+            qDebug() << __FILE__ << __LINE__ << "Error: Fail to create." << query.lastError();
         }
         query.finish();
+        MusicList list("本地音乐");
+        insertList(list);
 
-        QString insert_query = "INSERT INTO list (l_id, l_name) VALUES (%1, '%2');";
-        query.prepare(insert_query.arg(MyListWidget::LOCAL).arg("本地音乐"));
-        if(!query.exec()) {
-            qDebug() << __FILE__ << __LINE__ << "Error: Fail to insert." << query.lastError();
-        }
-        query.finish();
+        list.setName("历史音乐");
+        insertList(list);
 
-        query.prepare(insert_query.arg(MyListWidget::HISTORY).arg("历史音乐"));
-        if(!query.exec()) {
-            qDebug() << __FILE__ << __LINE__ << "Error: Fail to create table." << query.lastError();
-        }
-        query.finish();
+        list.setName("我喜欢的音乐");
+        insertList(list);
 
-        query.prepare(insert_query.arg(MyListWidget::FAVORITE).arg("我喜欢的音乐"));
-        if(!query.exec()) {
-            qDebug() << __FILE__ << __LINE__ << "Error: Fail to insert." << query.lastError();
-        }
-
-        query.prepare(insert_query.arg(MyListWidget::DEFALUT).arg("默认歌单"));
-        if(!query.exec()) {
-            qDebug() << __FILE__ << __LINE__ << "Error: Fail to insert." << query.lastError();
-        }
+        list.setName("默认歌单");
+        insertList(list);
     } else {
-        qDebug() << __FILE__ << __LINE__ << "table list existed";
+        qDebug() << __FILE__ << __LINE__ << "table musiclist existed";
     }
 }
 
@@ -171,22 +161,24 @@ void MusicDB::remove(int id, int l_id)
 }
 
 // 增添新的音乐列表
-int MusicDB::insertList(QString &listName)
+int MusicDB::insertList(const MusicList& list)
 {
     // 插入音乐列表
     QSqlQuery song_query(m_db);
-    QString insert_sql = "INSERT INTO list (l_name) "
-                         "VALUES (:name);";
+    QString insert_sql = "INSERT INTO musiclist (l_name, l_cover, l_intro) "
+                         "VALUES (:name, :cover, :intro);";
     song_query.prepare(insert_sql);
-    song_query.bindValue(":name", listName);
+    song_query.bindValue(":name", list.name());
+    song_query.bindValue(":cover", list.cover());
+    song_query.bindValue(":intro", list.intro());
     if(!song_query.exec()) {
-        qDebug() << __FILE__ << __LINE__ << "insert list error: " << song_query.lastError();
+        qDebug() << __FILE__ << __LINE__ << "insert musiclist error: " << song_query.lastError();
     }
     else {
-        qDebug() << __FILE__ << __LINE__ << "insert list success!";
+        qDebug() << __FILE__ << __LINE__ << "insert musiclist success!";
     }
     // 获取自增id
-    QString sql = "SELECT last_insert_rowid() FROM list";
+    QString sql = "SELECT last_insert_rowid() FROM musiclist";
     song_query.prepare(sql);
     if(!song_query.exec()) {
         qDebug() << __FILE__ << __LINE__ << "get id error: "<<song_query.lastError();
@@ -200,28 +192,55 @@ int MusicDB::insertList(QString &listName)
 }
 
 // 查询所有的音乐列表
-QMap<int, QString> MusicDB::queryList()
+QList<MusicList> MusicDB::queryList()
 {
     QSqlQuery song_query(m_db);
-    QString querySql = "SELECT l_id, l_name FROM list WHERE l_id >= %1";
+    QString querySql = "SELECT l_id, l_name, l_cover, l_intro FROM musiclist WHERE l_id >= %1";
     song_query.prepare(querySql.arg(MyListWidget::FAVORITE));
     if (!song_query.exec()) {
         qDebug() << __FILE__ << __LINE__ << "query error: "<<song_query.lastError();
     }
-    QMap<int, QString> songList;
+
+    QList<MusicList> songList;
     while (song_query.next()) {
         int id = song_query.value(0).toInt();
         QString name = song_query.value(1).toString();
-        songList.insert(id, name);
+        QString cover = song_query.value(2).toString();
+        QString intro = song_query.value(3).toString();
+        songList.push_back(MusicList(id, name, cover, intro));
     }
     return songList;
+}
+
+void MusicDB::updateCover(int id, const QString &cover)
+{
+    QSqlQuery song_query(m_db);
+    QString querySql = "UPDATE musiclist SET l_cover = :cover WHERE l_id = :id";
+    song_query.prepare(querySql);
+    song_query.bindValue(":cover", cover);
+    song_query.bindValue(":id", id);
+    if (!song_query.exec()) {
+        qDebug() << __FILE__ << __LINE__ << "update error: "<<song_query.lastError();
+    }
+}
+
+void MusicDB::updateIntro(int id, const QString &intro)
+{
+    QSqlQuery song_query(m_db);
+    QString querySql = "UPDATE musiclist SET l_intro = :intro WHERE l_id = :id";
+    song_query.prepare(querySql);
+    song_query.bindValue(":intro", intro);
+    song_query.bindValue(":id", id);
+    if (!song_query.exec()) {
+        qDebug() << __FILE__ << __LINE__ << "update error: " << song_query.lastError();
+    }
 }
 
 // 删除音乐列表
 void MusicDB::removeList(int l_id)
 {
     QSqlQuery song_query(m_db);
-    QString querySql = "DELETE FROM list WHERE l_id = :l_id";
+    QString querySql = "DELETE FROM musiclist WHERE l_id = :l_id";
 
     song_query.prepare(querySql);
     song_query.bindValue(":l_id", QString::number(l_id));
@@ -230,7 +249,14 @@ void MusicDB::removeList(int l_id)
     } else {
         qDebug() << __FILE__ << __LINE__ << "delete suscceed: ";
     }
-
+    querySql = "DELETE FROM song WHERE l_id = :l_id";
+    song_query.prepare(querySql);
+    song_query.bindValue(":l_id", QString::number(l_id));
+    if (!song_query.exec()) {
+        qDebug() << __FILE__ << __LINE__ << "delete error: "<<song_query.lastError();
+    } else {
+        qDebug() << __FILE__ << __LINE__ << "delete suscceed: ";
+    }
 }
 
 // 关闭数据库连接

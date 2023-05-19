@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
     w.setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinMaxButtonsHint);
     // 外层窗口透明
     w.setAttribute(Qt::WA_TranslucentBackground);
+    w.setAutoFillBackground(false);
     QThreadPool::globalInstance()->setMaxThreadCount(10);	// 设置最大线程个数为10
     w.show();
     return a.exec();

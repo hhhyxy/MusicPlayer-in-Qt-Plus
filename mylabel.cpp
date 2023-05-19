@@ -15,6 +15,7 @@ MyLabel::MyLabel(QWidget *parent)
     networkManager = new QNetworkAccessManager(this);
     request = new QNetworkRequest();
     setShadow();
+
 }
 
 MyLabel::~MyLabel()
@@ -59,7 +60,7 @@ void MyLabel::setRadiusPixmap(QString url)
     url += QString("?param=%1y%2").arg(width).arg(width);
     request->setUrl(QUrl(url));
     networkManager->get(*request);
-    connect(networkManager, QNetworkAccessManager::finished, this, MyLabel::onReplyFinished, Qt::UniqueConnection);
+    connect(networkManager, &QNetworkAccessManager::finished, this, &MyLabel::onReplyFinished, Qt::UniqueConnection);
 }
 
 //void MyLabel::setRoundedPicInThread(QString url)
