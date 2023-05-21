@@ -158,6 +158,16 @@ void MusicDB::remove(int id, int l_id)
     } else {
         qDebug() << __FILE__ << __LINE__ << "delete success";
     }
+
+    querySql = "UPDATE musiclist SET l_cover = (SELECT picurl FROM song WHERE l_id = :l_id ORDER BY rowid DESC limit 1) WHERE l_id = :id";
+    song_query.prepare(querySql);
+    song_query.bindValue(":l_id", QString::number(l_id));
+    song_query.bindValue(":id", QString::number(l_id));
+    if (!song_query.exec()) {
+        qDebug() << __FILE__ << __LINE__ << "update error: " << song_query.lastError();
+    } else {
+        qDebug() << __FILE__ << __LINE__ << "update success";
+    }
 }
 
 // 增添新的音乐列表

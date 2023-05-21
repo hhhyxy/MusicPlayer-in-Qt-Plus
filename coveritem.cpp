@@ -41,13 +41,11 @@ void CoverItem::setMargin(int mar)
 
 void CoverItem::normal()
 {
-    qDebug() << "normal";
     ui->label_name->show();
 }
 
 void CoverItem::zoomOut()
 {
-    qDebug() << "zoom out";
     ui->label_name->hide();
 }
 

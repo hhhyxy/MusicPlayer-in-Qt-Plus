@@ -1048,7 +1048,6 @@ void HaoMusic::menuRemoveFromSongList(CustomItem *item)
                 list->removeCustomItem(item);
             }
         }
-
     }
     if (type == MyListWidget::FAVORITE) {
         int index = favoriteMusicList.indexOf(item->getMusic());

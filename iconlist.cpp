@@ -115,6 +115,7 @@ void IconList::onCustomContextMenuRequested(const QPoint &pos)
 
     QListWidgetItem *item = this->itemAt(mapFromGlobal(QCursor::pos()));
     if (item != nullptr) {
+        int id = item->data(Qt::UserRole).toInt();
         QAction * rename = new QAction("重命名", menu);
         QAction * drop = new QAction("删除歌单", menu);
         menu->addAction(rename);
@@ -122,10 +123,10 @@ void IconList::onCustomContextMenuRequested(const QPoint &pos)
         connect(rename, &QAction::triggered, [=] {
             renameSongsList(item);
         });
-        connect(drop, &QAction::triggered, [=] {
-            dropSongsList(item);
-        });
+        if (id > MyListWidget::DEFALUT)
+            connect(drop, &QAction::triggered, [=] {
+                dropSongsList(item);
+            });
     }
-    qDebug() << "menu";
     menu->exec(QCursor::pos());
 }
