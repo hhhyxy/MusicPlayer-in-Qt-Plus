@@ -823,7 +823,7 @@
                     <item>
                      <widget class="QLabel" name="label_mySonglist">
                       <property name="text">
-                       <string>我创建的歌单</string>
+                       <string>我的歌单</string>
                       </property>
                      </widget>
                     </item>

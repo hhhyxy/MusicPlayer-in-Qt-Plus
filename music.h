@@ -10,6 +10,7 @@ class Music
 {
 public:
     explicit Music();
+    Music(int id, const QString &songName, const QString &author, const QString &albumPicUrl);
     explicit Music(int id, QString songName, QString author, QString albumName, QString albumPicUrl, int songDuration);
     // 重写==操作符
     bool operator ==(const Music &music);

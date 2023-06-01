@@ -69,3 +69,9 @@ int Music::getId() const
 {
     return m_id;
 }
+
+Music::Music(int id, const QString &songName, const QString &author, const QString &albumPicUrl) : m_id(id),
+    m_songName(songName),
+    m_author(author),
+    m_albumPicUrl(albumPicUrl)
+{}

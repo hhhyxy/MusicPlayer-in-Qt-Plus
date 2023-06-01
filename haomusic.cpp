@@ -6,6 +6,7 @@
 #include <QFocusEvent>
 #include <QListWidgetItem>
 #include <QMenu>
+#include <QMetaEnum>
 #include <QMovie>
 #include <QPainter>
 #include <QScroller>
@@ -89,7 +90,7 @@ void HaoMusic::initPlayer()
 //    songLists.insert(MyListWidget::HISTORY, ui->listWidget_history);
 //    songLists.insert(MyListWidget::DEFALUT, ui->listWidget_defaultList);
     // 加载动画
-    loadingMovie = new QMovie(":/icon/loading.gif");
+    loadingMovie = new QMovie(":/icon/loading.gif", QByteArray(), this);
     ui->label_loading->setMovie(loadingMovie);
     //设置歌词鼠标左键拖动
     QScroller::grabGesture(ui->listWidget_lrc,QScroller::LeftMouseButtonGesture);
@@ -105,6 +106,8 @@ void HaoMusic::initMusicList()
     // 获取数据库实例
     m_db = MusicDB::instance();
     ui->pushButton_localmusic->click();
+    if (search->hotSearch().isEmpty())
+        return;
     ui->lineEdit_search->setPlaceholderText(search->hotSearch().first());
 }
 
@@ -168,6 +171,32 @@ void HaoMusic::connectSignalsAndSlots()
             default:
                 ui->pushButton_switch->setToolTip("播放");
                 ui->pushButton_switch->setIcon(QIcon(QPixmap(":/icon/Player, play.svg")));
+                break;
+        }
+    });
+    connect(mediaPlaylist, &MyMediaPlaylist::playbackModeChanged, this, [=](QMediaPlaylist::PlaybackMode mode) {
+        switch (mode) {
+            //列表循环
+            case MyMediaPlaylist::Loop:
+                ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/repeat.svg")));
+                ui->pushButton_mode->setToolTip("列表循环");
+                break;
+            //顺序播放
+            case MyMediaPlaylist::Sequential:
+                ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/order-play-fill.svg")));
+                ui->pushButton_mode->setToolTip("顺序播放");
+                break;
+            //随机播放
+            case MyMediaPlaylist::Random:
+                ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/random.svg")));
+                ui->pushButton_mode->setToolTip("随机播放");
+                break;
+            //单曲循环
+            case MyMediaPlaylist::CurrentItemInLoop:
+                ui->pushButton_mode->setIcon(QIcon(QPixmap(":/icon/repeat-one-line.svg")));
+                ui->pushButton_mode->setToolTip("单曲循环");
+                break;
+            case MyMediaPlaylist::CurrentItemOnce:
                 break;
         }
     });
@@ -316,15 +345,32 @@ void HaoMusic::readSettings()
     int vol = config.value("volumn", -1).toInt();
     int list = config.value("listType", -1).toInt();
     int id = config.value("musicId", -1).toInt();
-
+    QString name = config.value("musicName", "").toString();
+    QString singer = config.value("singer", "").toString();
+    QString cover = config.value("cover", "").toString();
+    int pos = config.value("position", -1).toInt();
+    int mode = config.value("playbackMode", -1).toInt();
     if (vol >= 0) {
         volume = vol;
         ui->horizontalSlider_volume->setValue(vol);
     }
     if (list >= 0) {
         listType = list;
-        updateMediaPlaylist();
-        mediaPlaylist->setCurrentIndex(mediaPlaylist->musicIndex(id));
+        if (listType == MyListWidget::SEARCHRESULT) {
+            mediaPlaylist->addMedia(id);
+            musicList.push_back(Music(id, name, singer, cover));
+        } else {
+            updateMediaPlaylist();
+        }
+        if (id >= 0) {
+            mediaPlaylist->setCurrentIndex(mediaPlaylist->musicIndex(id));
+        }
+        if (pos >= 0) {
+            mediaPlayer->setPosition(pos);
+        }
+        if (mode >= 0) {
+            mediaPlaylist->setPlaybackMode(static_cast<QMediaPlaylist::PlaybackMode>(mode));
+        }
     }
 }
 
@@ -334,6 +380,11 @@ void HaoMusic::writeSettings()
     config.setValue("volumn", mediaPlayer->volume());
     config.setValue("listType", listType);
     config.setValue("musicId", currentMusic.getId());
+    config.setValue("musicName", currentMusic.getSongName());
+    config.setValue("singer", currentMusic.getAuthor());
+    config.setValue("cover", currentMusic.albumPicUrl());
+    config.setValue("position", mediaPlayer->position());
+    config.setValue("playbackMode", mediaPlaylist->playbackMode());
 }
 
 // 绘制圆角阴影窗体边框
@@ -731,15 +782,16 @@ void HaoMusic::updateMediaPlaylist()
         case MyListWidget::SEARCHRESULT:
             musicList = searchResultMusicList;
             break;
-        case MyListWidget::FAVORITE:
-            musicList = favoriteMusicList;
-            break;
+//        case MyListWidget::FAVORITE:
+
+//            musicList = favoriteMusicList;
+//            break;
         case MyListWidget::LOCAL:
             musicList = localMusicList;
             break;
-        case MyListWidget::HISTORY:
-            musicList = historyMusicList;
-            break;
+//        case MyListWidget::HISTORY:
+//            musicList = historyMusicList;
+//            break;
         default:
             musicList = m_db->query(listType);
             break;
